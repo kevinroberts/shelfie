@@ -12,6 +12,9 @@ const cors = require('cors');
 if (!process.env.APP_SECRET) {
   console.error("An APP_SECRET is required - please define one in process env");
 }
+if (!process.env.MONGO_CONNECTION_STRING) {
+  console.error("A mongo db connection string is required - please define one in process env");
+}
 
 // DB Setup
 mongoose.connect(process.env.MONGO_CONNECTION_STRING);

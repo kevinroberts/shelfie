@@ -54,7 +54,7 @@ function validate(formProps) {
   const errors = {};
 
   if (!formProps.username) {
-    errors.email = 'Please enter a username';
+    errors.username = 'Please enter a username';
   }
 
   if (!formProps.email) {

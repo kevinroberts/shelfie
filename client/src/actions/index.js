@@ -22,10 +22,17 @@ export function signinUser({ username, password }) {
         // - redirect to the route '/feature'
         browserHistory.push('/feature');
       })
-      .catch(() => {
+      .catch(response => {
         // If request is bad...
         // - Show an error to the user
-        dispatch(authError('Bad Login Info'));
+        let responseMessage = 'Bad Login Info';
+        if (response.status == 401) {
+          responseMessage = 'Incorrect user credentials. Please check your username or password.'
+        }
+        if (response.data.error) {
+          responseMessage = response.data.error;
+        }
+        dispatch(authError(responseMessage));
       });
   }
 }
