@@ -1,0 +1,60 @@
+.navbar-brand {
+  padding-left: 1px;
+  padding-right: 10px;
+}
+
+input[type=text].nav-search-input {
+  width: 290px;
+  padding: 6px 10px 6px 30px;
+  color: #001A33;
+  font-weight: 300;
+  background-color: transparent;
+}
+
+.nav-search {
+  position: relative;
+  background-color: #fef6ff;
+  border-radius: 3px;
+
+  i {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    color: gray;
+    pointer-events: none;
+  }
+}
+
+.nav-login {
+
+  a {
+    color: #001A33 !important;
+  }
+
+  i {
+    color: #001A33;
+    font-size: large;
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+
+}
+.navbar-login
+{
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+
+}
+
+.navbar-login-session
+{
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.icon-size
+{
+  font-size: 87px;
+}

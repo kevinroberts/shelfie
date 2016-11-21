@@ -1,20 +1,20 @@
 module.exports = {
-  entry: [
-    './src/index.js'
-  ],
+  entry: {
+    app: ['./src/index']
+  },
   output: {
     path: __dirname,
     publicPath: '/',
     filename: 'bundle.js'
   },
   module: {
-    loaders: [{
-      exclude: /node_modules/,
-      loader: 'babel'
-    }]
+    loaders: [
+      { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
+      { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+    ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx', '.sass']
   },
   devServer: {
     historyApiFallback: true,

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import _ from 'lodash';
+import LocalStorageUtils from '../utils/local_storage_utils';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -15,10 +17,12 @@ export function signinUser({ username, password }) {
     axios.post(`${ROOT_URL}/signin`, { username, password })
       .then(response => {
         // If request is good...
-        // - Update state to indicate user is authenticated
-        dispatch({ type: AUTH_USER });
         // - Save the JWT token
-        localStorage.setItem('token', response.data.token);
+        LocalStorageUtils.setUser(response);
+        // - Update state to indicate user is authenticated
+        var payload = {username: username, email: response.data.email};
+        dispatch({ type: AUTH_USER,
+                    payload: payload });
         // - redirect to the route '/feature'
         browserHistory.push('/feature');
       })
@@ -29,7 +33,7 @@ export function signinUser({ username, password }) {
         if (response.status == 401) {
           responseMessage = 'Incorrect user credentials. Please check your username or password.'
         }
-        if (response.data.error) {
+        if (_.has(response, 'data.error')) {
           responseMessage = response.data.error;
         }
         dispatch(authError(responseMessage));
@@ -41,8 +45,9 @@ export function signupUser({ username, email, password }) {
   return function(dispatch) {
     axios.post(`${ROOT_URL}/signup`, { username, email, password })
       .then(response => {
-        dispatch({ type: AUTH_USER });
-        localStorage.setItem('token', response.data.token);
+        var payload = {username: username, email: email};
+        dispatch({ type: AUTH_USER, payload: payload });
+        LocalStorageUtils.setUser(response);
         browserHistory.push('/feature');
       })
       .catch(response => dispatch(authError(response.data.error)));
@@ -57,7 +62,7 @@ export function authError(error) {
 }
 
 export function signoutUser() {
-  localStorage.removeItem('token');
+  LocalStorageUtils.clearUser();
 
   return { type: UNAUTH_USER };
 }
@@ -65,7 +70,7 @@ export function signoutUser() {
 export function fetchMessage() {
   return function(dispatch) {
     axios.get(ROOT_URL, {
-      headers: { authorization: localStorage.getItem('token') }
+      headers: { authorization: LocalStorageUtils.getToken() }
     })
       .then(response => {
         dispatch({

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import reduxThunk from 'redux-thunk';
+import LocalStorageUtils from './utils/local_storage_utils';
 
 import App from './components/app';
 import Signin from './components/auth/signin';
@@ -14,15 +15,16 @@ import RequireAuth from './components/auth/require_auth';
 import Welcome from './components/welcome';
 import reducers from './reducers';
 import { AUTH_USER } from './actions/types';
+import '../styles/main.scss';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
-const token = localStorage.getItem('token');
+const token = LocalStorageUtils.getToken();
 // If we have a token, consider the user to be signed in
 if (token) {
   // we need to update application state
-  store.dispatch({ type: AUTH_USER });
+  store.dispatch({ type: AUTH_USER, payload: LocalStorageUtils.getUser() });
 }
 
 ReactDOM.render(
