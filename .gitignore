@@ -50,5 +50,6 @@ jspm_packages
 
 ## File-based project format:
 *.iws
+*.iml
 
 .idea
