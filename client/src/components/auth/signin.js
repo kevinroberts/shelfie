@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import * as actions from '../../actions';
+import { Link } from 'react-router';
 
 class Signin extends Component {
   handleFormSubmit({ username, password }) {
@@ -22,18 +23,26 @@ class Signin extends Component {
     const { handleSubmit, fields: { username, password }} = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <fieldset className="form-group">
-          <label>Email or Username:</label>
-          <input {...username} className="form-control" />
-        </fieldset>
-        <fieldset className="form-group">
-          <label>Password:</label>
-          <input {...password} type="password" className="form-control" />
-        </fieldset>
-        {this.renderAlert()}
-        <button action="submit" className="btn btn-primary">Sign in</button>
-      </form>
+      <div className="row">
+        <div className="col-sm-6 col-md-4 offset-md-4">
+          <h1 className="text-xs-center login-title">Sign in to continue</h1>
+
+          <div className="account-wall">
+            <img className="profile-img" src="/static/img/photo.png"
+                 alt="empty profile image" />
+            <form className="form-signin" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+              <input {...username} placeholder="Username or Email" className="form-control" />
+              <input {...password} type="password" placeholder="Password" className="form-control" />
+              {this.renderAlert()}
+              <button action="submit" className="btn btn-lg btn-primary btn-block">Sign in</button>
+              <a href="#" className="pull-right need-help">Need help? </a>
+              <span className="clearfix" />
+            </form>
+          </div>
+          <Link to="/signup" className="text-center new-account">Create an account </Link>
+        </div>
+      </div>
+
     );
   }
 }

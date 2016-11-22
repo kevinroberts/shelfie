@@ -4,7 +4,7 @@
 }
 
 input[type=text].nav-search-input {
-  width: 290px;
+  min-width: 290px;
   padding: 6px 10px 6px 30px;
   color: #001A33;
   font-weight: 300;
@@ -26,10 +26,6 @@ input[type=text].nav-search-input {
 }
 
 .nav-login {
-
-  a {
-    color: #001A33 !important;
-  }
 
   i {
     color: #001A33;
@@ -57,4 +53,8 @@ input[type=text].nav-search-input {
 .icon-size
 {
   font-size: 87px;
+}
+
+.nav-logout {
+  color: #fff !important;
 }

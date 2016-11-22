@@ -11,6 +11,7 @@ const userSchema = new Schema({
   password: String,
   firstName: String,
   lastName: String,
+  timezone: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

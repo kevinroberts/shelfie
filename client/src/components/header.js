@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import Gravatar from 'react-gravatar';
 
 class Header extends Component {
   renderLogin() {
@@ -18,14 +19,18 @@ class Header extends Component {
               <div className="row">
                 <div className="col-lg-4">
                   <p className="text-center">
-                    <span className="fa fa-user icon-size" />
+                    <Link to={'/profile/' + this.props.username}>
+                    <Gravatar email={this.props.email} size={80} />
+                    </Link>
                   </p>
                 </div>
                 <div className="col-lg-8">
-                  <p className="text-left"><strong>{this.props.username}</strong></p>
+                  <p className="text-left">
+                    <strong>{this.props.username}</strong>
+                  </p>
                   <p className="text-left small">{this.props.email}</p>
                   <p className="text-left">
-                    <a href="#" className="btn btn-primary btn-block btn-sm">Profile settings</a>
+                    <Link className="btn btn-primary btn-block btn-sm" to={'/profile/' + this.props.username}>Profile settings</Link>
                   </p>
                 </div>
               </div>
@@ -37,7 +42,7 @@ class Header extends Component {
               <div className="row">
                 <div className="col-lg-12">
                   <p>
-                    <Link className="nav-link btn btn-danger btn-block" to="/signout">Log Out</Link>
+                    <Link className="nav-link btn btn-danger btn-block nav-logout" to="/signout">Log Out</Link>
                   </p>
                 </div>
               </div>
@@ -50,7 +55,7 @@ class Header extends Component {
       // show a link to sign in or sign up
       return [
         <li className="nav-item" key={1}>
-          <Link className="nav-link" to="/signin">Log In</Link>
+          <Link className="nav-link" to="/signin">Sign In</Link>
         </li>,
         <li className="nav-item" key={2}>
           <Link className="nav-link" to="/signup">Register</Link>
@@ -65,13 +70,19 @@ class Header extends Component {
       <div className="container">
         <button className="navbar-toggler hidden-sm-up pull-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation" />
 
-        <a className="navbar-brand" href="#">Shelfie</a>
+        <Link className="navbar-brand" to="/">Shelfie</Link>
 
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
       <ul className="nav navbar-nav">
-        <li className="nav-item"><a className="nav-link" href="#">Library</a></li>
-        <li className="nav-item active"><a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a></li>
-        <li className="nav-item"><a className="nav-link" href="#">Stats</a></li>
+        <li className="nav-item">
+          <a className="nav-link" href="#">Library</a>
+        </li>
+        <li className="nav-item active">
+          <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="#">Stats</a>
+        </li>
       </ul>
 
       <ul className="nav navbar-nav pull-right">
@@ -86,8 +97,6 @@ class Header extends Component {
           </div>
       </div>
     </nav>
-
-
 
     );
   }

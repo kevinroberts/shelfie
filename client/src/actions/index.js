@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import _ from 'lodash';
-import LocalStorageUtils from '../utils/local_storage_utils';
+import LocalStorageUtils from '../utils/local-storage-utils';
 import {
   AUTH_USER,
   UNAUTH_USER,
   AUTH_ERROR,
-  FETCH_MESSAGE
+  FETCH_MESSAGE,
+  FETCH_PROFILE
 } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
@@ -52,6 +53,21 @@ export function signupUser({ username, email, password }) {
       })
       .catch(response => dispatch(authError(response.data.error)));
   }
+}
+
+export function fetchProfile ( username ) {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/profile?username=${username}`, {
+      headers: { authorization: LocalStorageUtils.getToken() }
+    })
+      .then(response => {
+        dispatch({
+          type: FETCH_PROFILE,
+          payload: response.data
+        });
+      });
+  }
+
 }
 
 export function authError(error) {

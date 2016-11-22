@@ -10,6 +10,7 @@ module.exports = function(app) {
   app.get('/', requireAuth, function(req, res) {
     res.send({ message: 'Super secret code is ABC123' });
   });
+  app.get('/profile', requireAuth, Authentication.getProfile);
   app.post('/signin', globalBruteforce.prevent, requireSignin, Authentication.signin);
   app.post('/signup', Authentication.signup);
 };

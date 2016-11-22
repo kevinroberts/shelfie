@@ -12,6 +12,35 @@ exports.signin = function(req, res, next) {
   res.send({ token: tokenForUser(req.user), username: req.user.username, email: req.user.email  });
 };
 
+
+exports.getProfile = function (req, res, next) {
+  const username = req.query.username;
+  const authedUser = req.user;
+  if (!username) {
+    return res.status(422).send({ field: 'username', error: 'You must provide username'});
+  }
+
+  // find profile of given username
+  User.findOne({ username: username }, function(err, userProfile) {
+    if (err) { return next(err); }
+
+    let user = { isOwnProfile: false };
+
+    if (authedUser.username === userProfile.username) {
+      user.isOwnProfile = true;
+    }
+
+    user.username = userProfile.username;
+    user.email = userProfile.email;
+    user.firstName = userProfile.firstName;
+    user.lastName = userProfile.lastName;
+    user.createdAt = userProfile.createdAt;
+
+    res.json({ user });
+  });
+
+};
+
 exports.signup = function(req, res, next) {
   const username = req.body.username;
   const email = req.body.email;

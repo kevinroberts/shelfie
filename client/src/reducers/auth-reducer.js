@@ -2,6 +2,7 @@ import {
   AUTH_USER,
   UNAUTH_USER,
   AUTH_ERROR,
+  FETCH_PROFILE,
   FETCH_MESSAGE
 } from '../actions/types';
 
@@ -11,6 +12,8 @@ export default function(state = {}, action) {
       return { ...state, error: '', authenticated: true, username: action.payload.username, email: action.payload.email };
     case UNAUTH_USER:
       return { ...state, authenticated: false, username: '', email: '' };
+    case FETCH_PROFILE:
+      return {...state, user: action.payload.user};
     case AUTH_ERROR:
       return { ...state, error: action.payload };
     case FETCH_MESSAGE:
