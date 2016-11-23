@@ -8,9 +8,11 @@ const requireSignin = passport.authenticate('local', { session: false });
 
 module.exports = function(app) {
   app.get('/', requireAuth, function(req, res) {
-    res.send({ message: 'Super secret code is ABC123' });
+    res.send({ message: 'You have successfully authenticated' });
   });
   app.get('/profile', requireAuth, Authentication.getProfile);
   app.post('/signin', globalBruteforce.prevent, requireSignin, Authentication.signin);
   app.post('/signup', Authentication.signup);
+  app.post('/reset-request', Authentication.resetRequest);
+  app.post('/reset/:token', Authentication.resetPassword);
 };

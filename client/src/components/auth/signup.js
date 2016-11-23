@@ -3,6 +3,13 @@ import { reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 
 class Signup extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.props.clearAuthErrors();
+  }
+
   handleFormSubmit(formProps) {
     // Call action creator to sign up the user!
     this.props.signupUser(formProps);

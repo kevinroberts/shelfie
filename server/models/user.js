@@ -12,6 +12,8 @@ const userSchema = new Schema({
   firstName: String,
   lastName: String,
   timezone: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

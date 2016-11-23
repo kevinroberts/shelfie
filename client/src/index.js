@@ -11,6 +11,7 @@ import Signin from './components/auth/signin';
 import Signout from './components/auth/signout';
 import Signup from './components/auth/signup';
 import ResetPassword from './components/auth/reset-password';
+import ResetRequest from './components/auth/reset-request';
 import Feature from './components/feature';
 import Profile from './components/profile';
 import RequireAuth from './components/auth/require-auth';
@@ -39,6 +40,7 @@ ReactDOM.render(
         <Route path="signup" component={Signup} />
         <Route path="profile/:username" component={RequireAuth(Profile)} />
         <Route path="resetPassword/:key" component={ResetPassword} />
+        <Route path="resetRequest" component={ResetRequest} />
         <Route path="feature" component={RequireAuth(Feature)} />
       </Route>
     </Router>

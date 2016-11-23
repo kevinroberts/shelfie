@@ -21,9 +21,9 @@ const handleStoreError = function(message, parent, req) {
   console.log("store error for bruteforce check", message);
 };
 
-// No more than 1000 login attempts per day per IP
+// No more than 500 login attempts per day per IP
 const globalBruteforce = new ExpressBrute(store, {
-  freeRetries: 1000,
+  freeRetries: 500,
   attachResetToRequest: false,
   refreshTimeoutOnRequest: false,
   minWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)

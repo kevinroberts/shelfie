@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 const Loading = require('../utils/react-loading-animation');
 import Gravatar from 'react-gravatar';
-
+import { Link } from 'react-router';
 
 class Profile extends Component {
 
@@ -41,7 +41,7 @@ class Profile extends Component {
           <div className="form-group row">
             <label className="col-sm-2 col-form-label">Password</label>
             <div className="col-sm-10">
-              <a className="" href="#">Reset password</a>
+              <Link to="/resetRequest">Reset password</Link>
             </div>
           </div>
 

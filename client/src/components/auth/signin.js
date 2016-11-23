@@ -4,6 +4,13 @@ import * as actions from '../../actions';
 import { Link } from 'react-router';
 
 class Signin extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.props.clearAuthErrors();
+  }
+
   handleFormSubmit({ username, password }) {
     // Need to do something to log user in
     this.props.signinUser({ username, password });
@@ -23,7 +30,7 @@ class Signin extends Component {
     const { handleSubmit, fields: { username, password }} = this.props;
 
     return (
-      <div className="row">
+      <div className="row form-gap">
         <div className="col-sm-6 col-md-4 offset-md-4">
           <h1 className="text-xs-center login-title">Sign in to continue</h1>
 
@@ -35,7 +42,7 @@ class Signin extends Component {
               <input {...password} type="password" placeholder="Password" className="form-control" />
               {this.renderAlert()}
               <button action="submit" className="btn btn-lg btn-primary btn-block">Sign in</button>
-              <a href="#" className="pull-right need-help">Need help? </a>
+              <Link to="/resetRequest" className="pull-right need-help">Need help? </Link>
               <span className="clearfix" />
             </form>
           </div>

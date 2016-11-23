@@ -7,7 +7,9 @@ import {
   UNAUTH_USER,
   AUTH_ERROR,
   FETCH_MESSAGE,
-  FETCH_PROFILE
+  FETCH_PROFILE,
+  INIT_AUTH,
+  RESET_REQUEST_SUCCESS
 } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
@@ -52,7 +54,27 @@ export function signupUser({ username, email, password }) {
         browserHistory.push('/feature');
       })
       .catch(response => dispatch(authError(response.data.error)));
-  }
+  };
+}
+
+export function sendResetRequest({ email }) {
+  return function (dispatch) {
+    axios.post(`${ROOT_URL}/reset-request`, { email })
+      .then(response => {
+        dispatch({ type: RESET_REQUEST_SUCCESS, payload: response.data.message });
+      })
+      .catch(response => dispatch(authError(response.data.error)));
+  };
+}
+
+export function sendPasswordReset({password, key}) {
+  return function (dispatch) {
+    axios.post(`${ROOT_URL}/reset/${key}`, { password })
+      .then(response => {
+        dispatch({ type: RESET_REQUEST_SUCCESS, payload: response.data.message });
+      })
+      .catch(response => dispatch(authError(response.data.error)));
+  };
 }
 
 export function fetchProfile ( username ) {
@@ -66,14 +88,19 @@ export function fetchProfile ( username ) {
           payload: response.data
         });
       });
-  }
-
+  };
 }
 
 export function authError(error) {
   return {
     type: AUTH_ERROR,
     payload: error
+  };
+}
+
+export function clearAuthErrors() {
+  return {
+    type: INIT_AUTH,
   };
 }
 
