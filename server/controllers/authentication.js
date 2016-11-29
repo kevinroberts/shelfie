@@ -20,6 +20,24 @@ exports.signup = function(req, res, next) {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+
+  if (!firstName) {
+    return res.status(422).send({ field: 'firstName', error: 'You must provide a first name.'});
+  }
+
+  if (!lastName) {
+    return res.status(422).send({ field: 'lastName', error: 'You must provide a last name.'});
+  }
+
+  if (firstName && firstName.length > 50) {
+    return res.status(422).send({ field: 'firstName', error: 'Sorry, we cannot store first names longer than 50 characters.'});
+  }
+
+  if (lastName && lastName.length > 50) {
+    return res.status(422).send({ field: 'firstName', error: 'Sorry, we cannot store last names longer than 50 characters.'});
+  }
 
   if (!username) {
     return res.status(422).send({ field: 'username', error: 'You must provide username'});
@@ -27,6 +45,10 @@ exports.signup = function(req, res, next) {
 
   if (!email || !password) {
     return res.status(422).send({ field: 'all', error: 'You must provide email and password'});
+  }
+
+  if (email && email.length > 128) {
+    return res.status(422).send({ field: 'firstName', error: 'Sorry, we cannot store email addresses longer than 50 characters.'});
   }
 
   if (password && password.length < 7) {
@@ -52,6 +74,8 @@ exports.signup = function(req, res, next) {
         // If a user with email does NOT exist, create and save user record
         const user = new User({
           email: email,
+          firstName: xss(firstName, {}),
+          lastName: xss(lastName, {}),
           username: xss(username, {}),
           password: password
         });

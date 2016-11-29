@@ -44,12 +44,11 @@ export function signinUser({ username, password }) {
   }
 }
 
-export function signupUser({ username, email, password }) {
+export function signupUser({ firstName, lastName, username, email, password }) {
   return function(dispatch) {
-    axios.post(`${ROOT_URL}/signup`, { username, email, password })
+    axios.post(`${ROOT_URL}/signup`, { firstName, lastName, username, email, password })
       .then(response => {
-        var payload = {username: username, email: email};
-        dispatch({ type: AUTH_USER, payload: payload });
+        dispatch({ type: AUTH_USER, payload: response.data });
         LocalStorageUtils.setUser(response);
         browserHistory.push('/feature');
       })

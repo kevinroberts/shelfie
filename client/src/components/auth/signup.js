@@ -26,39 +26,70 @@ class Signup extends Component {
   }
 
   render() {
-    const { handleSubmit, fields: { username, email, password, passwordConfirm }} = this.props;
+    const { handleSubmit, fields: { firstName, lastName, username, email, password, passwordConfirm }} = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <fieldset className="form-group">
-          <label>Username:</label>
-          <input className="form-control" {...username} />
-          {username.touched && username.error && <div className="error">{username.error}</div>}
-        </fieldset>
-        <fieldset className="form-group">
-          <label>Email:</label>
-          <input className="form-control" {...email} />
-          {email.touched && email.error && <div className="error">{email.error}</div>}
-        </fieldset>
-        <fieldset className="form-group">
-          <label>Password:</label>
-          <input className="form-control" {...password} type="password" />
-          {password.touched && password.error && <div className="error">{password.error}</div>}
-        </fieldset>
-        <fieldset className="form-group">
-          <label>Confirm Password:</label>
-          <input className="form-control" {...passwordConfirm} type="password" />
-          {passwordConfirm.touched && passwordConfirm.error && <div className="error">{passwordConfirm.error}</div>}
-        </fieldset>
-        {this.renderAlert()}
-        <button action="submit" className="btn btn-primary">Sign up!</button>
-      </form>
+      <div className="row form-gap">
+        <div className="col-sm-7 col-md-5 offset-md-3">
+          <form className="card" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            <h3 className="card-header"><i className="fa fa-user-plus" aria-hidden="true" /> Sign up</h3>
+            <div className="card-block">
+
+
+              <label>Name:</label>
+              <div className="row sign-up-name">
+                <div className="col-xs-6 col-md-6">
+                  <label className="sr-only">First name</label>
+                  <input className="form-control" placeholder="First Name" type="text" {...firstName} />
+                </div>
+                <div className="col-xs-6 col-md-6">
+                  <label className="sr-only">Last name</label>
+                  <input className="form-control" placeholder="Last Name" type="text" {...lastName} />
+                </div>
+                {firstName.touched && firstName.error && <div className="error">{firstName.error}</div>}
+                {lastName.touched && lastName.error && <div className="error">{lastName.error}</div>}
+              </div>
+
+              <fieldset className="form-group">
+                <label>Username:</label>
+                <input className="form-control" placeholder="Your Username" {...username} />
+                {username.touched && username.error && <div className="error">{username.error}</div>}
+              </fieldset>
+              <fieldset className="form-group">
+                <label>Email:</label>
+                <input type="email" className="form-control" placeholder="Your Email" {...email} />
+                {email.touched && email.error && <div className="error">{email.error}</div>}
+              </fieldset>
+              <fieldset className="form-group">
+                <label>Password:</label>
+                <input className="form-control" placeholder="New Password" {...password} type="password" />
+                {password.touched && password.error && <div className="error">{password.error}</div>}
+              </fieldset>
+              <fieldset className="form-group">
+                <label>Confirm Password:</label>
+                <input className="form-control" placeholder="Re-enter Password" {...passwordConfirm} type="password" />
+                {passwordConfirm.touched && passwordConfirm.error && <div className="error">{passwordConfirm.error}</div>}
+              </fieldset>
+              {this.renderAlert()}
+              <button action="submit" className="btn btn-primary">Sign up!</button>
+            </div>
+          </form>
+        </div>
+      </div>
     );
   }
 }
 
 function validate(formProps) {
   const errors = {};
+
+  if (!formProps.firstName) {
+    errors.firstName = 'Please enter a first name';
+  }
+
+  if (!formProps.lastName) {
+    errors.lastName = 'Please enter a last name';
+  }
 
   if (!formProps.username) {
     errors.username = 'Please enter a username';
@@ -93,6 +124,6 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   form: 'signup',
-  fields: ['username', 'email', 'password', 'passwordConfirm'],
+  fields: ['firstName', 'lastName', 'username', 'email', 'password', 'passwordConfirm'],
   validate
 }, mapStateToProps, actions)(Signup);
