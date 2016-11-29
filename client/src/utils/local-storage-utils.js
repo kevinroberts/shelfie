@@ -71,6 +71,8 @@ const util = {
       return localStorage.setCacheItem('user', {
         token: responseData.data.token,
         email: responseData.data.email,
+        firstName: responseData.data.firstName,
+        lastName: responseData.data.lastName,
         username: responseData.data.username
       }, {days : 1 });
 

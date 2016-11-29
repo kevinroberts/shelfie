@@ -26,12 +26,23 @@ class Signin extends Component {
     }
   }
 
+  renderMessage() {
+    if (this.props.loginMessage) {
+      return (
+        <div className="alert alert-success">
+          <strong>Note: </strong> {this.props.loginMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     const { handleSubmit, fields: { username, password }} = this.props;
 
     return (
       <div className="row form-gap">
         <div className="col-sm-6 col-md-4 offset-md-4">
+          {this.renderMessage()}
           <h1 className="text-xs-center login-title">Sign in to continue</h1>
 
           <div className="account-wall">
@@ -55,7 +66,7 @@ class Signin extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error };
+  return { errorMessage: state.auth.error, loginMessage: state.auth.loginMessage };
 }
 
 export default reduxForm({

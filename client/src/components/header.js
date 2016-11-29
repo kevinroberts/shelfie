@@ -37,7 +37,7 @@ class Header extends Component {
               <div className="navbar-footer-content">
                 <div className="row">
                   <div className="col-md-6">
-                    <Link className="btn btn-secondary btn-sm" to={'/profile/' + this.props.username}>View Profile</Link>
+                    <Link className="btn btn-secondary btn-sm" to={'/profile/' + this.props.username}>Change Password</Link>
                   </div>
                   <div className="col-md-6">
                     <Link className="btn btn-secondary btn-sm pull-right" to="/signout">Sign Out</Link>

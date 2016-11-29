@@ -3,6 +3,7 @@ const User = require('../models/user');
 const async = require('async');
 const crypto = require('crypto');
 const emailer = require('../services/email-helper');
+const xss = require('xss');
 
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
@@ -12,7 +13,7 @@ function tokenForUser(user) {
 exports.signin = function(req, res, next) {
   // User has already had their email and password auth'd
   // We just need to give them a token
-  res.send({ token: tokenForUser(req.user), username: req.user.username, email: req.user.email  });
+  res.send({ token: tokenForUser(req.user), username: req.user.username, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName });
 };
 
 exports.signup = function(req, res, next) {
@@ -26,6 +27,10 @@ exports.signup = function(req, res, next) {
 
   if (!email || !password) {
     return res.status(422).send({ field: 'all', error: 'You must provide email and password'});
+  }
+
+  if (password && password.length < 7) {
+    return res.status(422).send({ field: 'all', error: 'Your password must be at least 7 characters in length.'});
   }
 
   // See if a user with the given email exists
@@ -47,14 +52,14 @@ exports.signup = function(req, res, next) {
         // If a user with email does NOT exist, create and save user record
         const user = new User({
           email: email,
-          username: username,
+          username: xss(username, {}),
           password: password
         });
 
         user.save(function(err) {
           if (err) { return next(err); }
           // Respond to request indicating the user was created
-          res.json({ token: tokenForUser(user), username: username, email: email });
+          res.json({ token: tokenForUser(user), username: username, email: email, firstName: '', lastName: '' });
         });
     });
   });
@@ -170,6 +175,70 @@ exports.getProfile = function (req, res, next) {
     user.createdAt = userProfile.createdAt;
 
     res.json({ user });
+  });
+
+};
+
+exports.editProfile = function (req, res, next) {
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const password = req.body.password;
+  const authedUser = req.user;
+  let changed = false;
+  let passChanged = false;
+
+  async.waterfall([
+    function (done) {
+
+      User.findOne({ username: authedUser.username }, function(err, userProfile) {
+        if (err) { return next(err); }
+
+        if (firstName && lastName) {
+          userProfile.firstName = xss(firstName, {});
+          userProfile.lastName = xss(lastName, {});
+          changed = true;
+        }
+        if (password) {
+          userProfile.password = password;
+          changed = true;
+          passChanged = true;
+        }
+
+        if (changed) {
+          userProfile.updatedAt = new Date();
+
+          userProfile.save(function(err) {
+            if (err) { return next(err) }
+
+            userProfile.message = "Profile updated successfully";
+            if (passChanged) {
+              userProfile.message = "Your password has been updated successfully. Please sign in with your new password to continue."
+            }
+
+            done(err, userProfile);
+
+          });
+
+        } else {
+          userProfile.message = "No changes were processed.";
+          done(err, userProfile);
+        }
+
+      });
+
+
+    }, function (user, done) {
+      emailer.sendPasswordChangedEmail(user.email, user.username, function (error, response) {
+        done(error, user);
+      });
+    }
+    ], function (err, user) {
+    if (err) {
+      console.error("an error has occurred trying to edit profile", err);
+    } else {
+      return res.json({ message: user.message, firstName : user.firstName, lastName : user.lastName, email: user.email });
+    }
+
   });
 
 };

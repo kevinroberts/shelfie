@@ -94,6 +94,10 @@ function validate(formProps) {
 
   if (!formProps.password) {
     errors.password = 'Please enter an password';
+  } else {
+    if (formProps.password && formProps.password.length < 7) {
+      errors.password = 'Your password must be at least 7 characters.';
+    }
   }
 
   if (!formProps.passwordConfirm) {

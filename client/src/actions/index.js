@@ -8,8 +8,9 @@ import {
   AUTH_ERROR,
   FETCH_MESSAGE,
   FETCH_PROFILE,
+  EDIT_USER,
   INIT_AUTH,
-  RESET_REQUEST_SUCCESS
+  REQUEST_SUCCESS
 } from './types';
 
 const ROOT_URL = 'http://localhost:3090';
@@ -23,9 +24,8 @@ export function signinUser({ username, password }) {
         // - Save the JWT token
         LocalStorageUtils.setUser(response);
         // - Update state to indicate user is authenticated
-        var payload = {username: username, email: response.data.email};
         dispatch({ type: AUTH_USER,
-                    payload: payload });
+                    payload: response.data });
         // - redirect to the route '/feature'
         browserHistory.push('/feature');
       })
@@ -57,11 +57,33 @@ export function signupUser({ username, email, password }) {
   };
 }
 
+export function editUser({firstName, lastName, password }) {
+  return function (dispatch) {
+    axios({
+      method: 'post',
+      url: `${ROOT_URL}/profile`,
+      data: {
+        firstName, lastName, password
+      },
+      headers: { authorization: LocalStorageUtils.getToken() }
+    }).then(response => {
+        // if password changed - > un-auth user and send them back to sign in
+        if (password) {
+          LocalStorageUtils.clearUser();
+          dispatch({type: UNAUTH_USER, payload: response.data});
+          browserHistory.push('/signin');
+        } else {
+          dispatch({ type: EDIT_USER, payload: response.data });
+        }
+      }).catch(response => dispatch(authError(response.data.error)));
+  }
+}
+
 export function sendResetRequest({ email }) {
   return function (dispatch) {
     axios.post(`${ROOT_URL}/reset-request`, { email })
       .then(response => {
-        dispatch({ type: RESET_REQUEST_SUCCESS, payload: response.data.message });
+        dispatch({ type: REQUEST_SUCCESS, payload: response.data.message });
       })
       .catch(response => dispatch(authError(response.data.error)));
   };
@@ -71,7 +93,7 @@ export function sendPasswordReset({password, key}) {
   return function (dispatch) {
     axios.post(`${ROOT_URL}/reset/${key}`, { password })
       .then(response => {
-        dispatch({ type: RESET_REQUEST_SUCCESS, payload: response.data.message });
+        dispatch({ type: REQUEST_SUCCESS, payload: response.data.message });
       })
       .catch(response => dispatch(authError(response.data.error)));
   };

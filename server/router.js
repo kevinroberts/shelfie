@@ -13,6 +13,7 @@ module.exports = function(app) {
   app.get('/profile', requireAuth, Authentication.getProfile);
   app.post('/signin', bruteforce.loginBruteforce.prevent, requireSignin, Authentication.signin);
   app.post('/signup', Authentication.signup);
+  app.post('/profile', requireAuth, Authentication.editProfile);
   app.post('/reset-request', bruteforce.resetPassBruteforce.prevent, Authentication.resetRequest);
   app.post('/reset/:token', Authentication.resetPassword);
 };
