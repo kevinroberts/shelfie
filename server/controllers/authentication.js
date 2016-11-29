@@ -91,7 +91,7 @@ exports.resetRequest = function (req, res, next) {
     },
     function(token, user, done) {
       // send the reset request email ${req.headers.host}
-      emailer.sendResetEmail(user.email, `http://localhost:8080/resetPassword/${token}`, function (error, reponse) {
+      emailer.sendResetEmail(user.email, `${process.env.HOST_URL}/resetPassword/${token}`, function (error, reponse) {
         done(error, reponse);
       });
     }

@@ -1,3 +1,5 @@
+import { setExpiration, getExpiration } from './local-cache';
+
 const isAvailable = (function isAvailableIffe() {
   const test = 'test';
   try {
@@ -33,10 +35,10 @@ const util = {
   },
   getToken() {
     if (isAvailable) {
-      if (localStorage.getItem("user") === null) {
+      if (localStorage.getCacheItem("user") === null) {
         return null;
       } else {
-        var user = JSON.parse(localStorage.getItem('user'));
+        var user = localStorage.getCacheItem('user');
         return user.token;
       }
     }
@@ -44,10 +46,10 @@ const util = {
   },
   getUsername() {
     if (isAvailable) {
-      if (localStorage.getItem("user") === null) {
+      if (localStorage.getCacheItem("user") === null) {
         return null;
       } else {
-        var user = JSON.parse(localStorage.getItem('user'));
+        var user = localStorage.getCacheItem('user');
         return user.username;
       }
     }
@@ -55,10 +57,10 @@ const util = {
   },
   getUser() {
     if (isAvailable) {
-      if (localStorage.getItem("user") === null) {
+      if (localStorage.getCacheItem("user") === null) {
         return null;
       } else {
-        return JSON.parse(localStorage.getItem('user'));
+        return localStorage.getCacheItem('user');
       }
     }
     return null;
@@ -66,11 +68,11 @@ const util = {
   setUser(responseData) {
     if (isAvailable) {
 
-      return localStorage.setItem('user', JSON.stringify({
+      return localStorage.setCacheItem('user', {
         token: responseData.data.token,
         email: responseData.data.email,
         username: responseData.data.username
-      }));
+      }, {days : 1 });
 
     }
     return null;
