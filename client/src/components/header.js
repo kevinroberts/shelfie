@@ -15,35 +15,33 @@ class Header extends Component {
         </a>
         <ul className="dropdown-menu dropdown-menu-right">
           <li>
-            <div className="navbar-login">
+            <div className="navbar-content">
               <div className="row">
-                <div className="col-lg-4">
-                  <p className="text-center">
-                    <Link to={'/profile/' + this.props.username}>
-                    <Gravatar email={this.props.email} size={80} />
-                    </Link>
-                  </p>
+                <div className="col-md-5">
+                    <Gravatar email={this.props.email} size={120} className={'img-fluid'} />
+                    <p className="text-xs-center small">
+                      <a href="https://en.gravatar.com/emails" target="_blank">Change Photo</a>
+                    </p>
                 </div>
-                <div className="col-lg-8">
-                  <p className="text-left">
-                    <strong>{this.props.username}</strong>
-                  </p>
-                  <p className="text-left small">{this.props.email}</p>
-                  <p className="text-left">
-                    <Link className="btn btn-primary btn-block btn-sm" to={'/profile/' + this.props.username}>Profile settings</Link>
-                  </p>
+                <div className="col-md-7">
+                  <span>{this.props.username}</span>
+                  <p className="text-muted small">
+                    {this.props.email}</p>
+                  <div className="divider">
+                  </div>
+                  <Link className="btn btn-primary btn-sm active" to={'/profile/' + this.props.username}>View Profile</Link>
                 </div>
               </div>
             </div>
-          </li>
-          <li className="divider" />
-          <li>
-            <div className="navbar-login navbar-login-session">
-              <div className="row">
-                <div className="col-lg-12">
-                  <p>
-                    <Link className="nav-link btn btn-danger btn-block nav-logout" to="/signout">Log Out</Link>
-                  </p>
+            <div className="navbar-footer">
+              <div className="navbar-footer-content">
+                <div className="row">
+                  <div className="col-md-6">
+                    <Link className="btn btn-secondary btn-sm" to={'/profile/' + this.props.username}>View Profile</Link>
+                  </div>
+                  <div className="col-md-6">
+                    <Link className="btn btn-secondary btn-sm pull-right" to="/signout">Sign Out</Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,7 +86,7 @@ class Header extends Component {
       <ul className="nav navbar-nav pull-right">
         <li className="nav-item hidden-sm-down">
           <form className="nav-search form-inline float-xs-left">
-            <i className="fa fa-search" aria-hidden="true"></i>
+            <i className="fa fa-search" aria-hidden="true" />
             <input className="nav-search-input form-control" type="text" placeholder="Search" />
           </form>
         </li>

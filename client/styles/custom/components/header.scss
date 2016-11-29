@@ -35,26 +35,28 @@ input[type=text].nav-search-input {
   }
 
 }
-.navbar-login
+
+.navbar-content
 {
-  width: 305px;
-  padding: 10px;
-  padding-bottom: 0px;
-
+  width:320px;
+  padding: 15px;
+  padding-bottom:0px;
 }
-
-.navbar-login-session
+.navbar-content:before, .navbar-content:after
 {
-  padding: 10px;
-  padding-bottom: 0px;
-  padding-top: 0px;
+  display: table;
+  content: "";
+  line-height: 0;
 }
-
-.icon-size
+.navbar-nav.navbar-right:last-child {
+  margin-right: 15px !important;
+}
+.navbar-footer
 {
-  font-size: 87px;
+  background-color:#DDD;
 }
-
-.nav-logout {
-  color: #fff !important;
+.navbar-footer-content { padding:15px 15px 15px 15px; }
+.dropdown-menu {
+  padding: 0px;
+  overflow: hidden;
 }
