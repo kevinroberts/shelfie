@@ -1,32 +1,45 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import * as actions from '../../actions';
+import { ROOT_URL } from '../../actions/index'
+import { connect } from 'react-redux';
+import { SubmissionError } from 'redux-form';
+import axios from 'axios';
 
 class Signup extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.props.clearAuthErrors();
+  renderField ({ input, label, type, placeholder, meta: { touched, error } }) {
+    return (<fieldset className="form-group">
+      <label>{label + ':'}</label>
+      <input {...input} placeholder={placeholder} className="form-control" type={type}/>
+      {touched && error && <div className="error">{error}</div>}
+    </fieldset>);
   }
 
-  handleFormSubmit(formProps) {
-    // Call action creator to sign up the user!
-    this.props.signupUser(formProps);
-  }
-
-  renderAlert() {
-    if (this.props.errorMessage) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
-        </div>
-      );
+  renderInlineField ({ input, label, type, meta: { touched, error } }) {
+      return (<div className="col-xs-6 col-md-6">
+        <label className="sr-only">{label}</label>
+        <input className="form-control" {...input} placeholder={label} type={type} />
+        {touched && error && <div className="error row">{error}</div>}
+      </div>)
     }
+
+  handleFormSubmit(values) {
+    // Call api to sign up the user
+    return axios.post(`${ROOT_URL}/signup`, { ...values })
+      .then(response => {
+        // success response - pass action creator to update state
+        this.props.signupUser(response);
+      })
+      .catch(response => {
+        if (response instanceof SubmissionError) throw err;
+        throw new SubmissionError({ _error : 'Sign up failed', ...response.data });
+      });
   }
 
   render() {
-    const { handleSubmit, fields: { firstName, lastName, username, email, password, passwordConfirm }} = this.props;
+
+    const { error, handleSubmit, pristine, reset, submitting } = this.props;
 
     return (
       <div className="row form-gap">
@@ -34,88 +47,59 @@ class Signup extends Component {
           <form className="card" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             <h3 className="card-header"><i className="fa fa-user-plus" aria-hidden="true" /> Sign up</h3>
             <div className="card-block">
-
-
               <label>Name:</label>
+
               <div className="row sign-up-name">
-                <div className="col-xs-6 col-md-6">
-                  <label className="sr-only">First name</label>
-                  <input className="form-control" placeholder="First Name" type="text" {...firstName} />
-                </div>
-                <div className="col-xs-6 col-md-6">
-                  <label className="sr-only">Last name</label>
-                  <input className="form-control" placeholder="Last Name" type="text" {...lastName} />
-                </div>
-                {firstName.touched && firstName.error && <div className="error">{firstName.error}</div>}
-                {lastName.touched && lastName.error && <div className="error">{lastName.error}</div>}
+                <Field name="firstName" type="text" component={this.renderInlineField} label="First Name"/>
+                <Field name="lastName" type="text" component={this.renderInlineField} label="Last Name"/>
               </div>
 
-              <fieldset className="form-group">
-                <label>Username:</label>
-                <input className="form-control" placeholder="Your Username" {...username} />
-                {username.touched && username.error && <div className="error">{username.error}</div>}
-              </fieldset>
-              <fieldset className="form-group">
-                <label>Email:</label>
-                <input type="email" className="form-control" placeholder="Your Email" {...email} />
-                {email.touched && email.error && <div className="error">{email.error}</div>}
-              </fieldset>
-              <fieldset className="form-group">
-                <label>Password:</label>
-                <input className="form-control" placeholder="New Password" {...password} type="password" />
-                {password.touched && password.error && <div className="error">{password.error}</div>}
-              </fieldset>
-              <fieldset className="form-group">
-                <label>Confirm Password:</label>
-                <input className="form-control" placeholder="Re-enter Password" {...passwordConfirm} type="password" />
-                {passwordConfirm.touched && passwordConfirm.error && <div className="error">{passwordConfirm.error}</div>}
-              </fieldset>
-              {this.renderAlert()}
-              <button action="submit" className="btn btn-primary">Sign up!</button>
+              <Field name="username" type="text" component={this.renderField} label="Username" placeholder="Your Username" />
+              <Field name="email" type="email" component={this.renderField} label="Email " placeholder="Your Email" />
+              <Field name="password" type="password" component={this.renderField} label="Password" placeholder="New Password"/>
+              <Field name="passwordConfirm" type="password" component={this.renderField} label="Confirm Password" placeholder="Re-enter Password" />
+              {error && <div className="error row">{error}</div>}
+
+              <button action="submit" className="btn btn-primary" disabled={submitting}>Sign up!</button>
             </div>
           </form>
         </div>
       </div>
     );
+
   }
+
 }
 
-function validate(formProps) {
+function validate (values) {
   const errors = {};
 
-  if (!formProps.firstName) {
+  if (!values.firstName) {
     errors.firstName = 'Please enter a first name';
   }
-
-  if (!formProps.lastName) {
+  if (!values.lastName) {
     errors.lastName = 'Please enter a last name';
   }
-
-  if (!formProps.username) {
+  if (!values.username) {
     errors.username = 'Please enter a username';
   }
-
-  if (!formProps.email) {
+  if (!values.email) {
     errors.email = 'Please enter an email';
   }
-
-  if (!formProps.password) {
+  if (!values.password) {
     errors.password = 'Please enter a password';
   } else {
-    if (formProps.password && formProps.password.length < 7) {
+    if (values.password && values.password.length < 7) {
       errors.password = 'Your password must be at least 7 characters.';
     }
   }
-
-  if (!formProps.passwordConfirm) {
+  if (!values.passwordConfirm) {
     errors.passwordConfirm = 'Please enter a password confirmation';
   }
-
-  if (formProps.password !== formProps.passwordConfirm) {
+  if (values.password !== values.passwordConfirm) {
     errors.password = 'Passwords must match';
   }
-
-  return errors;
+  return errors
 }
 
 function mapStateToProps(state) {
@@ -123,7 +107,7 @@ function mapStateToProps(state) {
 }
 
 export default reduxForm({
-  form: 'signup',
-  fields: ['firstName', 'lastName', 'username', 'email', 'password', 'passwordConfirm'],
-  validate
-}, mapStateToProps, actions)(Signup);
+  form: 'signup',  // a unique identifier for this form
+  validate                // <--- validation function given to redux-form
+})(connect(mapStateToProps, actions)(Signup))
+

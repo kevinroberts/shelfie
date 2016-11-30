@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 import { Link } from 'react-router';
+import { ROOT_URL } from '../../actions/index'
+import { connect } from 'react-redux';
+import { SubmissionError } from 'redux-form';
+import axios from 'axios';
 import LocalStorageUtils from '../../utils/local-storage-utils';
 
 
@@ -10,26 +14,50 @@ class ResetPassword extends Component {
   constructor(props) {
     super(props);
 
-    this.props.clearAuthErrors();
-
     this.state = {
-      hiddenForm : ""
+      requestSuccess : false,
+      successMessage : '',
+      hiddenForm : ''
     };
 
   }
 
-  handleFormSubmit(formProps) {
+  renderField ({ input, label, type, placeholder, meta: { touched, error } }) {
+    return (
+      <fieldset className="form-group">
+          <label>{label}</label>
+          <input {...input} placeholder={placeholder} className="form-control" type={type}/>
+          {touched && error && <div className="error">{error}</div>}
+      </fieldset>
+    );
+  }
+
+  handleFormSubmit(values) {
     // Call action creator to send reset request to server
-    formProps.key = this.props.params.key;
-    this.props.sendPasswordReset(formProps);
+    return axios.post(`${ROOT_URL}/reset/${this.props.params.key}`, { ...values })
+      .then(response => {
+
+        this.props.reset();
+
+        this.setState({requestSuccess: true, successMessage: response.data.message, hiddenForm: 'invisible'});
+        setTimeout(() => {
+          this.setState({requestSuccess: false, successMessage: '', hiddenForm: ''});
+        }, 30000); // show message for 30 seconds
+
+        this.props.sendPasswordReset(response);
+      })
+      .catch(response => {
+        if (response instanceof SubmissionError) throw err;
+        throw new SubmissionError({ ...response.data });
+      });
   }
 
   renderAlert() {
-    if (this.props.errorMessage) {
+    if (this.props.error) {
       return (
         <div>
         <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
+          <strong>Oops!</strong> {this.props.error}
         </div>
           <p>Need help? <Link to="/resetRequest">Request a new password reset email</Link>.</p>
         </div>
@@ -38,20 +66,18 @@ class ResetPassword extends Component {
   }
 
   renderSuccess() {
-    if (this.props.successMessage) {
+    if (this.state.requestSuccess) {
 
       // un-auth user if they are logged in
       const token = LocalStorageUtils.getToken();
       if (token) {
         this.props.signoutUser();
       }
-
-      this.setState({hiddenForm: 'invisible'});
       return (
         <div className="alert alert-success">
-          <strong>Success!</strong> {this.props.successMessage}
+          <strong>Success!</strong> {this.state.successMessage}
           <br />
-          <Link to="/login">You may now login with your new password.</Link>
+          <Link to="/signin">You may now sign in with your new password.</Link>
         </div>
       );
     }
@@ -59,27 +85,22 @@ class ResetPassword extends Component {
 
   render() {
 
-    const { handleSubmit, fields: { password, passwordConfirm }} = this.props;
+    const { error, handleSubmit, pristine, reset, submitting } = this.props;
 
     return (
       <div className="form-gap">
         {this.renderSuccess()}
-      <div className={'card' + this.state.hiddenForm} >
+      <div className={'card ' + this.state.hiddenForm}>
         <div className="card-block">
           <h4 className="card-title">Choose a new password</h4>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="card-text">
-            <fieldset className="form-group">
-              <label>New Password:</label>
-              <input className="form-control" type="password" {...password} />
-              {password.touched && password.error && <div className="error">{password.error}</div>}
-            </fieldset>
-            <fieldset className="form-group">
-              <label>Confirm Password:</label>
-              <input className="form-control" type="password" {...passwordConfirm} />
-              {passwordConfirm.touched && passwordConfirm.error && <div className="error">{passwordConfirm.error}</div>}
-            </fieldset>
+
+            <Field name="password" type="password" component={this.renderField} label="New Password:" placeholder="new password" />
+
+            <Field name="passwordConfirm" type="password" component={this.renderField} label="Confirm Password:" placeholder="confirm password" />
+
             {this.renderAlert()}
-            <button action="submit" className="btn btn-primary">Reset Password!</button>
+            <button action="submit" className="btn btn-primary" disabled={submitting}>Reset Password!</button>
           </form>
         </div>
       </div>
@@ -112,15 +133,12 @@ function validate(formProps) {
 }
 
 
-
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error,
-    successMessage : state.auth.successMessage };
+  return { authenticated: state.auth.authenticated };
 }
 
 export default reduxForm({
-  form: 'resetPassword',
-  fields: [ 'password', 'passwordConfirm' ],
-  validate
-}, mapStateToProps, actions)(ResetPassword);
+  form: 'resetPassword',  // a unique identifier for this form
+  validate                // <--- validation function given to redux-form
+})(connect(mapStateToProps, actions)(ResetPassword))
 

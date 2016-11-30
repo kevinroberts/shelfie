@@ -14,7 +14,7 @@ const store = new MongoStore(function (ready) {
 const requestFailCallback = function (req, res, next, nextValidRequestDate) {
   console.log("request failed bruteforce check");
   let msg = "You've made too many failed attempts in a short period of time, please try again " + moment(nextValidRequestDate).fromNow();
-  return res.status(429).send({ field: 'all', error: msg });
+  return res.status(429).send({ _error: msg });
 };
 
 const handleStoreError = function(message, parent, req) {

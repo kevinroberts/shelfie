@@ -2,9 +2,7 @@ import _ from 'lodash';
 import {
   AUTH_USER,
   UNAUTH_USER,
-  AUTH_ERROR,
   FETCH_PROFILE,
-  INIT_AUTH,
   EDIT_USER,
   REQUEST_SUCCESS,
   FETCH_MESSAGE
@@ -20,15 +18,10 @@ export default function(state = {}, action) {
       return { ...state, authenticated: false, username: '', email: '', fistName: '', lastName: '', loginMessage: _.has(action, 'payload.message') ? action.payload.message : '' };
     case FETCH_PROFILE:
       return {...state, user: action.payload.user};
-    case AUTH_ERROR:
-      return { ...state, error: action.payload };
     case REQUEST_SUCCESS:
-      return { ...state, error: '', successMessage: action.payload};
+      return { ...state };
     case EDIT_USER:
-      return { ...state, error: '', successMessage: action.payload.message,
-        firstName: action.payload.firstName, lastName: action.payload.lastName};
-    case INIT_AUTH:
-      return { ...state, error: '', successMessage: ''};
+      return { ...state, firstName: action.payload.firstName, lastName: action.payload.lastName, user: action.payload};
     case FETCH_MESSAGE:
       return { ...state, message: action.payload };
   }
