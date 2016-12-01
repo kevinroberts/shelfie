@@ -21,10 +21,9 @@ exports.signin = function(req, res, next) {
 exports.signup = function(req, res, next) {
   const signupValidator = new Checkit(Validator.signUpValidation);
   signupValidator.run(req.body).then((validated)=>{
-    console.log('form validated', validated);
 
     // See if a user with the given email exists
-    User.findOne({ username: req.body.username }, function(err, existingUserWithUsername) {
+    User.findOne({ username: validated.username }, function(err, existingUserWithUsername) {
       if (err) { return next(err); }
 
       // If a user with email does exist, return an error
@@ -32,7 +31,7 @@ exports.signup = function(req, res, next) {
         return res.status(422).send({ _error: 'username is in use' });
       }
 
-      User.findOne({ email: req.body.email }, function(err, existingUserWithEmail) {
+      User.findOne({ email: validated.email }, function(err, existingUserWithEmail) {
         if (err) { return next(err); }
 
         if (existingUserWithEmail) {
@@ -42,10 +41,10 @@ exports.signup = function(req, res, next) {
         // If a user with email does NOT exist, create and save user record
         const user = new User({
           email: req.body.email,
-          firstName: xss(req.body.firstName, {}),
-          lastName: xss(req.body.lastName, {}),
-          username: xss(req.body.username, {}),
-          password: req.body.password
+          firstName: xss(validated.firstName, {}),
+          lastName: xss(validated.lastName, {}),
+          username: xss(validated.username, {}),
+          password: validated.password
         });
 
         user.save(function(err) {
@@ -67,8 +66,7 @@ exports.signup = function(req, res, next) {
 exports.resetRequest = function (req, res, next) {
   const resetValidator = new Checkit(Validator.resetRequestValidation);
   resetValidator.run(req.body).then((validated)=> {
-    console.log('form validated', validated);
-    const email = req.body.email;
+
     async.waterfall([
       function(done) {
         crypto.randomBytes(20, function(err, buf) {
@@ -78,7 +76,7 @@ exports.resetRequest = function (req, res, next) {
       },
       function(token, done) {
 
-        User.findOne({ email: email }, function(err, user) {
+        User.findOne({ email: validated.email }, function(err, user) {
           if (!user) {
             return res.status(422).send({ _error: 'No account with that email address exists'});
           }
@@ -124,7 +122,7 @@ exports.resetPassword = function (req, res, next) {
             return res.status(422).send({ _error: 'Password reset token is invalid or has expired.'});
           }
 
-          user.password = req.body.password;
+          user.password = validated.password;
           user.updatedAt = new Date();
           user.resetPasswordToken = undefined;
           user.resetPasswordExpires = undefined;
@@ -187,9 +185,9 @@ exports.editProfile = function (req, res, next) {
   const editProfileValidator = new Checkit(Validator.editProfileValidation);
   editProfileValidator.run(req.body).then((validated)=> {
     const authedUser = req.user;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const password = req.body.password;
+    const firstName = validated.firstName;
+    const lastName = validated.lastName;
+    const password = validated.password;
     let changed = false;
     let passChanged = false;
 
@@ -246,7 +244,8 @@ exports.editProfile = function (req, res, next) {
       if (err) {
         console.error("an error has occurred trying to edit profile", err);
       } else {
-        return res.json({ message: user.message, firstName : user.firstName, lastName : user.lastName, email: user.email, isOwnProfile: true });
+        return res.json({ message: user.message, firstName : user.firstName,
+          lastName : user.lastName, email: user.email, createdAt: user.createdAt, isOwnProfile: true });
       }
 
     });
