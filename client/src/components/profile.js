@@ -11,7 +11,7 @@ class Profile extends Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchProfile(this.props.params.username);
   }
 
