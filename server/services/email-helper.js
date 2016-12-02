@@ -15,14 +15,14 @@ function resetEmail(toEmail, resetLink) {
   return mail.toJSON();
 }
 
-function passwordChangedEmail(toEmail, toUser) {
+function passwordChangedEmail(toEmail, toUser, fName) {
   const helper = require('sendgrid').mail;
 
   const from_email = new helper.Email(process.env.FROM_EMAIL);
   const to_email = new helper.Email(toEmail);
   const subject = "Shelfie - Your password has been changed";
 
-  const content = new helper.Content("text/plain", `Hello,\n\nThis is a confirmation that the password for your account with username ${toUser} has been changed.`);
+  const content = new helper.Content("text/plain", `Hello ${fName},\n\nThis is a confirmation that the password for your account with username ${toUser} has been changed.\n\nRegards,\nShelfie`);
 
   const mail = new helper.Mail(from_email, subject, to_email, content);
 

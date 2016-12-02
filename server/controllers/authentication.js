@@ -100,7 +100,7 @@ exports.resetRequest = function (req, res, next) {
         console.log('error sending reset request', err);
         return res.status(422).send({ _error: 'Error with sending email - please try again'});
       } else {
-        return res.json({message: `An e-mail has been sent to ${email} with further instructions.`});
+        return res.json({message: `An e-mail has been sent to ${validated.email} with further instructions.`});
       }
 
     });
@@ -134,7 +134,7 @@ exports.resetPassword = function (req, res, next) {
       },
       function(user, done) {
         // send the user a confirmation email that their password has just been changed
-        emailer.sendPasswordChangedEmail(user.email, user.username, function (error, response) {
+        emailer.sendPasswordChangedEmail(user.email, user.username, user.firstName, function (error, response) {
           done(error, response);
         });
       }
@@ -170,7 +170,7 @@ exports.getProfile = function (req, res, next) {
     }
 
     user.username = userProfile.username;
-    user.email = userProfile.email;
+    user.gravitarMd5 = crypto.createHash('md5').update(userProfile.email).digest("hex");
     user.firstName = userProfile.firstName;
     user.lastName = userProfile.lastName;
     user.createdAt = userProfile.createdAt;

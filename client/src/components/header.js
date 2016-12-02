@@ -63,35 +63,37 @@ class Header extends Component {
   }
 
   render() {
+
+    let authVisible = this.props.authenticated ? '' : 'invisible';
+
     return (
     <nav className="navbar navbar-fixed-top navbar-dark bg-primary" role="navigation">
       <div className="container">
         <button className="navbar-toggler hidden-sm-up pull-right" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation" />
 
         <Link className="navbar-brand" to="/">Shelfie</Link>
-
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
-      <ul className="nav navbar-nav">
-        <li className="nav-item">
-          <a className="nav-link" href="#">Library</a>
-        </li>
-        <li className="nav-item active">
-          <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Stats</a>
-        </li>
-      </ul>
+          <ul className="nav navbar-nav">
+            <li className="nav-item">
+              <a className="nav-link" href="#">Library</a>
+            </li>
+            <li className="nav-item active">
+              <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
+            </li>
+            <li className={'nav-item ' + authVisible }>
+              <a className="nav-link" href="#"><i className="fa fa-plus" aria-hidden="true" /> Add Clip</a>
+            </li>
+          </ul>
 
-      <ul className="nav navbar-nav pull-right">
-        <li className="nav-item hidden-sm-down">
-          <form className="nav-search form-inline float-xs-left">
-            <i className="fa fa-search" aria-hidden="true" />
-            <input className="nav-search-input form-control" type="text" placeholder="Search" />
-          </form>
-        </li>
-        {this.renderLogin()}
-      </ul>
+          <ul className="nav navbar-nav pull-right">
+            <li className="nav-item hidden-sm-down">
+              <form className="nav-search form-inline float-xs-left">
+                <i className="fa fa-search" aria-hidden="true" />
+                <input className="nav-search-input form-control" type="text" placeholder="Search" />
+              </form>
+            </li>
+            {this.renderLogin()}
+          </ul>
           </div>
       </div>
     </nav>
