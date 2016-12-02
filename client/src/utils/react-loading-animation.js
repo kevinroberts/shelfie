@@ -81,6 +81,7 @@ class Loading extends React.Component {
                     <svg style={svg_style} viewBox="25 25 50 50">
                         <circle style={circle_style} cx="50" cy="50" r="20" fill="none" strokeWidth="7" strokeMiterlimit="10"/>
                     </svg>
+                    <p className="loading-text">Loading...</p>
                 </div>
             );
         } else {

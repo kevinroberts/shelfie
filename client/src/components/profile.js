@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-const Loading = require('../utils/react-loading-animation');
+import Loading from '../utils/react-loading-animation';
 import Gravatar from 'react-gravatar';
 import ProfileEdit from './auth/profile-edit'
 
@@ -19,7 +19,7 @@ class Profile extends Component {
     const { user } = this.props;
 
     if (!user) {
-      return <Loading />;
+      return <Loading margin={'25% auto'} />;
     }
 
     return (

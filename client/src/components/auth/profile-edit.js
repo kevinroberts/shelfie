@@ -134,8 +134,8 @@ class ProfileEdit extends Component {
             </div>
 
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">Photo</label>
-              <div className="col-sm-10">
+              <label className="col-sm-2 col-form-label">Profile Photo</label>
+              <div className="col-sm-10 extra-top-pad">
                 <a target="_blank" href="https://en.gravatar.com/emails">Change at Gravatar.com</a>
               </div>
             </div>

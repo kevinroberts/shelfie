@@ -1,0 +1,42 @@
+.full {
+  width: 100%;
+}
+.footer {
+  height: auto;
+  position: relative;
+  width: 100%;
+  background: #EDEFF1;
+  border-top: 1px solid #DDDDDD;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  p {
+    margin: 0;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  ul {
+    font-size: 13px;
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    margin-top: 15px;
+    color: #7F8C8D;
+  }
+
+  a {
+    color: #78828D
+  }
+
+  ul li a {
+    padding: 0 5px 5px 0;
+    display: block;
+  }
+
+  .pull-left {
+    padding-top: 6px;
+  }
+}
