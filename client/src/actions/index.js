@@ -10,7 +10,7 @@ import {
   REQUEST_SUCCESS
 } from './types';
 
-export const ROOT_URL = 'http://localhost:3090';
+export const ROOT_URL = 'http://localhost:8080/api';
 
 export function signinUser( response ) {
   return function(dispatch) {
