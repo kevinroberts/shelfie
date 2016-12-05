@@ -1,13 +1,16 @@
 const Authentication = require('./controllers/authentication');
 const passportService = require('./services/passport');
 const passport = require('passport');
+const path = require('path');
+const express = require('express');
 const bruteforce = require('./services/bruteforce_check');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
 
 module.exports = function(app) {
-  app.get('/', requireAuth, function(req, res) {
+
+  app.get('/message', requireAuth, function(req, res) {
     res.send({ message: 'You have successfully authenticated' });
   });
   app.get('/profile', requireAuth, Authentication.getProfile);
@@ -16,4 +19,14 @@ module.exports = function(app) {
   app.post('/profile', requireAuth, Authentication.editProfile);
   app.post('/reset-request', bruteforce.resetPassBruteforce.prevent, Authentication.resetRequest);
   app.post('/reset/:token', Authentication.resetPassword);
+
+  // Express only serves static assets in production
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client'));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve('../client/index.html'))
+    });
+  }
+
 };
