@@ -15,7 +15,7 @@ import ResetRequest from './components/auth/reset-request';
 import Feature from './components/feature';
 import Profile from './components/profile';
 import RequireAuth from './components/auth/require-auth';
-import Welcome from './components/welcome';
+import Library from './components/library';
 import reducers from './reducers';
 import { AUTH_USER } from './actions/types';
 import '../styles/main.scss';
@@ -34,7 +34,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={Welcome} />
+        <IndexRoute component={Library} />
         <Route path="signin" component={Signin} />
         <Route path="signout" component={Signout} />
         <Route path="signup" component={Signup} />

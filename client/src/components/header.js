@@ -75,7 +75,7 @@ class Header extends Component {
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
           <ul className="nav navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="#">Library</a>
+              <a className="nav-link" href="#">My Library</a>
             </li>
             <li className="nav-item active">
               <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
