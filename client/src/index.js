@@ -15,7 +15,7 @@ import ResetRequest from './components/auth/reset-request';
 import Feature from './components/feature';
 import Profile from './components/profile';
 import RequireAuth from './components/auth/require-auth';
-import Library from './components/library';
+import Library from './components/library/public-library';
 import reducers from './reducers';
 import { AUTH_USER } from './actions/types';
 import '../styles/main.scss';
