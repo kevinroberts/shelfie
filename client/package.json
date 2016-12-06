@@ -20,6 +20,7 @@
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
     "css-loader": "^0.26.0",
+    "expose-loader": "^0.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "jquery": "^2.2.1",
     "jsdom": "^8.1.0",
@@ -38,12 +39,15 @@
     "lodash": "^4.17.2",
     "moment": "^2.17.0",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^0.14.3",
     "react-gravatar": "^2.6.1",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.1",
+    "react-wavesurfer": "^0.8.2",
     "redux": "^3.0.4",
     "redux-form": "^6.2.0",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "^2.0.1",
+    "wavesurfer.js": "^1.2.7"
   }
 }

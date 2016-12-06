@@ -11,6 +11,7 @@ module.exports = {
   },
   module: {
     loaders: [
+      { test: require.resolve("wavesurfer.js"), loader: "expose-loader?$!expose-loader?jQuery" },
       { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
       {
         test: /\.scss$/,
