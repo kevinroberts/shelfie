@@ -78,3 +78,13 @@ exports.resetPasswordValidation = {
     message: 'Your password must contain a minimum of 7 characters.'
   }]
 };
+
+exports.clipValidation = {
+  title: [{
+    rule: 'required',
+    message: 'You must provide a title.'
+  }, {
+    rule: 'minLength:2',
+    message: 'Your title must be a minimum of 2 characters.'
+  }]
+};

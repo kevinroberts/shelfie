@@ -1,4 +1,6 @@
-const Authentication = require('./controllers/authentication');
+const Authentication = require('./controllers/authentication-controller');
+const ClipController = require('./controllers/clip-controller');
+const TagController = require('./controllers/tag-controller');
 const passportService = require('./services/passport');
 const passport = require('passport');
 const path = require('path');
@@ -19,6 +21,10 @@ module.exports = function(app) {
   app.post('/profile', requireAuth, Authentication.editProfile);
   app.post('/reset-request', bruteforce.resetPassBruteforce.prevent, Authentication.resetRequest);
   app.post('/reset/:token', Authentication.resetPassword);
+  app.get('/clip', ClipController.getClips);
+  app.post('/clip', requireAuth, ClipController.createClip);
+  app.post('/tag', requireAuth, TagController.createTag);
+
 
   // Express only serves static assets in production
   if (process.env.NODE_ENV === 'production') {

@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
-
 mongoose.Promise = global.Promise;
 
 // Define our model
@@ -14,6 +13,7 @@ const userSchema = new Schema({
   timezone: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  clips: [{ type: Schema.Types.ObjectId, ref: 'Clip' } ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
@@ -49,7 +49,7 @@ userSchema.methods.comparePassword = function(candidatePassword, callback) {
 };
 
 // Create the model class
-const ModelClass = mongoose.model('user', userSchema);
+const ModelClass = mongoose.model('User', userSchema);
 
 // Export the model
 module.exports = ModelClass;
