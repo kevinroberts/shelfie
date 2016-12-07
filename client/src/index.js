@@ -14,6 +14,7 @@ import ResetPassword from './components/auth/reset-password';
 import ResetRequest from './components/auth/reset-request';
 import Feature from './components/feature';
 import Profile from './components/profile';
+import AddClip from './components/actions/add-clip';
 import RequireAuth from './components/auth/require-auth';
 import Library from './components/library/public-library';
 import reducers from './reducers';
@@ -41,6 +42,7 @@ ReactDOM.render(
         <Route path="profile/:username" component={RequireAuth(Profile)} />
         <Route path="resetPassword/:key" component={ResetPassword} />
         <Route path="resetRequest" component={ResetRequest} />
+        <Route path="addClip" component={RequireAuth(AddClip)} />
         <Route path="feature" component={RequireAuth(Feature)} />
       </Route>
     </Router>

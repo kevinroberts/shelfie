@@ -41,6 +41,7 @@
     "react": "^0.14.3",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^0.14.3",
+    "react-dropzone-s3-uploader": "^0.8.1",
     "react-gravatar": "^2.6.1",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.1",
