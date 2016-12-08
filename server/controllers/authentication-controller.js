@@ -134,7 +134,7 @@ exports.resetPassword = function (req, res, next) {
       },
       function(user, done) {
         // send the user a confirmation email that their password has just been changed
-        emailer.sendPasswordChangedEmail(user.email, user.username, user.firstName, function (error, response) {
+        emailer.sendPasswordChangedEmail(user, function (error, response) {
           done(error, response);
         });
       }

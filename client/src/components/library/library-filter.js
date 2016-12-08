@@ -14,11 +14,21 @@ class LibraryFilter extends Component {
   }
 
   renderTags() {
-    return this.props.tags.map((tag) =>
-      <li>
+    return this.props.tags.map(function (tag) {
+      if (tag.clips.length > 0) {
+        return (
+          <li key={tag._id}>
           <a href="">{tag.name}</a> <span className="tag tag-default tag-pill">{tag.clips.length}</span>
-      </li>
-      );
+        </li>
+        );
+      } else {
+        return (
+          <li key={tag._id}>
+          {tag.name} <span className="tag tag-default tag-pill">{tag.clips.length}</span>
+          </li>
+        );
+      }
+    });
   }
 
 
@@ -31,7 +41,7 @@ class LibraryFilter extends Component {
                 {this.renderTags()}
               </ul>
             </div>
-    )
+      )
 
   };
 

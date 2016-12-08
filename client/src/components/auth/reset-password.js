@@ -88,9 +88,9 @@ class ResetPassword extends Component {
     const { error, handleSubmit, pristine, reset, submitting } = this.props;
 
     return (
-      <div className="form-gap">
+      <div className="row form-gap">
         {this.renderSuccess()}
-      <div className={'card ' + this.state.hiddenForm}>
+      <div className={'card col-sm-6 col-md-4 offset-md-4' + this.state.hiddenForm}>
         <div className="card-block">
           <h4 className="card-title">Choose a new password</h4>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="card-text">
