@@ -74,10 +74,12 @@ class ResetPassword extends Component {
         this.props.signoutUser();
       }
       return (
+        <div className="col-sm-6 col-md-4 offset-md-4">
         <div className="alert alert-success">
           <strong>Success!</strong> {this.state.successMessage}
           <br />
           <Link to="/signin">You may now sign in with your new password.</Link>
+        </div>
         </div>
       );
     }
@@ -90,7 +92,7 @@ class ResetPassword extends Component {
     return (
       <div className="row form-gap">
         {this.renderSuccess()}
-      <div className={'card col-sm-6 col-md-4 offset-md-4' + this.state.hiddenForm}>
+      <div className={'card col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
         <div className="card-block">
           <h4 className="card-title">Choose a new password</h4>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="card-text">

@@ -17,7 +17,7 @@ class Library extends Component {
       <Clip key="2" audioSrc="/static/gameover.wav" />,
       <Clip key="3" audioSrc="/static/gameover.wav"/>,
       <Clip key="4" audioSrc="/static/gameover.wav"/>,
-      <Clip key="5" audioSrc="http://static.vinberts.com/clips/BigBoss.wav"/>,
+      <Clip key="5" audioSrc="http://static.vinberts.com/clips/mgs/BigBoss.wav"/>,
     ]
 
   }

@@ -86,5 +86,12 @@ exports.clipValidation = {
   }, {
     rule: 'minLength:2',
     message: 'Your title must be a minimum of 2 characters.'
+  }],
+  sourceUrl: [ {
+    rule: 'required',
+    message: 'You must provide a source url'
+  },{
+    rule: 'url',
+    message: 'You must provide a valid source url'
   }]
 };

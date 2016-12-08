@@ -36,6 +36,23 @@ exports.createTag = function (req, res, next) {
 
 };
 
+exports.addClipToTag = function (tagID, clipID, cb) {
+  Tag.findOne({ _id: tagID }, function(err, existingTag) {
+
+    existingTag.clips.push(clipID);
+
+    existingTag.save(function (err) {
+      if (err) {
+        return cb(err);
+      }
+
+      // respond with successfully updated tag
+      return cb(err, existingTag);
+    });
+
+  });
+};
+
 exports.getTags = function (req, res, next) {
 
   let limit = req.query.limit ? _.toNumber(req.query.limit) : 150;
@@ -59,6 +76,5 @@ exports.getTags = function (req, res, next) {
       res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
     }
   );
-
 
 };

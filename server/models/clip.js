@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 var ClipSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'user' },
-  title: String,
+  title: { type: String, unique: true },
   sourceUrl: String,
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' } ],
   length: Number,

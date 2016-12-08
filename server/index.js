@@ -9,6 +9,9 @@ const router = require('./router');
 const mongoose = require('mongoose');
 //const cors = require('cors');
 
+if (!process.env.SALT_WORK_FACTOR) {
+  console.error("a SALT_WORK_FACTOR is required - please define one in the process env");
+}
 if (!process.env.APP_SECRET) {
   console.error("An APP_SECRET is required - please define one in process env");
 }
