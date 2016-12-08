@@ -9,6 +9,13 @@ class LibraryFilter extends Component {
     super(props);
   }
 
+  componentWillMount() {
+      this.props.searchClips({
+        title: '',
+        sort: 'createdAt'
+      });
+  }
+
   componentDidMount() {
     this.props.getTagList();
   }

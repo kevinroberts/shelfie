@@ -3,7 +3,9 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import LibraryFilter from './library-filter';
-import Clip from './clip-card';
+import Paginator from './paginator';
+import WaveSurferCard from './clip-wavesurfer-card';
+import ReduxAudioCard from './clip-reduxAudio-card';
 
 class Library extends Component {
 
@@ -11,15 +13,27 @@ class Library extends Component {
     super(props);
   }
 
-  renderClips() {
-    return [
-      <Clip key="1" audioSrc="/static/gameover.wav" />,
-      <Clip key="2" audioSrc="/static/gameover.wav" />,
-      <Clip key="3" audioSrc="/static/gameover.wav"/>,
-      <Clip key="4" audioSrc="/static/gameover.wav"/>,
-      <Clip key="5" audioSrc="http://static.vinberts.com/clips/mgs/BigBoss.wav"/>,
-    ]
+  renderPaginator() {
+    if (this.props.clips.all.length) {
+      return <Paginator />;
+    }
+  }
 
+  renderList() {
+    let numberRendered = 0;
+    return this.props.clips.all.map(function (clip) {
+      numberRendered++;
+      // Browsers can only render 6 audio contexts per page
+      if (numberRendered < 7) {
+        return (
+          <WaveSurferCard key={clip._id} {...clip} />
+        );
+      } else {
+        return (
+          <ReduxAudioCard key={clip._id} {...clip} />
+        );
+      }
+    });
   }
 
   render() {
@@ -32,7 +46,10 @@ class Library extends Component {
             <LibraryFilter />
             <div className="col-sm-10">
               <div className="card-columns">
-                {this.renderClips()}
+                {this.renderList()}
+              </div>
+              <div className="row">
+                {this.renderPaginator()}
               </div>
             </div>
           </div>
@@ -45,7 +62,8 @@ class Library extends Component {
 }
 
 function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated };
+  return { authenticated: state.auth.authenticated,
+            clips: state.clips };
 }
 
 export default connect(mapStateToProps, actions)(Library);

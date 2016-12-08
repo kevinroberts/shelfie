@@ -5,3 +5,6 @@ export const FETCH_PROFILE = 'fetch_profile';
 export const EDIT_USER = 'edit-user';
 export const REQUEST_SUCCESS = 'reset_success';
 export const SET_TAG_LIST = 'set_tag_list';
+export const SEARCH_CLIPS = 'search_clips';
+export const FIND_CLIP = 'find_clip';
+export const RESET_CLIP = 'reset_clip';

@@ -8,6 +8,7 @@ import {
   FETCH_PROFILE,
   EDIT_USER,
   SET_TAG_LIST,
+  SEARCH_CLIPS,
   REQUEST_SUCCESS
 } from './types';
 
@@ -85,6 +86,20 @@ export function getTagList() {
         dispatch({
           type: SET_TAG_LIST,
           payload: response.data.all
+        });
+      });
+  }
+}
+
+export function searchClips(...criteria) {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/clips`, {
+      params : { ...criteria }
+    })
+      .then(response => {
+        dispatch({
+          type: SEARCH_CLIPS,
+          payload: response.data
         });
       });
   }

@@ -4,14 +4,18 @@ const Clip = require('../models/clip');
  * Searches through the Clip collection
  * @param {object} criteria An object with a name, age, and yearsActive
  * @param {string} sortProperty The property to sort the results by
- * @param {integer} offset How many records to skip in the result set
- * @param {integer} limit How many records to return in the result set
+ * @param {String} sortOrder 'asc' or 'desc'
+ * @param {Number} offset How many records to skip in the result set
+ * @param {Number} limit How many records to return in the result set
  * @return {promise} A promise that resolves with the artists, count, offset, and limit
  * like this: { all: [clips], count: count, offset: offset, limit: limit }
  */
-module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
+module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => {
+  if (!sortOrder) {
+    sortOrder = 'asc';
+  }
   const query = Clip.find(buildQuery(criteria))
-    .sort({ [sortProperty]: 1 })
+    .sort({ [sortProperty]: sortOrder })
     .skip(offset)
     .limit(limit);
 
@@ -31,6 +35,10 @@ const buildQuery = (criteria) => {
 
   if (criteria.title) {
     query.$text = { $search: criteria.title };
+  }
+
+  if (criteria.tags) {
+    query.tags = { $in : criteria.tags }
   }
 
   if (criteria.length) {
