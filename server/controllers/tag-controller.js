@@ -1,8 +1,9 @@
 const Clip = require('../models/clip');
-const Checkit = require('checkit');
 const Tag = require('../models/tag');
-const Validator = require('../helpers/checkit-validation');
 const xss = require('xss');
+const SearchTags = require('../queries/search-tags');
+const _ = require('lodash');
+const mongoose = require('mongoose');
 
 exports.createTag = function (req, res, next) {
   const authedUser = req.user;
@@ -32,5 +33,32 @@ exports.createTag = function (req, res, next) {
     });
 
   });
+
+};
+
+exports.getTags = function (req, res, next) {
+
+  let limit = req.query.limit ? _.toNumber(req.query.limit) : 150;
+  let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
+  let clips = req.query.clips ? _.split(req.query.clips, ',') : null;
+
+  let criteria = {name: ''};
+
+  if (clips) {
+    criteria.clips = clips;
+  }
+
+  if (!_.isInteger(limit) || !_.isInteger(offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+
+  SearchTags(criteria, 'name', offset, limit).then((result = []) =>
+      res.json(result)
+  ).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
+    }
+  );
+
 
 };

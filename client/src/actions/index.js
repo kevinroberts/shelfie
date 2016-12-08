@@ -7,6 +7,7 @@ import {
   FETCH_MESSAGE,
   FETCH_PROFILE,
   EDIT_USER,
+  SET_TAG_LIST,
   REQUEST_SUCCESS
 } from './types';
 
@@ -75,6 +76,18 @@ export function signoutUser() {
   LocalStorageUtils.clearUser();
 
   return { type: UNAUTH_USER };
+}
+
+export function getTagList() {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/tags`)
+      .then(response => {
+        dispatch({
+          type: SET_TAG_LIST,
+          payload: response.data.all
+        });
+      });
+  }
 }
 
 export function fetchMessage() {

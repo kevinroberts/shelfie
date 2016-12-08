@@ -16,7 +16,7 @@ const userSchema = new Schema({
   clips: [{ type: Schema.Types.ObjectId, ref: 'Clip' } ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
-});
+}, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }});
 
 // On Save Hook, encrypt password
 // Before saving a model, run this function

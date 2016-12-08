@@ -11,19 +11,12 @@ exports.createClip = function(req, res, next) {
 
   clipValidator.run(req.body).then((validated)=>{
 
-    var tag = new Tag({
-      name: "Video games"
-    });
-
-    tag.save(function (err) {
       var clip = new Clip({
         title : xss(validated.title, {}),
         sourceUrl: '/static/gameover.wav',
-        length: 1234,
+        length: 9.9874,
         _creator: authedUser._id
       });
-
-      clip.tags.push(tag);
 
       clip.save(function (err) {
         if (err) { return next(err); }
@@ -39,8 +32,6 @@ exports.createClip = function(req, res, next) {
 
 
       });
-
-    });
 
   }).catch( function(err) {
     console.log(err);

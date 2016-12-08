@@ -24,6 +24,7 @@ module.exports = function(app) {
   app.get('/clip', ClipController.getClips);
   app.post('/clip', requireAuth, ClipController.createClip);
   app.post('/tag', requireAuth, TagController.createTag);
+  app.get('/tags', TagController.getTags);
 
 
   // Express only serves static assets in production

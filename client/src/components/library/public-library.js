@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import LibraryFilter from './library-filter';
 import Clip from './clip-card';
 
 class Library extends Component {
@@ -28,14 +29,7 @@ class Library extends Component {
         <div className="col-sm-12">
           <h2 className="text-xs-center">Public Library</h2>
           <div className="row">
-            <div className="col-sm-2">
-              <h4>Tags</h4>
-              <ul className="list-unstyled">
-                <li>Movies <span className="tag tag-default tag-pill">14</span></li>
-                <li>Video Games <span className="tag tag-default tag-pill">24</span></li>
-                <li>Metal Gear Solid <span className="tag tag-default tag-pill">14</span></li>
-              </ul>
-            </div>
+            <LibraryFilter />
             <div className="col-sm-10">
               <div className="card-columns">
                 {this.renderClips()}
