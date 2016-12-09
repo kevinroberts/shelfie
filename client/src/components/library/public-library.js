@@ -20,19 +20,11 @@ class Library extends Component {
   }
 
   renderList() {
-    let numberRendered = 0;
     return this.props.clips.all.map(function (clip) {
-      numberRendered++;
       // Browsers can only render 6 audio contexts per page
-      if (numberRendered < 7) {
-        return (
-          <WaveSurferCard key={clip._id} {...clip} />
-        );
-      } else {
-        return (
-          <ReduxAudioCard key={clip._id} {...clip} />
-        );
-      }
+      return (
+        <ReduxAudioCard key={clip._id} {...clip} />
+      );
     });
   }
 

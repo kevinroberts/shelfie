@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import DownloadButton from './download-button';
 import  * as actions  from 'redux-audio/actions';
 
 import { Audio } from 'redux-audio'
@@ -12,8 +13,12 @@ class Clip extends Component {
     super(props);
 
     this.handleTogglePlay = this.handleTogglePlay.bind(this);
-    this.handleFinish = this.handleFinish.bind(this);
     this.handleStop = this.handleStop.bind(this);
+    // this.handleFinish = this.handleFinish.bind(this);
+    this.state = {
+      playing: false,
+      pos: 0
+    };
   }
 
 
@@ -25,7 +30,7 @@ class Clip extends Component {
     } else if (audioState === 'ended') {
       setTimeout(() => {
         this.props.audioPlay(this.props._id);
-      }, 300);
+      }, 200);
       this.props.audioPause(this.props._id);
       // this.props.audioPlay(this.props._id);
     } else {
@@ -33,11 +38,10 @@ class Clip extends Component {
     }
   }
 
-  handleFinish() {
-    let audioState = this.props.audio.get(this.props._id)._root.entries[1][1];
-    console.log("checking audio state", audioState);
-
-  }
+  // handleFinish() {
+  //   let audioState = this.props.audio.get(this.props._id)._root.entries[1][1];
+  //   console.log("checking audio state", audioState);
+  // }
 
   handleStop() {
     this.props.audioPause(this.props._id);
@@ -64,8 +68,7 @@ class Clip extends Component {
           <div className="card-block">
 
             <Audio src={this.props.sourceUrl}
-                   uniqueId={this.props._id}
-                   controls />
+                   uniqueId={this.props._id} />
 
           </div>
           <div className="card-footer text-muted text-xs-center">
@@ -80,7 +83,7 @@ class Clip extends Component {
                 </OverlayTrigger>
               </div>
               <div className="btn-group" role="group">
-                <button type="button" className="btn btn-success" title="download this clip"><i className="fa fa-download" aria-hidden="true" /></button>
+                <DownloadButton className="btn btn-success" filename={this.props.sourceUrl}  />
               </div>
             </div>
           </div>
