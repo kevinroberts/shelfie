@@ -1,4 +1,18 @@
 .audio-card  {
+  audio {
+    margin-top: 10px;
+    margin-left: 1px;
+    width: 99%;
+  }
+  audio::-webkit-media-controls-volume-slider {
+    display: none;
+  }
+  audio::-webkit-media-controls-mute-button {
+    display: none;
+  }
+  audio::-webkit-media-controls-play-button {
+    display: none;
+  }
   i {
     font-size: 1.4rem;
   }
@@ -15,6 +29,64 @@
 
 .paginationBlock {
   margin-bottom: 15px;
+
+  .pagination {
+    a {
+      font-size: 1.2rem;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+  }
 }
 
-audio {width: 100%;}
+
+
+// safari only
+//_::-webkit-:host:not(:root:root), audio::-webkit-media-controls-play-button {
+//
+//  width: 30px !important;
+//  height: 30px !important;
+//
+//}
+
+
+.progress-bar {
+  text-align: center;
+  margin: 10px 5px 5px 10px;
+}
+
+.tag-list {
+  .nav-link {
+    padding: 0 4px;
+  }
+}
+
+.progress-bar progress[value] {
+  /* Reset the default appearance */
+  //-webkit-appearance: none;
+  //appearance: none;
+
+  //width: 290px;
+  //height: 20px;
+}
+
+.progress-bar progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+.progress-bar progress[value]::-webkit-progress-value {
+  background-color: #4bd885;
+  border-radius: 2px;
+  background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+.player__time-elapsed {
+  padding-left: 5px;
+}
+.player__time-separator {
+  padding-left: 5px;
+  padding-right: 5px;
+}

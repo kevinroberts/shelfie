@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import LibraryFilter from './library-filter';
 import Paginator from './paginator';
-import WaveSurferCard from './clip-wavesurfer-card';
-import ReduxAudioCard from './clip-reduxAudio-card';
+// import WaveSurferCard from './clip-wavesurfer-card';
+import Clip from './clip-reduxAudio-card';
+// import Clip from './clip-sound';
 
 class Library extends Component {
 
@@ -23,7 +24,7 @@ class Library extends Component {
     return this.props.clips.all.map(function (clip) {
       // Browsers can only render 6 audio contexts per page
       return (
-        <ReduxAudioCard key={clip._id} {...clip} />
+        <Clip key={clip._id} {...clip} />
       );
     });
   }

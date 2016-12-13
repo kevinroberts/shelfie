@@ -8,6 +8,7 @@ const app = express();
 const router = require('./router');
 const mongoose = require('mongoose');
 //const cors = require('cors');
+// require('./queries/db-update');
 
 if (!process.env.SALT_WORK_FACTOR) {
   console.error("a SALT_WORK_FACTOR is required - please define one in the process env");

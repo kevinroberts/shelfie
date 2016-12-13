@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import LocalStorageUtils from '../utils/local-storage-utils';
+import Qs from 'Qs';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -9,6 +10,7 @@ import {
   EDIT_USER,
   SET_TAG_LIST,
   SEARCH_CLIPS,
+  SET_ACTIVE_TAG,
   REQUEST_SUCCESS
 } from './types';
 
@@ -91,11 +93,14 @@ export function getTagList() {
   }
 }
 
+export function setActiveTag(tag) {
+
+  return { type: SET_ACTIVE_TAG, payload: tag };
+}
+
 export function searchClips(...criteria) {
   return function(dispatch) {
-    axios.get(`${ROOT_URL}/clips`, {
-      params : { ...criteria }
-    })
+    axios.get(`${ROOT_URL}/clips?${Qs.stringify(criteria[0])}`)
       .then(response => {
         dispatch({
           type: SEARCH_CLIPS,

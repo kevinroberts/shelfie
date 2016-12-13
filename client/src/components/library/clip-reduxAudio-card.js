@@ -14,7 +14,6 @@ class Clip extends Component {
 
     this.handleTogglePlay = this.handleTogglePlay.bind(this);
     this.handleStop = this.handleStop.bind(this);
-    // this.handleFinish = this.handleFinish.bind(this);
     this.state = {
       playing: false,
       pos: 0
@@ -38,13 +37,33 @@ class Clip extends Component {
     }
   }
 
-  // handleFinish() {
-  //   let audioState = this.props.audio.get(this.props._id)._root.entries[1][1];
-  //   console.log("checking audio state", audioState);
-  // }
 
   handleStop() {
     this.props.audioPause(this.props._id);
+  }
+
+  formatMilliseconds(milliseconds, totalLength) {
+    // Format hours
+    var hours = Math.floor(milliseconds / 3600000);
+    milliseconds = milliseconds % 3600000;
+
+    // Format minutes
+    var minutes = Math.floor(milliseconds / 60000);
+    milliseconds = milliseconds % 60000;
+
+    // Format seconds
+    var seconds = Math.floor(milliseconds / 1000);
+    milliseconds = Math.floor(milliseconds % 1000);
+    totalLength = Math.floor(totalLength / 1000);
+    // show milliseconds left if short clip
+    if (totalLength < 2) {
+      // Return as string
+      return (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds + '.' + milliseconds;
+    } else {
+      return (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+    }
   }
 
 
@@ -56,8 +75,14 @@ class Clip extends Component {
       playingState = this.props.audio.get(this.props._id)._root.entries[1][1];
     }
 
+    let length = this.formatMilliseconds(this.props.length, this.props.length);
+    let filename = this.props.sourceUrl.substr(this.props.sourceUrl.lastIndexOf('/')+1, this.props.sourceUrl.length);
+
     const faveTooltip = (
       <Tooltip id="faveTooltip" className="tooltip tooltip-top">Add this clip to your favorites!</Tooltip>
+    );
+    const downloadTooltip = (
+      <Tooltip id="downloadTooltip" className="tooltip tooltip-top">Download {filename}</Tooltip>
     );
 
       return (
@@ -65,14 +90,13 @@ class Clip extends Component {
           <div className="card-header">
             {this.props.title}
           </div>
-          <div className="card-block">
+          <div className="">
 
             <Audio src={this.props.sourceUrl}
-                   uniqueId={this.props._id} />
-
+                   uniqueId={this.props._id} controls />
           </div>
-          <div className="card-footer text-muted text-xs-center">
-            <div className="btn-toolbar" role="toolbar">
+          <div className="card-footer text-muted">
+            <div className="btn-toolbar card-toolbar" role="toolbar">
               <div className="btn-group" role="group">
                 <button type="button" onClick={this.handleTogglePlay}  className="btn btn-secondary"><i className={playingState === 'playing' ? "fa fa-pause" : "fa fa-play"} aria-hidden="true" /></button>
                 <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" aria-hidden="true" /></button>
@@ -82,9 +106,11 @@ class Clip extends Component {
                   <button className="btn btn-secondary"><i className="fa fa-heart-o" aria-hidden="true" /></button>
                 </OverlayTrigger>
               </div>
+              <OverlayTrigger placement="top" overlay={downloadTooltip}>
               <div className="btn-group" role="group">
                 <DownloadButton className="btn btn-success" filename={this.props.sourceUrl}  />
               </div>
+              </OverlayTrigger>
             </div>
           </div>
         </div>

@@ -4,25 +4,43 @@ import * as actions from '../../actions';
 
 class Paginator extends Component {
   back() {
-    const { offset, limit, form: { filters: { values } } } = this.props;
+    const { offset, limit, activeTag } = this.props;
 
     if (offset === 0 ) { return; }
 
-    this.props.searchArtists(values, offset - 10, limit);
+    let criteria = {
+      offset: offset - 10,
+      limit: limit
+    };
+
+    if (activeTag._id) {
+      criteria.tags = activeTag._id;
+    }
+
+    this.props.searchClips(criteria);
   }
 
   advance() {
-    const { offset, limit, count, form: { filters: { values } } } = this.props;
+    const { offset, limit, count, activeTag } = this.props;
 
     if ((offset + limit) > count) { return; }
 
-    this.props.searchArtists(values, offset + 10, limit);
+    let criteria = {
+      offset: offset + 10,
+      limit: limit
+    };
+
+    if (activeTag._id) {
+      criteria.tags = activeTag._id;
+    }
+
+    this.props.searchClips(criteria);
   }
 
   left() {
     return (
       <li className={this.props.offset === 0 ? 'disabled page-item' : 'page-item'}>
-        <a className="page-link" onClick={this.back.bind(this)}>
+        <a href="javascript:void(0)" className="page-link" onClick={this.back.bind(this)}>
           <span>&laquo;</span>
           <span className="sr-only">Previous</span>
         </a>
@@ -37,7 +55,7 @@ class Paginator extends Component {
 
     return (
       <li className={end ? 'disabled page-item' : 'page-item'}>
-        <a className="page-link" onClick={this.advance.bind(this)}>
+        <a href="javascript:void(0)" className="page-link" onClick={this.advance.bind(this)}>
           <span>&raquo;</span>
           <span className="sr-only">Next</span>
         </a>
@@ -53,18 +71,18 @@ class Paginator extends Component {
           <li className="page-item active"><a className="page-link">Page {this.props.offset / 10 + 1}</a></li>
           {this.right()}
         </ul>
-        <div>
-        {this.props.count} Records Found
+        <div className="total-clips">
+        {this.props.count} Clips Found
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ clips }) => {
-  const { limit, offset, count } = clips;
+const mapStateToProps = (state) => {
+  const { limit, offset, count } = state.clips;
 
-  return { limit, offset, count};
+  return { limit, offset, count, activeTag : state.filterCriteria.tag,};
 };
 
 export default connect(mapStateToProps, actions)(Paginator);

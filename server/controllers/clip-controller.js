@@ -14,12 +14,13 @@ exports.createClip = function(req, res, next) {
   const clipValidator = new Checkit(Validator.clipValidation);
 
   clipValidator.run(req.body).then((validated)=>{
-
+      let length = validated.length ? validated.length : 0;
       var clip = new Clip({
         title : xss(validated.title, {}),
         sourceUrl: validated.sourceUrl,
-        tags : [ '58472b4d23f5229b16a0bd1c', '584727de6574dd6df2406f5a'],
-        length: 9.9874,
+        description: validated.description,
+        tags : [ '584727de6574dd6df2406f5a', '585027957e4d16f42b95d92d'],
+        length: length,
         _creator: authedUser._id
       });
 
@@ -51,14 +52,13 @@ exports.createClip = function(req, res, next) {
         });
       },
       function (clip, done) {
-        TagController.addClipToTag('58472b4d23f5229b16a0bd1c', clip._id, function (err, tag) {
+        TagController.addClipToTag('584727de6574dd6df2406f5a', clip._id, function (err, tag) {
 
           done(err, clip);
 
         });
-      },
-      function (clip, done) {
-        TagController.addClipToTag('584727de6574dd6df2406f5a', clip._id, function (err, tag) {
+      },function (clip, done) {
+        TagController.addClipToTag('585027957e4d16f42b95d92d', clip._id, function (err, tag) {
 
           done(err, clip);
 
@@ -82,7 +82,7 @@ exports.createClip = function(req, res, next) {
 };
 
 exports.getClips = function (req, res, next) {
-  let limit = req.query.limit ? _.toNumber(req.query.limit) : 150;
+  let limit = req.query.limit ? _.toNumber(req.query.limit) : 20;
   let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
   let tags = req.query.tags ? _.split(req.query.tags, ',') : null;
   let sort = req.query.sort ? req.query.sort : 'createdAt';

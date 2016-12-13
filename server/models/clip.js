@@ -5,6 +5,7 @@ var ClipSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'user' },
   title: { type: String, unique: true },
   sourceUrl: String,
+  description: String,
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' } ],
   length: Number,
   createdAt: { type: Date, default: Date.now },
