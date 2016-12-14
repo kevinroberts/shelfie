@@ -6,20 +6,21 @@ import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Progress from './Progress'
 import DownloadButton from './download-button';
+import { Link } from 'react-router';
 
 class Clip extends Component {
 
   constructor(props) {
     super(props);
 
-    let total = '00:00.0';
+    let total = '00:00.000';
     if (this.props.length) {
-      total = this.formatMilliseconds(this.props.length, this.props.length);
+      total = this.formatMilliseconds(this.props.length);
     }
 
     this.state = {
       position: 0,
-      elapsed: '00:00.0',
+      elapsed: '00:00.000',
       total: total,
       bytesLoaded: 0,
       bytesTotal: 0,
@@ -53,7 +54,6 @@ class Clip extends Component {
   }
 
   handleSongLoading(audio) {
-    console.log(`${audio.bytesLoaded / audio.bytesTotal * 100}% loaded`);
     var loaded = false;
     if ((audio.bytesLoaded / audio.bytesTotal * 100) > 50) {
       loaded = true;
@@ -73,12 +73,12 @@ class Clip extends Component {
   }
 
   handleSongPlaying(audio) {
-    this.setState({  elapsed: this.formatMilliseconds(audio.position, audio.duration),
-      total: this.formatMilliseconds(audio.duration, audio.duration),
+    this.setState({  elapsed: this.formatMilliseconds(audio.position),
+      total: this.formatMilliseconds(audio.duration),
       position: audio.position / audio.duration })
   }
 
-  formatMilliseconds(milliseconds, totalLength) {
+  formatMilliseconds(milliseconds) {
     // Format hours
     var hours = Math.floor(milliseconds / 3600000);
     milliseconds = milliseconds % 3600000;
@@ -90,16 +90,9 @@ class Clip extends Component {
     // Format seconds
     var seconds = Math.floor(milliseconds / 1000);
     milliseconds = Math.floor(milliseconds % 1000);
-    totalLength = Math.floor(totalLength / 1000);
-    // show milliseconds left if short clip
-    if (totalLength < 2) {
-      // Return as string
-      return (minutes < 10 ? '0' : '') + minutes + ':' +
-        (seconds < 10 ? '0' : '') + seconds + '.' + milliseconds;
-    } else {
-      return (minutes < 10 ? '0' : '') + minutes + ':' +
-        (seconds < 10 ? '0' : '') + seconds;
-    }
+    return (minutes < 10 ? '0' : '') + minutes + ':' +
+      (seconds < 10 ? '0' : '') + seconds + '.' + milliseconds;
+
   }
 
   render() {
@@ -108,14 +101,21 @@ class Clip extends Component {
       <Tooltip id="faveTooltip" className="tooltip tooltip-top">Add this clip to your favorites!</Tooltip>
     );
 
+    let filename = this.props.sourceUrl.substr(this.props.sourceUrl.lastIndexOf('/')+1, this.props.sourceUrl.length);
+    const downloadTooltip = (
+      <Tooltip id="downloadTooltip" className="tooltip tooltip-top">Download {filename}</Tooltip>
+    );
+
+    const audioUrl = `${this.props.sourceUrl}`;
+
     return (
       <div className="card audio-card">
         <div className="card-header">
-          {this.props.title}
+          <Link to={'/clip/' + this.props._id}>{this.props.title}</Link>
         </div>
         <div>
           <Sound
-            url={this.props.sourceUrl}
+            url={audioUrl}
             playStatus={this.state.playStatus}
             playFromPosition={this.state.playFromPosition}
             onLoading={this.handleSongLoading.bind(this)}
@@ -142,9 +142,11 @@ class Clip extends Component {
                 <button className="btn btn-secondary"><i className="fa fa-heart-o" /></button>
               </OverlayTrigger>
             </div>
-            <div className="btn-group" role="group">
-              <DownloadButton className="btn btn-success" filename={this.props.sourceUrl}  />
-            </div>
+            <OverlayTrigger placement="top" overlay={downloadTooltip}>
+              <div className="btn-group" role="group">
+                <DownloadButton className="btn btn-success" filename={this.props.sourceUrl}  />
+              </div>
+            </OverlayTrigger>
           </div>
         </div>
       </div>

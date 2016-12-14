@@ -19,6 +19,8 @@ module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => 
     .skip(offset)
     .limit(limit);
 
+
+
   return Promise.all([query, Clip.find(buildQuery(criteria)).count()])
     .then((results) => {
       return {

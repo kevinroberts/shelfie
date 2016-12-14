@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import DownloadButton from './download-button';
 import  * as actions  from 'redux-audio/actions';
+import { Link } from 'react-router';
 
 import { Audio } from 'redux-audio'
 
@@ -85,22 +86,25 @@ class Clip extends Component {
       <Tooltip id="downloadTooltip" className="tooltip tooltip-top">Download {filename}</Tooltip>
     );
 
+    const audioUrl = `${this.props.sourceUrl}`; //?cb=${new Date().getTime()}
+
       return (
         <div className="card audio-card">
           <div className="card-header">
-            {this.props.title}
+            <Link to={'/clip/' + this.props._id}>{this.props.title}</Link>
           </div>
           <div className="">
 
-            <Audio src={this.props.sourceUrl}
+            <Audio src={audioUrl}
                    uniqueId={this.props._id} controls />
           </div>
           <div className="card-footer text-muted">
             <div className="btn-toolbar card-toolbar" role="toolbar">
-              <div className="btn-group" role="group">
-                <button type="button" onClick={this.handleTogglePlay}  className="btn btn-secondary"><i className={playingState === 'playing' ? "fa fa-pause" : "fa fa-play"} aria-hidden="true" /></button>
-                <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" aria-hidden="true" /></button>
-              </div>
+              {/*<div className="btn-group" role="group">*/}
+                {/*<button type="button" onClick={this.handleTogglePlay}  className="btn btn-secondary"><i className={playingState === 'playing' ? "fa fa-pause" : "fa fa-play"} aria-hidden="true" /></button>*/}
+                {/*<button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" aria-hidden="true" /></button>*/}
+              {/*</div>*/}
+              {playingState}
               <div className="btn-group" role="group">
                 <OverlayTrigger placement="top" overlay={faveTooltip}>
                   <button className="btn btn-secondary"><i className="fa fa-heart-o" aria-hidden="true" /></button>

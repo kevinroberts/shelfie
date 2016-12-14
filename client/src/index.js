@@ -14,7 +14,8 @@ import ResetPassword from './components/auth/reset-password';
 import ResetRequest from './components/auth/reset-request';
 import Feature from './components/feature';
 import Profile from './components/profile';
-import AddClip from './components/auth/add-clip';
+import AddClip from './components/clip/add-clip';
+import ViewClip from './components/clip/view-clip';
 import RequireAuth from './components/auth/require-auth';
 import Library from './components/library/public-library';
 import reducers from './reducers';
@@ -40,6 +41,7 @@ ReactDOM.render(
         <Route path="signout" component={Signout} />
         <Route path="signup" component={Signup} />
         <Route path="profile/:username" component={RequireAuth(Profile)} />
+        <Route path="clip/:id" component={ViewClip} />
         <Route path="resetPassword/:key" component={ResetPassword} />
         <Route path="resetRequest" component={ResetRequest} />
         <Route path="addClip" component={RequireAuth(AddClip)} />

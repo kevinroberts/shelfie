@@ -3,13 +3,18 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 class Paginator extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   back() {
     const { offset, limit, activeTag } = this.props;
 
     if (offset === 0 ) { return; }
 
     let criteria = {
-      offset: offset - 10,
+      offset: offset - 20,
       limit: limit
     };
 
@@ -26,7 +31,7 @@ class Paginator extends Component {
     if ((offset + limit) > count) { return; }
 
     let criteria = {
-      offset: offset + 10,
+      offset: offset + 20,
       limit: limit
     };
 
@@ -40,7 +45,7 @@ class Paginator extends Component {
   left() {
     return (
       <li className={this.props.offset === 0 ? 'disabled page-item' : 'page-item'}>
-        <a href="javascript:void(0)" className="page-link" onClick={this.back.bind(this)}>
+        <a href="javascript:void(0)" className="page-link" title="previous page" onClick={this.back.bind(this)}>
           <span>&laquo;</span>
           <span className="sr-only">Previous</span>
         </a>
@@ -55,7 +60,7 @@ class Paginator extends Component {
 
     return (
       <li className={end ? 'disabled page-item' : 'page-item'}>
-        <a href="javascript:void(0)" className="page-link" onClick={this.advance.bind(this)}>
+        <a href="javascript:void(0)" className="page-link" title="next page" onClick={this.advance.bind(this)}>
           <span>&raquo;</span>
           <span className="sr-only">Next</span>
         </a>
@@ -64,14 +69,17 @@ class Paginator extends Component {
   }
 
   render() {
+
+    let totalPages = Math.ceil(this.props.count / 20);
+
     return (
       <div className="col-sm-7 col-md-5 offset-md-3 paginationBlock">
         <ul className="pagination">
           {this.left()}
-          <li className="page-item active"><a className="page-link">Page {this.props.offset / 10 + 1}</a></li>
+          <li className="page-item "><a className="page-link">Page {this.props.offset / 20 + 1} of {totalPages}</a></li>
           {this.right()}
         </ul>
-        <div className="total-clips">
+        <div className="invisible">
         {this.props.count} Clips Found
         </div>
       </div>

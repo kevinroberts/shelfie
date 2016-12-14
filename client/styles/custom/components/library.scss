@@ -11,7 +11,9 @@
     display: none;
   }
   audio::-webkit-media-controls-play-button {
-    display: none;
+    //display: none;
+    width: 60px;
+    height: 60px;
   }
   i {
     font-size: 1.4rem;

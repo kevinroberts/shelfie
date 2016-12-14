@@ -5,8 +5,8 @@ import * as actions from '../../actions';
 import LibraryFilter from './library-filter';
 import Paginator from './paginator';
 // import WaveSurferCard from './clip-wavesurfer-card';
-import Clip from './clip-reduxAudio-card';
-// import Clip from './clip-sound';
+// import Clip from './clip-reduxAudio-card';
+import Clip from './clip-sound';
 
 class Library extends Component {
 

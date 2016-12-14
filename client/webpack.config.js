@@ -25,6 +25,7 @@ module.exports = {
     })
   ],
   resolve: {
+    alias: { soundmanager2: 'soundmanager2/script/soundmanager2-nodebug-jsmin.js' },
     extensions: ['', '.js', '.jsx', '.sass']
   },
   devServer: {
@@ -38,6 +39,9 @@ module.exports = {
           '^/api': ''
         }
       }
+    },
+    headers: {
+      "Cache-Control": "no-cache",
     }
   }
 };
