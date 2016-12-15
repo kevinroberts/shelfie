@@ -4,9 +4,10 @@ import Sound from 'react-sound';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import Progress from './Progress'
-import DownloadButton from './download-button';
+import Progress from '../library/Progress'
+import DownloadButton from '../library/download-button';
 import { Link } from 'react-router';
+import { formatMilliseconds } from '../../utils/clip-utils';
 
 class Clip extends Component {
 
@@ -15,7 +16,7 @@ class Clip extends Component {
 
     let total = '00:00.000';
     if (this.props.length) {
-      total = this.formatMilliseconds(this.props.length);
+      total = formatMilliseconds(this.props.length);
     }
 
     this.state = {
@@ -73,27 +74,11 @@ class Clip extends Component {
   }
 
   handleSongPlaying(audio) {
-    this.setState({  elapsed: this.formatMilliseconds(audio.position),
-      total: this.formatMilliseconds(audio.duration),
+    this.setState({  elapsed: formatMilliseconds(audio.position),
+      total: formatMilliseconds(audio.duration),
       position: audio.position / audio.duration })
   }
 
-  formatMilliseconds(milliseconds) {
-    // Format hours
-    var hours = Math.floor(milliseconds / 3600000);
-    milliseconds = milliseconds % 3600000;
-
-    // Format minutes
-    var minutes = Math.floor(milliseconds / 60000);
-    milliseconds = milliseconds % 60000;
-
-    // Format seconds
-    var seconds = Math.floor(milliseconds / 1000);
-    milliseconds = Math.floor(milliseconds % 1000);
-    return (minutes < 10 ? '0' : '') + minutes + ':' +
-      (seconds < 10 ? '0' : '') + seconds + '.' + milliseconds;
-
-  }
 
   render() {
 

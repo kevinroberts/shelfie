@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var TagSchema = new Schema({
-  _creator: { type: Schema.Types.ObjectId, ref: 'user' },
+  _creator: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

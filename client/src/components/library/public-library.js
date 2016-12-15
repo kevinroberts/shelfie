@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import LibraryFilter from './library-filter';
 import Paginator from './paginator';
-// import WaveSurferCard from './clip-wavesurfer-card';
-// import Clip from './clip-reduxAudio-card';
-import Clip from './clip-sound';
+// import WaveSurferCard from '../clip/clip-wavesurfer-card';
+// import Clip from '../clip/clip-reduxAudio-card';
+import Clip from '../clip/clip-sound';
 
 class Library extends Component {
 

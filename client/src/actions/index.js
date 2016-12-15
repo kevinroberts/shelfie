@@ -11,6 +11,7 @@ import {
   SET_TAG_LIST,
   SEARCH_CLIPS,
   SET_ACTIVE_TAG,
+  FIND_CLIP,
   REQUEST_SUCCESS
 } from './types';
 
@@ -104,6 +105,18 @@ export function searchClips(...criteria) {
       .then(response => {
         dispatch({
           type: SEARCH_CLIPS,
+          payload: response.data
+        });
+      });
+  }
+}
+
+export function findClip(id) {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/clip?id=${id}`)
+      .then(response => {
+        dispatch({
+          type: FIND_CLIP,
           payload: response.data
         });
       });

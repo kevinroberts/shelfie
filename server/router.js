@@ -22,6 +22,7 @@ module.exports = function(app) {
   app.post('/reset-request', bruteforce.resetPassBruteforce.prevent, Authentication.resetRequest);
   app.post('/reset/:token', Authentication.resetPassword);
   app.get('/clips', ClipController.getClips);
+  app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
   app.post('/tag', requireAuth, TagController.createTag);
   app.get('/tags', TagController.getTags);

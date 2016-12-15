@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import DownloadButton from './download-button';
+import DownloadButton from '../library/download-button';
 import  * as actions  from 'redux-audio/actions';
 import { Link } from 'react-router';
 

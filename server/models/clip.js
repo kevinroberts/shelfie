@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var ClipSchema = new Schema({
-  _creator: { type: Schema.Types.ObjectId, ref: 'user' },
+  _creator: { type: Schema.Types.ObjectId, ref: 'User' },
   title: { type: String, unique: true },
   sourceUrl: String,
   description: String,

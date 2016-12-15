@@ -20,13 +20,13 @@ class Profile extends Component {
     const { user } = this.props;
 
     if (!user) {
-      return <Loading margin={'25% auto'} />;
+      return <Loading margin={'11% auto'} />;
     }
 
     let userAnniversary = moment(user.createdAt).fromNow();
 
     return (
-      <div>
+      <div className="row col-sm-7 offset-sm-2">
       <div className="row profile card">
         <div className="card-block">
               <div className="col-sm-2">
@@ -41,8 +41,8 @@ class Profile extends Component {
               <div className="col-sm-6">
                 <ul className="stats list-inline">
                   <li className="list-inline-item">
-                    <span>275</span>
-                    Friends
+                    <span>{this.props.user.clips.length}</span>
+                    Clips
                   </li>
                   <li className="list-inline-item">
                     <span>354</span>

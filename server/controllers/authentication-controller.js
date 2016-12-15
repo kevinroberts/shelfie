@@ -174,6 +174,7 @@ exports.getProfile = function (req, res, next) {
     user.firstName = userProfile.firstName;
     user.lastName = userProfile.lastName;
     user.createdAt = userProfile.createdAt;
+    user.clips = userProfile.clips;
 
     res.json({ user });
   });

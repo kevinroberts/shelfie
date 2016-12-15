@@ -6,6 +6,7 @@ const User = require('../models/user');
 const async = require('async');
 const Validator = require('../helpers/checkit-validation');
 const SearchClips = require('../queries/search-clips');
+const FindClip = require('../queries/find-clip');
 const xss = require('xss');
 const _ = require('lodash');
 
@@ -81,6 +82,23 @@ exports.createClip = function(req, res, next) {
 
 };
 
+exports.findClip = function (req, res, next) {
+  let id = req.query.id;
+
+  if (!id) {
+    return res.status(422).send({ _error: 'ID is required to fetch clip' });
+  }
+
+  FindClip(id).then((result = []) =>
+    res.json(result)
+  ).catch (function (err) {
+      console.log("find clip query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+    }
+  );
+
+};
+
 exports.getClips = function (req, res, next) {
   let limit = req.query.limit ? _.toNumber(req.query.limit) : 20;
   let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
@@ -102,7 +120,7 @@ exports.getClips = function (req, res, next) {
     res.json(result)
   ).catch (function (err) {
       console.log("query error:" , err);
-      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
+      res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' })
     }
   );
 };
