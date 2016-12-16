@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import Sound from 'react-sound';
+import Sound from '../../utils/react-sound';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';

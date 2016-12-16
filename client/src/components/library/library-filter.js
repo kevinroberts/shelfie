@@ -8,18 +8,22 @@ class LibraryFilter extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      activeTag: null,
-    };
-
   }
 
   componentWillMount() {
-      this.props.searchClips({
-        title: '',
-        sort: 'createdAt'
-      });
+
+    const { activeTag } = this.props;
+
+    let criteria = {
+      title: '',
+      sort: 'createdAt'
+    };
+
+    if (activeTag._id) {
+      criteria.tags = activeTag._id;
+    }
+
+    this.props.searchClips(criteria);
   }
 
   componentDidMount() {
@@ -63,7 +67,8 @@ const mapStateToProps = (state) => {
 
   return {
     tags: filterCriteria.tags,
-    authenticated: auth.authenticated
+    authenticated: auth.authenticated,
+    activeTag : state.filterCriteria.tag
   };
 };
 

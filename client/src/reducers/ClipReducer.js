@@ -7,6 +7,8 @@ import {
 const INITIAL_STATE = {
   all: [],
   offset: 0,
+  currentPage: 1,
+  totalPages: 1,
   limit: 20
 };
 

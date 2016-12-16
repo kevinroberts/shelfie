@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import UltimatePagination from '../../utils/pagination/UltimatePaginationBootstrap4';
 
 class Paginator extends Component {
 
   constructor(props) {
     super(props);
+
+    this.onPageChangeFromPagination = this.onPageChangeFromPagination.bind(this);
   }
 
-  back() {
-    const { offset, limit, activeTag } = this.props;
 
-    if (offset === 0 ) { return; }
+  onPageChangeFromPagination(newPage) {
+
+    const { limit, activeTag } = this.props;
 
     let criteria = {
-      offset: offset - 20,
+      offset: ((newPage-1) * limit),
       limit: limit
     };
 
@@ -23,62 +26,15 @@ class Paginator extends Component {
     }
 
     this.props.searchClips(criteria);
-  }
-
-  advance() {
-    const { offset, limit, count, activeTag } = this.props;
-
-    if ((offset + limit) > count) { return; }
-
-    let criteria = {
-      offset: offset + 20,
-      limit: limit
-    };
-
-    if (activeTag._id) {
-      criteria.tags = activeTag._id;
-    }
-
-    this.props.searchClips(criteria);
-  }
-
-  left() {
-    return (
-      <li className={this.props.offset === 0 ? 'disabled page-item' : 'page-item'}>
-        <a href="javascript:void(0)" className="page-link" title="previous page" onClick={this.back.bind(this)}>
-          <span>&laquo;</span>
-          <span className="sr-only">Previous</span>
-        </a>
-      </li>
-    );
-  }
-
-  right() {
-    const { offset, limit, count } = this.props;
-
-    const end = ((offset + limit) >= count) ? true : false;
-
-    return (
-      <li className={end ? 'disabled page-item' : 'page-item'}>
-        <a href="javascript:void(0)" className="page-link" title="next page" onClick={this.advance.bind(this)}>
-          <span>&raquo;</span>
-          <span className="sr-only">Next</span>
-        </a>
-      </li>
-    );
   }
 
   render() {
 
-    let totalPages = Math.ceil(this.props.count / 20);
-
     return (
       <div className="col-sm-7 col-md-5 offset-md-3 paginationBlock">
-        <ul className="pagination">
-          {this.left()}
-          <li className="page-item "><a className="page-link">Page {this.props.offset / 20 + 1} of {totalPages}</a></li>
-          {this.right()}
-        </ul>
+
+        <UltimatePagination currentPage={this.props.currentPage} totalPages={this.props.totalPages} onChange={this.onPageChangeFromPagination} />
+
         <div className="invisible">
         {this.props.count} Clips Found
         </div>
@@ -88,9 +44,9 @@ class Paginator extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { limit, offset, count } = state.clips;
+  const { limit, offset, count, currentPage, totalPages } = state.clips;
 
-  return { limit, offset, count, activeTag : state.filterCriteria.tag,};
+  return { limit, offset, count, currentPage, totalPages, activeTag : state.filterCriteria.tag,};
 };
 
 export default connect(mapStateToProps, actions)(Paginator);

@@ -21,6 +21,8 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
         all: results[0],
         count: results[1],
         offset: offset,
+        totalPages: Math.ceil(results[1]/ limit),
+        currentPage: offset / limit + 1,
         limit: limit
       };
     });

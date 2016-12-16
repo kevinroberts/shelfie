@@ -33,9 +33,20 @@ module.exports = function(app) {
 
   // Express only serves static assets in production
   if (process.env.NODE_ENV === 'production') {
+
+
+    // app.use((req, res, cb) => {
+    //   res.status(404).sendFile(Path.join(PUBLIC_DIR, "errors/404.html"))
+    // })
+    //
+    // app.use((err, req, res, cb) => {
+    //   res.status(err.status || 500).sendFile(Path.join(PUBLIC_DIR, "errors/500.html"))
+    // })
+
     app.use(express.static('../client'));
 
     app.get('*', (req, res) => {
+      // make user of custom error messages ?  if path does not contain relevant paths?
       res.sendFile(path.resolve('../client/index.html'))
     });
   }
