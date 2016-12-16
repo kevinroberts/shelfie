@@ -8,7 +8,7 @@ const app = express();
 const router = require('./router');
 const mongoose = require('mongoose');
 //const cors = require('cors');
-// require('./queries/db-update');
+// require('./queries/db-update'); // DB import helper script
 
 if (!process.env.SALT_WORK_FACTOR) {
   console.error("a SALT_WORK_FACTOR is required - please define one in the process env");
@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING);
 // App Setup
 app.use(morgan('combined'));
 //app.use(cors());
-app.use(bodyParser.json({ type: '*/*' }));
+app.use(bodyParser.json({limit: '15mb', type: '*/json'}));
 router(app);
 
 // Server Setup

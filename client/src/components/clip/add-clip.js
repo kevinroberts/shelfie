@@ -2,60 +2,98 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
+import { ROOT_URL } from '../../actions/index'
+import FineUploaderTraditional from 'react-fine-uploader'
+import LocalStorageUtils from '../../utils/local-storage-utils';
+import Gallery from 'react-fine-uploader/components/gallery';
+import UploadedClip from './uploaded-clip';
+
 
 class AddClip extends Component {
 
   constructor(props) {
     super(props);
-    this.handleFinishedUpload = this.handleFinishedUpload.bind(this);
+    this.state = {
+      errorMsg: '',
+      uploadedClips: []
+    };
   }
 
-  handleFinishedUpload() {
-    console.log('finished');
-  }
+  renderUploadedClips() {
+    if (this.state.uploadedClips.length === 0) {
+      return <span />;
+    }
 
+    return this.state.uploadedClips.map(function (clip) {
+      return (
+        <UploadedClip key={clip.id} clip={clip} />
+      );
+    });
+  }
 
   render() {
 
-    const style = {
-      height: 240,
-      border: 'dashed 2px #999',
-      borderRadius: 5,
-      position: 'relative',
-      cursor: 'pointer',
-    };
+    const uploader = new FineUploaderTraditional({
+      options: {
+        chunking: {
+          enabled: false
+        },
+        request: {
+          endpoint: `${ROOT_URL}/uploads`,
+          customHeaders: {
+            "authorization": LocalStorageUtils.getToken()
+          }
+        },
+        validation: {
+          allowedExtensions: ['wav'],
+          itemLimit: 15,
+          sizeLimit: 10485760 // 10 mB = 10 * 1024 * 1024 bytes
+      },
+        messages : {
+          typeError : "{file} has an invalid extension. Only files with the extension .wav are allowed."
+        },
+        callbacks: {
+          onComplete: (id, name, response) => {
+            // handle completed upload
+            console.log('uploaded completed');
+            let newClip = {...response};
 
-    const uploaderProps = {
-      style,
-      maxFileSize: 1024 * 1024 * 50,
-      server: 'https://example/com',
-      s3Url: 'https://my-bucket.s3.amazonaws.com/',
-      signingUrlQueryParams: {uploadType: 'avatar'},
-    };
-
+            this.setState( function (state) {
+              return {
+                errorMsg: '',
+                uploadedClips: state.uploadedClips.concat(newClip)
+              }
+            });
+          },
+          onValidate: (data, buttonContainer) => {
+            console.log('validating upload...');
+          },
+          onError: (id, name, errorReason, xhr) => {
+            console.log('file validation failed, msg: ', errorReason);
+            this.setState({
+              errorMsg: errorReason
+            });
+          }
+        }
+      }
+    });
 
     return (
-      <div className="row form-gap col-sm-7 col-md-6 offset-md-3">
+      <div className="row col-sm-7 col-md-6 offset-md-3">
         <div className="card">
           <div className="card-header">
             Upload new audio clips
           </div>
           <div className="card-block">
             <h4 className="card-title">Click below to select files from your computer</h4>
+            {this.state.errorMsg && <div className="alert alert-danger"><strong>Error!</strong> {this.state.errorMsg}</div>}
 
-            <h4>Or drag and drop files</h4>
-            <DropzoneS3Uploader className={'upload-drop-zone'} onFinish={this.handleFinishedUpload} {...uploaderProps}>
-              <span>Just drag and drop files here</span>
-            </DropzoneS3Uploader>
+            <Gallery uploader={ uploader } />
 
-            <p className="progress-header">
-              <span className="sr-only">Progress</span>
-            </p>
-            <div>
-              <div className="text-xs-center">Reticulating splines&hellip; 0%</div>
-              <progress className="progress" value="10" max="100" />
+            <div className="uploaded-clips">
+              {this.renderUploadedClips()}
             </div>
+
           </div>
 
         </div>

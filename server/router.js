@@ -1,6 +1,7 @@
 const Authentication = require('./controllers/authentication-controller');
 const ClipController = require('./controllers/clip-controller');
 const TagController = require('./controllers/tag-controller');
+const UploadController = require('./controllers/uploads-controller');
 const passportService = require('./services/passport');
 const passport = require('passport');
 const path = require('path');
@@ -26,6 +27,8 @@ module.exports = function(app) {
   app.post('/clip', requireAuth, ClipController.createClip);
   app.post('/tag', requireAuth, TagController.createTag);
   app.get('/tags', TagController.getTags);
+  app.post("/uploads", requireAuth, UploadController.onUpload);
+  app.delete("/uploads/:uuid", UploadController.onDeleteFile);
 
 
   // Express only serves static assets in production

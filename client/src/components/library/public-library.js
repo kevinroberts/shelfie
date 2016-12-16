@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import LibraryFilter from './library-filter';
 import Paginator from './paginator';
-// import WaveSurferCard from '../clip/clip-wavesurfer-card';
 // import Clip from '../clip/clip-reduxAudio-card';
 import Clip from '../clip/clip-sound';
 

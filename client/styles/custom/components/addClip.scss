@@ -1,10 +1,40 @@
 
+.react-fine-uploader-gallery-dropzone {
+  border: 2px dashed #999 !important;
+}
+.react-fine-uploader-filesize {
+  //padding-top: 10px !important;
+}
+.react-fine-uploader-thumbnail-not-available {
+  display: none !important;
+}
+.react-fine-uploader-gallery-file {
+  min-width: 141px !important;
+}
+.react-fine-uploader-gallery-file-input-container {
+  width: 139px !important;
+  background: #0275d8 !important;
+}
 .upload-drop-zone {
   color: #ccc;
   line-height: 200px;
   text-align: center;
 }
-
 .progress-header {
   margin-bottom: 3rem;
+}
+
+.uploaded-clips {
+  margin-top: 10px;
+}
+.uploaded-clip {
+  max-width: 500px;
+  position: relative;
+  padding: 1rem;
+  margin: 1rem 0;
+  border: solid #f7f7f9;
+
+  h5 {
+    margin-bottom: 17px;
+  }
 }
