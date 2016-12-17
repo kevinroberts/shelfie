@@ -14,17 +14,25 @@ class AddClip extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errorMsg: '',
-      uploadedClips: []
+      errorMsg: ''
     };
   }
 
+  clearRecentUploads() {
+    this.props.resetUploadedClips();
+  }
+
+  renderClearButton() {
+    if (this.props.uploadedClips.length > 0) {
+      return <button onClick={() => this.clearRecentUploads()} className="btn btn-warning float-xs-right">Clear recent uploads</button>;
+    }
+  }
+
   renderUploadedClips() {
-    if (this.state.uploadedClips.length === 0) {
+    if (this.props.uploadedClips.length === 0) {
       return <span />;
     }
-
-    return this.state.uploadedClips.map(function (clip) {
+    return this.props.uploadedClips.map(function (clip) {
       return (
         <UploadedClip key={clip.id} clip={clip} />
       );
@@ -35,6 +43,7 @@ class AddClip extends Component {
 
     const uploader = new FineUploaderTraditional({
       options: {
+        autoUpload : true,
         chunking: {
           enabled: false
         },
@@ -53,17 +62,14 @@ class AddClip extends Component {
           typeError : "{file} has an invalid extension. Only files with the extension .wav are allowed."
         },
         callbacks: {
-          onComplete: (id, name, response) => {
+            onComplete: (id, name, response) => {
             // handle completed upload
             console.log('uploaded completed');
             let newClip = {...response};
 
-            this.setState( function (state) {
-              return {
-                errorMsg: '',
-                uploadedClips: state.uploadedClips.concat(newClip)
-              }
-            });
+            this.props.addUploadedClip(newClip);
+
+
           },
           onValidate: (data, buttonContainer) => {
             console.log('validating upload...');
@@ -91,6 +97,7 @@ class AddClip extends Component {
             <Gallery uploader={ uploader } />
 
             <div className="uploaded-clips">
+              {this.renderClearButton()}
               {this.renderUploadedClips()}
             </div>
 
@@ -105,7 +112,7 @@ class AddClip extends Component {
 }
 
 function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated };
+  return { uploadedClips: state.uploaded.uploadedClips };
 }
 
 export default connect(mapStateToProps, actions)(AddClip);

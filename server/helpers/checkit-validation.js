@@ -84,11 +84,38 @@ exports.clipValidation = {
     rule: 'required',
     message: 'You must provide a title.'
   }, {
-    rule: 'minLength:2',
-    message: 'Your title must be a minimum of 2 characters.'
+    rule: 'minLength:3',
+    message: 'Your title must be a minimum of 3 characters.'
   }],
   sourceUrl: [ {
     rule: 'required',
+    message: 'You must provide a source url'
+  }],
+  description: [ {
+    rule: 'maxLength:200',
+    message: 'Description must be less than 200 characters'
+  }],
+  length: [ {
+    rule: 'numeric',
+    message: 'The length must be a numeric value (measured in milliseconds)'
+  }]
+};
+
+exports.editClipValidation = {
+  _id: [{
+    rule: 'required',
+    message: 'A valid clip id is required.'
+  }],
+  tags: [{
+    rule: 'minLength:3',
+    message: 'Minimum tag length check failed'
+  }],
+  title: [{
+    rule: 'minLength:3',
+    message: 'Your title must be a minimum of 3 characters.'
+  }],
+  sourceUrl: [ {
+    rule: 'minLength:3',
     message: 'You must provide a source url'
   }],
   description: [ {

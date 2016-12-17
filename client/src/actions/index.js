@@ -12,6 +12,8 @@ import {
   SEARCH_CLIPS,
   SET_ACTIVE_TAG,
   FIND_CLIP,
+  ADD_UPLOADED_CLIP,
+  RESET_UPLOADED,
   REQUEST_SUCCESS
 } from './types';
 
@@ -97,6 +99,14 @@ export function getTagList() {
 export function setActiveTag(tag) {
 
   return { type: SET_ACTIVE_TAG, payload: tag };
+}
+
+export function addUploadedClip(uploadedClip) {
+  return { type: ADD_UPLOADED_CLIP, payload: uploadedClip };
+}
+
+export function resetUploadedClips() {
+  return { type: RESET_UPLOADED };
 }
 
 export function searchClips(...criteria) {

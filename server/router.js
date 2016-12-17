@@ -22,11 +22,18 @@ module.exports = function(app) {
   app.post('/profile', requireAuth, Authentication.editProfile);
   app.post('/reset-request', bruteforce.resetPassBruteforce.prevent, Authentication.resetRequest);
   app.post('/reset/:token', Authentication.resetPassword);
+
+  // handle clip related requests
   app.get('/clips', ClipController.getClips);
   app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
+  app.post('/edit-clip', requireAuth, ClipController.editClip)
+
+  // handle tag related requests
   app.post('/tag', requireAuth, TagController.createTag);
   app.get('/tags', TagController.getTags);
+
+  // handle user uploads
   app.post("/uploads", requireAuth, UploadController.onUpload);
   app.delete("/uploads/:uuid", UploadController.onDeleteFile);
 

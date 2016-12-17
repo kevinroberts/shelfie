@@ -6,6 +6,7 @@ const User = require('../models/user');
 const async = require('async');
 const Validator = require('../helpers/checkit-validation');
 const SearchClips = require('../queries/search-clips');
+const EditClip = require('../queries/edit-clip');
 const FindClip = require('../queries/find-clip');
 const xss = require('xss');
 const _ = require('lodash');
@@ -123,5 +124,41 @@ exports.getClips = function (req, res, next) {
       res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' })
     }
   );
+};
+
+exports.editClip = function (req, res, next) {
+  const authedUser = req.user;
+  const clipValidator = new Checkit(Validator.editClipValidation);
+
+  clipValidator.run(req.body).then((validated)=>{
+
+    let updatedProps = {};
+    if (validated.title) {
+      updatedProps.title = validated.title;
+    }
+
+    Clip.findOne({title: validated.title}, function (err, existingClip) {
+      if (existingClip) {
+        return res.status(422).send({ _error: 'A clip with that title already exists. Please select a different title.' });
+      } else {
+
+        EditClip(validated._id, updatedProps).then((result = []) =>
+          res.json({message: 'Your clip was successfully updated.'})
+        ).catch (function (err) {
+            console.log("edit clip error:" , err);
+            res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+          }
+        );
+
+      }
+    });
+
+
+
+
+  }).catch( function(err) {
+    return res.status(422).send(err.toJSON());
+  });
+
 };
 
