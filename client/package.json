@@ -48,6 +48,7 @@
     "react-gravatar": "^2.6.1",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.1",
+    "react-tag-autocomplete": "^5.0.4",
     "react-wavesurfer": "^0.8.2",
     "redux": "^3.0.4",
     "redux-audio": "^1.0.0",

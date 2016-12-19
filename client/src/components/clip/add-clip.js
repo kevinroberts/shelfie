@@ -69,7 +69,6 @@ class AddClip extends Component {
 
             this.props.addUploadedClip(newClip);
 
-
           },
           onValidate: (data, buttonContainer) => {
             console.log('validating upload...');

@@ -4,10 +4,13 @@ import * as actions from '../../actions';
 import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux';
 import { SubmissionError } from 'redux-form';
+import LocalStorageUtils from '../../utils/local-storage-utils';
 import { Link } from 'react-router';
 import ActionsBar from './actions';
 import Loading from '../../utils/react-loading-animation';
+import ReactTags from 'react-tag-autocomplete';
 import axios from 'axios';
+import _ from 'lodash';
 
 let initialized = false;
 
@@ -18,28 +21,37 @@ class EditClip extends Component {
 
     this.state = {
       requestSuccess : false,
-      successMessage: ''
+      successMessage: '',
+      tags: [ ],
+      suggestions: []
     };
-
   }
 
   componentDidMount() {
+    this.props.getTagList();
     this.props.findClip(this.props.params.id);
     this.handleInitialize(this.props.clip);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps called ", nextProps);
     if (nextProps.clip) {
       this.handleInitialize(nextProps.clip);
     }
   }
 
+  componentWillUnmount() {
+    initialized = false;
+  }
+
   handleInitialize(clip) {
-    console.log('initializing form');
     if (!initialized && clip) {
-      console.log('initializing form action');
       this.props.initialize(clip);
+
+      const tagsList = clip.tags.map(t => {return {id: t._id, name: t.name }});
+      this.setState({
+        tags : tagsList
+      });
+
       initialized = true;
     }
   }
@@ -58,22 +70,27 @@ class EditClip extends Component {
   handleFormSubmit(values) {
     // Call action creator to send reset request to server
     console.log("edit clip submitted", values);
-    // return axios.post(`${ROOT_URL}/reset-request`, { ...values })
-    //   .then(response => {
-    //     // reset the form so user can tell it successfully submitted
-    //     this.props.reset();
-    //     // display a success message to the user
-    //     this.setState({requestSuccess: true, successMessage: response.data.message, hiddenForm: 'invisible'});
-    //     setTimeout(() => {
-    //       this.setState({requestSuccess: false, successMessage: '', hiddenForm: ''});
-    //     }, 15000); // show message for 15 seconds
-    //
-    //     this.props.sendResetRequest(response);
-    //   })
-    //   .catch(response => {
-    //     if (response instanceof SubmissionError) throw err;
-    //     throw new SubmissionError({ ...response.data });
-    //   });
+    if (values.title === this.props.clip.title) {
+      values = _.omit(values, ['title']);
+    }
+    return axios({method: 'post',
+    url: `${ROOT_URL}/edit-clip`,
+    data: {...values},
+    headers: {authorization : LocalStorageUtils.getToken() } })
+      .then(response => {
+
+        // display a success message to the user
+        this.setState({requestSuccess: true, successMessage: response.data.message});
+        setTimeout(() => {
+          this.setState({requestSuccess: false, successMessage: ''});
+        }, 5000); // show message for 5 seconds
+
+
+      })
+      .catch(response => {
+        if (response instanceof SubmissionError) throw err;
+        throw new SubmissionError({ ...response.data });
+      });
   }
 
   renderSuccess() {
@@ -90,13 +107,48 @@ class EditClip extends Component {
     console.log('Removing clip', id);
   }
 
+  handleDelete(i) {
+    let tags = this.state.tags;
+    tags.splice(i, 1);
+    this.setState({tags: tags});
+  }
+
+
+  handleAddition(tag) {
+  var tags = this.state.tags;
+  tags.push(tag);
+  this.setState({ tags: tags });
+  }
+
+  handleDrag(tag, currPos, newPos) {
+    let tags = this.state.tags;
+
+    // mutate array
+    tags.splice(currPos, 1);
+    tags.splice(newPos, 0, tag);
+
+    // re-render
+    this.setState({ tags: tags });
+  }
+
+
   render() {
 
-    const { clip, error, handleSubmit, pristine, reset, submitting } = this.props;
+    const { clip, tagList, error, handleSubmit, pristine, reset, submitting } = this.props;
 
-    if (!clip) {
+    if (!clip || !tagList) {
       return <Loading margin={'11% auto'} />;
     }
+
+    let tags = this.state.tags;
+    // map out from the list of all tags except the ones already selected.
+    let suggestions = tagList.map(t => {
+      if (_.find(tags, {'name' : t.name})) {
+        return false;
+      }
+      return {id: t._id, name: t.name }
+    });
+
 
     return (
 
@@ -118,8 +170,6 @@ class EditClip extends Component {
                     <i className="fa fa-times" />
                   </a>
                 </div>
-
-
               </div>
 
               <div className="card-block">
@@ -127,10 +177,23 @@ class EditClip extends Component {
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="form">
                   <Field name="title" type="text" component={this.renderField} label="Clip Title" />
 
-                  <div className="form-group">
+                  <Field name="length" type="number" component={this.renderField} label="Clip Length in Milliseconds (1 Second x 1000)" />
+
+                  <label className="tag-title">Tags</label>
+
+                  <ReactTags tags={tags}
+                             suggestions={suggestions}
+                             allowNew={true}
+                             handleDelete={this.handleDelete.bind(this)}
+                             handleAddition={this.handleAddition.bind(this)}
+                             handleDrag={this.handleDrag.bind(this)} />
+
+
+
+                  <div className="form-group edit-submit">
                     {error && <div className="alert alert-danger"><strong>Error!</strong> {error}</div>}
                     <button className="btn btn-lg btn-primary" type="submit" disabled={submitting || pristine}>Save changes</button>
-                    <button type="button" className="btn btn-lg btn-gray-light undo-btn" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>
+                    {/*<button type="button" className="btn btn-lg btn-gray-light undo-btn" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>*/}
                   </div>
                 </form>
 
@@ -160,7 +223,9 @@ function validate(formProps) {
 }
 
 function mapStateToProps(state) {
-  return { clip: state.clips.clip, username: state.auth.username };
+  const { filterCriteria, clips, auth } = state;
+
+  return { clip: clips.clip, username: auth.username, tagList: filterCriteria.tags };
 }
 
 const form = reduxForm({

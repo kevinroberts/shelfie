@@ -1,4 +1,4 @@
-
+const Clip = require('../models/clip');
 
 exports.signUpValidation = {
   firstName: [{
@@ -81,12 +81,20 @@ exports.resetPasswordValidation = {
 
 exports.clipValidation = {
   title: [{
-    rule: 'required',
-    message: 'You must provide a title.'
-  }, {
     rule: 'minLength:3',
     message: 'Your title must be a minimum of 3 characters.'
-  }],
+  }, {rule: 'required',
+    message: 'A clip title is required.'},
+    {
+      rule: function(val, params, context) {
+        var query = Clip.findOne({title: val});
+
+        return query.then(function (existingClip) {
+          if (existingClip) {
+            throw new Error('A clip with that title already exists. Please select a different title.');
+          }
+        });
+      }}],
   sourceUrl: [ {
     rule: 'required',
     message: 'You must provide a source url'
@@ -106,14 +114,17 @@ exports.editClipValidation = {
     rule: 'required',
     message: 'A valid clip id is required.'
   }],
-  tags: [{
-    rule: 'minLength:3',
-    message: 'Minimum tag length check failed'
-  }],
-  title: [{
-    rule: 'minLength:3',
-    message: 'Your title must be a minimum of 3 characters.'
-  }],
+  title: [
+    {
+    rule: function(val, params, context) {
+      var query = Clip.findOne({title: val});
+
+      return query.then(function (existingClip) {
+        if (existingClip) {
+          throw new Error('A clip with that title already exists. Please select a different title.');
+        }
+      });
+  }}],
   sourceUrl: [ {
     rule: 'minLength:3',
     message: 'You must provide a source url'

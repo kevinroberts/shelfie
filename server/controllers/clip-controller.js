@@ -28,15 +28,6 @@ exports.createClip = function(req, res, next) {
 
     async.waterfall([
       function(done) {
-        Clip.findOne({title: validated.title}, function (err, existingClip) {
-          if (existingClip) {
-            return res.status(422).send({ _error: 'A clip with that name already exists.' });
-          } else {
-            done(err, clip)
-          }
-        })
-      },
-      function(clip, done) {
         clip.save(function (err) {
           if (err) { done(err, clip) }
 
@@ -133,27 +124,26 @@ exports.editClip = function (req, res, next) {
   clipValidator.run(req.body).then((validated)=>{
 
     let updatedProps = {};
+
     if (validated.title) {
       updatedProps.title = validated.title;
     }
 
-    Clip.findOne({title: validated.title}, function (err, existingClip) {
-      if (existingClip) {
-        return res.status(422).send({ _error: 'A clip with that title already exists. Please select a different title.' });
-      } else {
+    if (validated.length) {
+      updatedProps.length = validated.length;
+    }
 
-        EditClip(validated._id, updatedProps).then((result = []) =>
-          res.json({message: 'Your clip was successfully updated.'})
-        ).catch (function (err) {
-            console.log("edit clip error:" , err);
-            res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
-          }
-        );
+    if (validated.tags) {
+      console.log("edit clip - tags submitted", validated.tags);
+    }
 
+    EditClip(validated._id, updatedProps).then((result = []) =>
+      res.json({message: 'Your clip was successfully updated.'})
+    ).catch (function (err) {
+        console.log("edit clip error:" , err);
+        res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
       }
-    });
-
-
+    );
 
 
   }).catch( function(err) {

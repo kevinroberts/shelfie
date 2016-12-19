@@ -3435,6 +3435,10 @@ react-router@^2.0.1:
     loose-envify "^1.2.0"
     warning "^3.0.0"
 
+react-tag-autocomplete:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/react-tag-autocomplete/-/react-tag-autocomplete-5.0.4.tgz#96c2758bd7ae8213cb9ca09c656cdbbd4e4cf8b4"
+
 react-wavesurfer@^0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/react-wavesurfer/-/react-wavesurfer-0.8.2.tgz#9e871cddfbdbe485211d84dc462702465866d01b"

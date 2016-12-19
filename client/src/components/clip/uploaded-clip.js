@@ -26,9 +26,6 @@ class UploadedClip extends Component {
 
     var updatedTitle = this.refs.clipTitleInput.value;
 
-    console.log('handle submit called for ', clip);
-
-
     if (updatedTitle === '' || updatedTitle === clip.fileName) {
       this.refs.errorBlock.style.display="block";
       this.refs.errorMsg.innerHTML="Please enter a valid title for your clip.";
