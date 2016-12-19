@@ -14,6 +14,11 @@ body {
   padding-bottom: 70px;
 }
 
+.md-content-spacer {
+  padding-top: 40px;
+  padding-bottom: 70px;
+}
+
 .sign-up-name {
   padding-bottom: 15px;
 }
@@ -26,6 +31,24 @@ body {
 }
 .extra-top-pad {
   padding-top: 8px;
+}
+
+.btn-gray-light {
+  color: #000;
+  background-color: #eee;
+  border-color: #eee;
+}
+.btn-gray-light.active, .btn-gray-light:active, .btn-gray-light:hover, .open>.dropdown-toggle.btn-gray-light {
+  color: #000;
+  background-color: #d5d5d5;
+  border-color: #cfcfcf;
+}
+.margin-left-sm {
+  margin-left: 11px;
+}
+
+.actions {
+
 }
 
 // debugging - show outline of grid rows

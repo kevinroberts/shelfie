@@ -81,7 +81,7 @@ class Header extends Component {
               <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
             </li>
             <li className={'nav-item ' + authVisible }>
-              <Link className="nav-link" to="/addClip"><i className="fa fa-plus" aria-hidden="true" /> Add Clip</Link>
+              <Link className="nav-link" to="/add-clip"><i className="fa fa-plus" aria-hidden="true" /> Add Clip</Link>
             </li>
           </ul>
 

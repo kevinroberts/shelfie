@@ -5,6 +5,7 @@ import Loading from '../../utils/react-loading-animation';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { formatMilliseconds } from '../../utils/clip-utils';
 import TagList from './tag-list';
+import ActionsBar from './actions';
 import Wavesurfer from 'react-wavesurfer';
 import Gravatar from 'react-gravatar';
 import { Link } from 'react-router';
@@ -23,7 +24,6 @@ class ViewClip extends Component {
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleFinish = this.handleFinish.bind(this);
     this.handleStop = this.handleStop.bind(this);
-
   }
 
   componentDidMount() {
@@ -55,6 +55,10 @@ class ViewClip extends Component {
     });
   }
 
+  removeClip(id) {
+    console.log('Removing clip', id);
+  }
+
   render() {
 
     const { clip } = this.props;
@@ -68,13 +72,28 @@ class ViewClip extends Component {
     );
 
     let createdDate = moment(clip.createdAt).format('MMMM Do YYYY, h:mm a');
+    let actionsVisibleToggle = 'invisible';
+
+    if (clip._creator.username === this.props.username) {
+      actionsVisibleToggle = '';
+    }
 
     return (
-      <div className="row form-gap">
+      <div>
+        <ActionsBar/>
+      <div className="row md-content-spacer">
         <div className="col-sm-7 offset-sm-2">
-          <div className="card view-clip">
+          <div className="card view-edit-clip">
             <div className="card-header">
-              {clip.title}
+              <div className="float-xs-left">{clip.title}</div>
+              <div className={'btn-group btn-group-sm float-xs-right ' + actionsVisibleToggle}>
+                <Link to={"/clip/" + clip._id + "/edit"} className="btn btn-warning" title="Edit">
+                  <i className="fa fa-edit" />
+                </Link>
+                <a href="#" className="btn btn-danger" title="Remove" onClick={() => this.removeClip(clip._id)}>
+                  <i className="fa fa-times" />
+                </a>
+              </div>
             </div>
             <Wavesurfer
               audioFile={clip.sourceUrl}
@@ -124,12 +143,13 @@ class ViewClip extends Component {
         </div>
 
       </div>
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { clip: state.clips.clip };
+  return { clip: state.clips.clip, username: state.auth.username };
 }
 
 export default connect(mapStateToProps, actions)(ViewClip);

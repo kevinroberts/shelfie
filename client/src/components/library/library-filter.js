@@ -48,6 +48,17 @@ class LibraryFilter extends Component {
 
     return (
             <div className="col-sm-2">
+              <div className="sorting-actions">
+                <h4>Sort</h4>
+              <select>
+                <option value="volvo">Sort by</option>
+                <option value="saab">Created date</option>
+                <option value="titleAZ">+Title</option>
+                <option value="titleZA">-Title</option>
+                <option value="lengthPlus">+Length</option>
+                <option value="lengthMinus">-Length</option>
+              </select>
+              </div>
               <h4>Tags</h4>
               <ul className="list-unstyled nav nav-pills nav-stacked tag-list">
                 <li className="nav-item">
