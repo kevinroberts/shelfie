@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const Checkit = require('checkit');
 const Validator = require('../helpers/checkit-validation');
 const EditTag = require('../queries/edit-tag')
+const ClipController = require('./clip-controller');
 
 
 exports.createTag = function (req, res, next) {
@@ -33,10 +34,27 @@ exports.createTag = function (req, res, next) {
     var tag = new Tag(properties);
 
     tag.save(function (err) {
-      if (err) { return next(err); }
+      if (err) {
+        console.error('problem saving tag', err);
+        return next(err);
+      }
 
-      // respond with successfully created clip
-      return res.json({tag});
+      // check if we should add the newly created tag to the clip
+      const addToClip = req.body.addToClip;
+      if (addToClip && clip) {
+        ClipController.addTagToClip(clip, tag._id, function (err, result) {
+          if (err) {
+            console.error('problem saving tag to clip', err);
+            return next(err);
+          }
+          return res.json({tag});
+        })
+      } else {
+        // respond with successfully created tag
+        return res.json({tag});
+      }
+
+
     });
 
   });
@@ -102,9 +120,25 @@ exports.editTag = function (req, res, next) {
       updatedProps.clips = req.body.clips;
     }
 
-    EditTag(validated._id, updatedProps).then((result = []) =>
-      res.json({message: 'Your clip was successfully updated.'})
-    ).catch (function (err) {
+    EditTag(validated._id, updatedProps).then((result = []) => {
+      // check if we should add the tag to the clip as well
+      const addToClip = req.body.addToClip;
+      const clipId = req.body.clipId;
+      if (addToClip && clipId) {
+        ClipController.addTagToClip(clipId, validated._id, function (err, result) {
+          if (err) {
+            console.error('problem saving tag to clip', err);
+            return next(err);
+          }
+          return res.json({message: 'Your clip was successfully updated.'});
+        })
+      } else {
+        res.json({message: 'Your clip was successfully updated.'});
+      }
+
+
+
+    }).catch (function (err) {
         console.log("edit clip error:" , err);
         res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
       }

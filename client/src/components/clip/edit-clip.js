@@ -156,10 +156,10 @@ class EditClip extends Component {
       let existingClips = existingTag.clips;
       existingClips.push(this.props.clip._id);
 
-      // this is an existing tag post a request to add it to the existing tag
+      // this is an existing tag post a request to add the clip to it
       axios({method: 'post',
         url: `${ROOT_URL}/edit-tags`,
-        data: { _id: existingTag._id, clips: existingClips},
+        data: { _id: existingTag._id, clips: existingClips, addToClip: true, clipId: this.props.clip._id},
         headers: {authorization : LocalStorageUtils.getToken() } })
         .then(response => {
 
@@ -183,7 +183,7 @@ class EditClip extends Component {
       // adding a brand new tag - post it to the API
       axios({method: 'post',
         url: `${ROOT_URL}/tags`,
-        data: {name: tag.name, clip: this.props.clip._id},
+        data: {name: tag.name, clip: this.props.clip._id, addToClip: true},
         headers: {authorization : LocalStorageUtils.getToken() } })
         .then(response => {
           tags.push({id: response.data.tag._id, name: response.data.tag.name});

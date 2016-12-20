@@ -91,6 +91,23 @@ exports.findClip = function (req, res, next) {
 
 };
 
+exports.addTagToClip = function (clipID, tagID, cb) {
+  Clip.findOne({ _id: clipID }, function(err, existingClip) {
+
+    existingClip.tags.push(tagID);
+
+    existingClip.save(function (err) {
+      if (err) {
+        return cb(err);
+      }
+
+      // respond with successfully updated clip
+      return cb(err, existingClip);
+    });
+
+  });
+};
+
 exports.getClips = function (req, res, next) {
   let limit = req.query.limit ? _.toNumber(req.query.limit) : 20;
   let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
