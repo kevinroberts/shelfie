@@ -22,7 +22,9 @@ class EditClip extends Component {
     this.state = {
       requestSuccess : false,
       successMessage: '',
-      tags: [ ],
+      tagError: '',
+      tagSuccess: '',
+      tags: [],
       suggestions: []
     };
   }
@@ -56,7 +58,6 @@ class EditClip extends Component {
     }
   }
 
-
   renderField ({ input, label, type, placeholder, meta: { touched, error } }) {
     return (
       <div className="form-group">
@@ -69,10 +70,31 @@ class EditClip extends Component {
 
   handleFormSubmit(values) {
     // Call action creator to send reset request to server
-    console.log("edit clip submitted", values);
     if (values.title === this.props.clip.title) {
       values = _.omit(values, ['title']);
     }
+
+    var updatedTags = this.state.tags.map(t => {return {_id: t.id, name: t.name }});
+
+    // check if updated tags are different from initial tags
+    var diff = false;
+
+    // check if number of tags is same but now different tags
+    if (updatedTags.length === values.tags.length) {
+      diff = _.reduce(values.tags, function(result, value, key) {
+        return value._id === updatedTags[key]._id ?
+          result : result.concat(key);
+      }, []);
+    } else {
+      diff = true;
+    }
+
+    if (diff === true || diff.length > 0) {
+      values.tags = updatedTags;
+    } else {
+      values = _.omit(values, ['tags']);
+    }
+
     return axios({method: 'post',
     url: `${ROOT_URL}/edit-clip`,
     data: {...values},
@@ -103,52 +125,105 @@ class EditClip extends Component {
     }
   }
 
+  // TODO handle clip delete
   removeClip(id) {
-    console.log('Removing clip', id);
+    if (confirm("Are you sure you want to remove " + this.props.clip.title + "?")) {
+      console.log('Removing clip', id);
+    } else {
+      console.log('Cancelled remove clip', id);
+    }
   }
 
+  // TODO handle tag removal
   handleDelete(i) {
     let tags = this.state.tags;
     tags.splice(i, 1);
     this.setState({tags: tags});
+    // enable submit button
+    this.refs.editClipSaveBtn.disabled="";
   }
 
 
   handleAddition(tag) {
-  var tags = this.state.tags;
-  tags.push(tag);
-  this.setState({ tags: tags });
-  }
+    var tags = this.state.tags;
 
-  handleDrag(tag, currPos, newPos) {
-    let tags = this.state.tags;
+    // check if this is a new tag or existing
+    var existingTag = _.find(this.props.fullTagList, {'name' : tag.name});
 
-    // mutate array
-    tags.splice(currPos, 1);
-    tags.splice(newPos, 0, tag);
+    if (existingTag) {
 
-    // re-render
-    this.setState({ tags: tags });
+      // grab existing tags set of clips and add this clip's id to it
+      let existingClips = existingTag.clips;
+      existingClips.push(this.props.clip._id);
+
+      // this is an existing tag post a request to add it to the existing tag
+      axios({method: 'post',
+        url: `${ROOT_URL}/edit-tags`,
+        data: { _id: existingTag._id, clips: existingClips},
+        headers: {authorization : LocalStorageUtils.getToken() } })
+        .then(response => {
+
+          tags.push(tag);
+          this.setState({ tags: tags });
+
+          this.refs.editClipSaveBtn.disabled="";
+
+        })
+        .catch(response => {
+          this.setState({ tagError: _.has(response.data, '_error') ?
+            response.data._error : 'An error occurred trying to save your tag update. Please try again.'});
+          setTimeout(() => {
+            this.setState({ tagError: ''});
+          }, 3000);
+        });
+
+      // enable submit button
+      this.refs.editClipSaveBtn.disabled="";
+    } else {
+      // adding a brand new tag - post it to the API
+      axios({method: 'post',
+        url: `${ROOT_URL}/tags`,
+        data: {name: tag.name, clip: this.props.clip._id},
+        headers: {authorization : LocalStorageUtils.getToken() } })
+        .then(response => {
+          tags.push({id: response.data.tag._id, name: response.data.tag.name});
+          // display a success message to the user
+          this.setState({tagSuccess: 'A new tag with the name ' + tag.name + " was successfully created.", tags: tags});
+          setTimeout(() => {
+            this.setState({ tagSuccess: ''});
+          }, 3000);
+          this.refs.editClipSaveBtn.disabled="";
+
+        })
+        .catch(response => {
+          this.setState({ tagError: _.has(response.data, '_error') ?
+            response.data._error : 'An error occurred trying to save your tag update. Please try again.'});
+          setTimeout(() => {
+            this.setState({ tagError: ''});
+          }, 3000);
+        });
+
+    }
+
   }
 
 
   render() {
 
-    const { clip, tagList, error, handleSubmit, pristine, reset, submitting } = this.props;
+    const { clip, fullTagList, error, handleSubmit, pristine, reset, submitting } = this.props;
+    const { tags, tagError, tagSuccess } = this.state;
 
-    if (!clip || !tagList) {
+    if (!clip || !fullTagList) {
       return <Loading margin={'11% auto'} />;
     }
 
-    let tags = this.state.tags;
     // map out from the list of all tags except the ones already selected.
-    let suggestions = tagList.map(t => {
+    let suggestions = fullTagList.map(t => {
       if (_.find(tags, {'name' : t.name})) {
         return false;
       }
       return {id: t._id, name: t.name }
     });
-
 
     return (
 
@@ -181,18 +256,18 @@ class EditClip extends Component {
 
                   <label className="tag-title">Tags</label>
 
+                  {tagError && <div className="alert alert-danger"><strong>Error!</strong> {tagError}</div>}
                   <ReactTags tags={tags}
                              suggestions={suggestions}
                              allowNew={true}
                              handleDelete={this.handleDelete.bind(this)}
-                             handleAddition={this.handleAddition.bind(this)}
-                             handleDrag={this.handleDrag.bind(this)} />
-
+                             handleAddition={this.handleAddition.bind(this)} />
+                  {tagSuccess && <div className="alert alert-success"><strong>Success!</strong> {tagSuccess}</div>}
 
 
                   <div className="form-group edit-submit">
                     {error && <div className="alert alert-danger"><strong>Error!</strong> {error}</div>}
-                    <button className="btn btn-lg btn-primary" type="submit" disabled={submitting || pristine}>Save changes</button>
+                    <button ref="editClipSaveBtn" className="btn btn-lg btn-primary" type="submit" disabled={pristine || submitting}>Save changes</button>
                     {/*<button type="button" className="btn btn-lg btn-gray-light undo-btn" disabled={pristine || submitting} onClick={reset}>Undo Changes</button>*/}
                   </div>
                 </form>
@@ -225,7 +300,7 @@ function validate(formProps) {
 function mapStateToProps(state) {
   const { filterCriteria, clips, auth } = state;
 
-  return { clip: clips.clip, username: auth.username, tagList: filterCriteria.tags };
+  return { clip: clips.clip, username: auth.username, fullTagList: filterCriteria.tags };
 }
 
 const form = reduxForm({

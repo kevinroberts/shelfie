@@ -27,10 +27,11 @@ module.exports = function(app) {
   app.get('/clips', ClipController.getClips);
   app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
-  app.post('/edit-clip', requireAuth, ClipController.editClip)
+  app.post('/edit-clip', requireAuth, ClipController.editClip);
 
   // handle tag related requests
-  app.post('/tag', requireAuth, TagController.createTag);
+  app.post('/tags', requireAuth, TagController.createTag);
+  app.post('/edit-tags', requireAuth, TagController.editTag);
   app.get('/tags', TagController.getTags);
 
   // handle user uploads

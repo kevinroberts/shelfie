@@ -1,4 +1,5 @@
 const Clip = require('../models/clip');
+const Tag = require('../models/tag');
 
 exports.signUpValidation = {
   firstName: [{
@@ -108,6 +109,25 @@ exports.clipValidation = {
     message: 'The length must be a numeric value (measured in milliseconds)'
   }]
 };
+
+exports.editTagValidation = {
+  _id: [{
+    rule: 'required',
+    message: 'A valid tag id is required.'
+  }],
+  name: [
+    {
+      rule: function(val, params, context) {
+        var query = Tag.findOne({name: val});
+
+        return query.then(function (existingTag) {
+          if (existingTag) {
+            throw new Error('A tag with that name already exists. Please select a different name.');
+          }
+        });
+      }}]
+};
+
 
 exports.editClipValidation = {
   _id: [{

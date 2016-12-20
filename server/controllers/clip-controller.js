@@ -133,8 +133,8 @@ exports.editClip = function (req, res, next) {
       updatedProps.length = validated.length;
     }
 
-    if (validated.tags) {
-      console.log("edit clip - tags submitted", validated.tags);
+    if (req.body.tags) {
+      updatedProps.tags = req.body.tags.map(t => {return t._id});
     }
 
     EditClip(validated._id, updatedProps).then((result = []) =>
