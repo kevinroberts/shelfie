@@ -154,6 +154,10 @@ exports.editClip = function (req, res, next) {
       updatedProps.tags = req.body.tags.map(t => {return t._id});
     }
 
+    if (validated.description) {
+      updatedProps.description = validated.description;
+    }
+
     EditClip(validated._id, updatedProps).then((result = []) =>
       res.json({message: 'Your clip was successfully updated.'})
     ).catch (function (err) {

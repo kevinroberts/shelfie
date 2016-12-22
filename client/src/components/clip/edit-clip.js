@@ -68,6 +68,16 @@ class EditClip extends Component {
     );
   }
 
+  renderTextAreaField ({ input, label, type, meta: { touched, error } }) {
+    return (
+      <div className="form-group">
+        <label>{label}</label>
+        <textarea {...input} className="form-control" type={type} defaultValue={input.value} />
+        {touched && error && <div className="error">{error}</div>}
+      </div>
+    );
+  }
+
   handleFormSubmit(values) {
     // Call action creator to send reset request to server
     if (values.title === this.props.clip.title) {
@@ -263,6 +273,9 @@ class EditClip extends Component {
                              handleDelete={this.handleDelete.bind(this)}
                              handleAddition={this.handleAddition.bind(this)} />
                   {tagSuccess && <div className="alert alert-success"><strong>Success!</strong> {tagSuccess}</div>}
+
+
+                  <Field name="description" type="textarea" label="Description" component={this.renderTextAreaField}/>
 
 
                   <div className="form-group edit-submit">
