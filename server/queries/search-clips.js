@@ -1,4 +1,5 @@
 const Clip = require('../models/clip');
+const env = require('get-env')();
 
 /**
  * Searches through the Clip collection
@@ -19,10 +20,15 @@ module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => 
     .skip(offset)
     .limit(limit);
 
-
+  if (env !== 'prod') {
+    console.time('search clip operation');
+  }
 
   return Promise.all([query, Clip.find(buildQuery(criteria)).count()])
     .then((results) => {
+      if (env !== 'prod') {
+        console.timeEnd('search clip operation');
+      }
       return {
         all: results[0],
         count: results[1],

@@ -10,6 +10,7 @@ const EditClip = require('../queries/edit-clip');
 const FindClip = require('../queries/find-clip');
 const ObjectID = require('mongodb').ObjectID;
 const xss = require('xss');
+const env = require('get-env')();
 const _ = require('lodash');
 
 exports.createClip = function(req, res, next) {

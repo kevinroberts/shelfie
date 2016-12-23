@@ -6,6 +6,7 @@ const passportService = require('./services/passport');
 const passport = require('passport');
 const path = require('path');
 const express = require('express');
+const env = require('get-env')();
 const bruteforce = require('./services/bruteforce_check');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
@@ -41,7 +42,7 @@ module.exports = function(app) {
 
 
   // Express only serves static assets in production
-  if (process.env.NODE_ENV === 'production') {
+  if (env === 'prod') {
 
 
     // app.use((req, res, cb) => {

@@ -1,4 +1,5 @@
 const Tag = require('../models/tag');
+const env = require('get-env')();
 
 /**
  * Searches through the Tag collection
@@ -15,8 +16,15 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
     .skip(offset)
     .limit(limit);
 
+  if (env !== 'prod') {
+    console.time('search tags operation');
+  }
+
   return Promise.all([query, Tag.find(buildQuery(criteria)).count()])
     .then((results) => {
+      if (env !== 'prod') {
+        console.timeEnd('search tags operation');
+      }
       return {
         all: results[0],
         count: results[1],
