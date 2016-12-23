@@ -8,6 +8,7 @@ const Validator = require('../helpers/checkit-validation');
 const SearchClips = require('../queries/search-clips');
 const EditClip = require('../queries/edit-clip');
 const FindClip = require('../queries/find-clip');
+const ObjectID = require('mongodb').ObjectID;
 const xss = require('xss');
 const _ = require('lodash');
 
@@ -140,6 +141,12 @@ exports.editClip = function (req, res, next) {
 
   clipValidator.run(req.body).then((validated)=>{
 
+    // make sure this request is from the clip's original author
+    var clipId = new ObjectID(validated._id);
+    if (!_.find(authedUser.clips, clipId)) {
+      return res.status(422).send({ _error: 'You may only edit clips that you have created.'});
+    }
+
     let updatedProps = {};
 
     if (validated.title) {
@@ -169,6 +176,37 @@ exports.editClip = function (req, res, next) {
 
   }).catch( function(err) {
     return res.status(422).send(err.toJSON());
+  });
+
+};
+
+exports.removeClip = function (req, res, next) {
+  const authedUser = req.user;
+
+  const clipId = req.body.clip;
+
+  if (!clipId) {
+    return res.status(422).send({ _error: 'A clip id is required.'});
+  }
+
+  var query = Clip.findOne({_id: clipId});
+
+  query.then(function (clip) {
+    if (!clip._creator.equals(authedUser._id)) {
+      return res.status(422).send({ _error: 'You may only remove clips that you have created.'});
+    }
+
+    if (clip.tags.length > 0) {
+      // remove the clip from the associated tag(s)
+
+
+    }
+
+    res.json(clip);
+
+  }).catch(function (err) {
+    console.log("find clip query error:" , err);
+    res.status(422).send({ _error: 'Could not find clip.' });
   });
 
 };

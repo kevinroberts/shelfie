@@ -135,12 +135,11 @@ class EditClip extends Component {
     }
   }
 
-  // TODO handle clip delete
   removeClip(id) {
     if (confirm("Are you sure you want to remove " + this.props.clip.title + "?")) {
-      console.log('Removing clip', id);
+      this.props.removeClip(id, this.props.clip.title);
     } else {
-      console.log('Cancelled remove clip', id);
+      console.log('Cancelled remove clip');
     }
   }
 
@@ -149,6 +148,7 @@ class EditClip extends Component {
     let tags = this.state.tags;
     tags.splice(i, 1);
     this.setState({tags: tags});
+
     // enable submit button
     this.refs.editClipSaveBtn.disabled="";
   }

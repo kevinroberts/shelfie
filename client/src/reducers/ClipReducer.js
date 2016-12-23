@@ -1,6 +1,7 @@
 import {
   SEARCH_CLIPS,
   FIND_CLIP,
+  REMOVE_CLIP,
   RESET_CLIP
 } from '../actions/types';
 
@@ -20,6 +21,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, clip: action.payload };
     case RESET_CLIP:
       return { ...state, clip: null };
+    case REMOVE_CLIP:
+      return {...state, clip: null};
     default:
       return state;
   }

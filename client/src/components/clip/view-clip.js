@@ -56,7 +56,11 @@ class ViewClip extends Component {
   }
 
   removeClip(id) {
-    console.log('Removing clip', id);
+    if (confirm("Are you sure you want to remove \"" + this.props.clip.title + "\"?")) {
+      this.props.removeClip(id, this.props.clip.title);
+    } else {
+      console.log('Cancelled remove clip');
+    }
   }
 
   render() {

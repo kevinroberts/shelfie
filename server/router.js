@@ -28,6 +28,7 @@ module.exports = function(app) {
   app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
   app.post('/edit-clip', requireAuth, ClipController.editClip);
+  app.post('/remove-clip', requireAuth, ClipController.removeClip);
 
   // handle tag related requests
   app.post('/tags', requireAuth, TagController.createTag);

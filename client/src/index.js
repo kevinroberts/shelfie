@@ -33,6 +33,10 @@ if (token) {
   store.dispatch({ type: AUTH_USER, payload: LocalStorageUtils.getUser() });
 }
 
+Notification.requestPermission().then(function(result) {
+  console.log(result);
+});
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>

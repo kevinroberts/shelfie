@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import { notifyUser } from '../utils/notifications'
 import LocalStorageUtils from '../utils/local-storage-utils';
 import Qs from 'Qs';
 import {
@@ -14,6 +15,7 @@ import {
   FIND_CLIP,
   ADD_UPLOADED_CLIP,
   RESET_UPLOADED,
+  REMOVE_CLIP,
   REQUEST_SUCCESS
 } from './types';
 
@@ -50,6 +52,28 @@ export function editUser(response, passwordChanged) {
       dispatch({type: EDIT_USER, payload: response.data});
     }
   };
+}
+
+export function removeClip(id, title) {
+  return function (dispatch) {
+
+    axios({method: 'post',
+      url: `${ROOT_URL}/remove-clip`,
+      data: {clip: id},
+      headers: {authorization : LocalStorageUtils.getToken() } })
+      .then(response => {
+        notifyUser("Clip removed!", "Your clip \"" + title + "\" was successfully removed.", "/static/img/trash.png");
+        browserHistory.push('/');
+        dispatch({type: REMOVE_CLIP});
+
+      })
+      .catch(response => {
+        notifyUser("Error", "Your clip \"" + title + "\" could not be removed.", "/static/img/error.png");
+      });
+
+
+
+  }
 }
 
 export function sendResetRequest(response) {
