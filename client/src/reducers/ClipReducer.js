@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   offset: 0,
   currentPage: 1,
   totalPages: 1,
+  sort: 'createdAt',
   limit: 20
 };
 

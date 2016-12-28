@@ -8,10 +8,15 @@ const Validator = require('../helpers/checkit-validation');
 const SearchClips = require('../queries/search-clips');
 const EditClip = require('../queries/edit-clip');
 const FindClip = require('../queries/find-clip');
+const RemoveClip = require('../queries/remove-clip');
 const ObjectID = require('mongodb').ObjectID;
+const rimraf = require("rimraf");
 const xss = require('xss');
 const env = require('get-env')();
 const _ = require('lodash');
+
+const uploadedFilesPath = process.env.UPLOADED_FILES_DIR + '/';
+const UUIDRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
 
 exports.createClip = function(req, res, next) {
   const authedUser = req.user;
@@ -199,11 +204,88 @@ exports.removeClip = function (req, res, next) {
 
     if (clip.tags.length > 0) {
       // remove the clip from the associated tag(s)
+      async.filter(clip.tags, function (tag, callback) {
+        const update = Tag.update({_id: tag}, {$pullAll: { clips: [clipId] } } );
 
+        update.then(function (updatedTag) {
+          console.log("removed " + clipId + " from tag ", tag);
+          callback(null, updatedTag)
+        }).catch(function(err) {
+          callback(err);
+        });
+
+      }, function (err, results) {
+        if (err) {
+          console.error("error removing clip from tag", err);
+        }
+
+        // remove clip from user's list of clips
+        const updateUser = User.update({_id: authedUser._id}, {$pullAll: { clips: [clipId] } } );
+
+        updateUser.then(function (updatedUser) {
+          RemoveClip(clipId).then((result = []) => {
+            var uuid = clip.sourceUrl.match(UUIDRegex);
+
+            if (uuid) {
+              var dirToDelete = uploadedFilesPath + uuid[0];
+
+              rimraf(dirToDelete, function(error) {
+                if (error) {
+                  console.error("Problem deleting file! " + error);
+                  res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+                }
+
+                res.json({message: 'Your clip was successfully removed.'})
+              });
+            } else {
+              console.error("Problem deleting file! - file path could not be found");
+              res.json({message: 'Your clip was successfully removed from our records. File was not deleted.'})
+            }
+
+          }).catch (function (err) {
+              console.log("remove clip error:" , err);
+              res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+            }
+          );
+        });
+
+
+      })
+
+    } else {
+      const updateUser = User.update({_id: authedUser._id}, {$pullAll: { clips: [clipId] } } );
+
+      updateUser.then(function (updatedUser) {
+        RemoveClip(clipId).then((result = []) => {
+
+          var uuid = clip.sourceUrl.match(UUIDRegex);
+
+          if (uuid) {
+            var dirToDelete = uploadedFilesPath + uuid[0];
+
+            rimraf(dirToDelete, function(error) {
+              if (error) {
+                console.error("Problem deleting file! " + error);
+                res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+              }
+
+              res.json({message: 'Your clip was successfully removed.'})
+            });
+          } else {
+            console.error("Problem deleting file! - file path could not be found");
+            res.json({message: 'Your clip was successfully removed from our records. File was not deleted.'})
+          }
+
+        }).catch (function (err) {
+            console.log("remove clip error:" , err);
+            res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+          }
+        );
+      });
 
     }
 
-    res.json(clip);
+
 
   }).catch(function (err) {
     console.log("find clip query error:" , err);

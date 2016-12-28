@@ -12,9 +12,37 @@ const env = require('get-env')();
  * like this: { all: [clips], count: count, offset: offset, limit: limit }
  */
 module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => {
+
+  let sortPropertyWithOrder = sortProperty;
+
   if (!sortOrder) {
     sortOrder = 'asc';
   }
+
+  if (sortProperty === 'titleAZ') {
+    sortProperty = 'title';
+    sortOrder = 'asc';
+    sortPropertyWithOrder = "titleAZ";
+  }
+
+  if (sortProperty === 'titleZA') {
+    sortProperty = 'title';
+    sortOrder = 'desc';
+    sortPropertyWithOrder = "titleZA";
+  }
+
+  if (sortProperty === 'lengthPlus') {
+    sortProperty = 'length';
+    sortOrder = 'asc';
+    sortPropertyWithOrder = "lengthPlus";
+  }
+
+  if (sortProperty === 'lengthMinus') {
+    sortProperty = 'length';
+    sortOrder = 'desc';
+    sortPropertyWithOrder = "lengthMinus";
+  }
+
   const query = Clip.find(buildQuery(criteria))
     .sort({ [sortProperty]: sortOrder })
     .skip(offset)
@@ -33,6 +61,7 @@ module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => 
         all: results[0],
         count: results[1],
         offset: offset,
+        sort: sortPropertyWithOrder,
         totalPages: Math.ceil(results[1]/ limit),
         currentPage: offset / limit + 1,
         limit: limit

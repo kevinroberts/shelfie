@@ -24,12 +24,24 @@ class Signin extends Component {
     );
   }
 
+  renderCheckboxField ({ input, label, type, placeholder, meta: { touched, error } }) {
+    return (
+      <div className="form-check pull-left need-help">
+        <label className="form-check-label">
+          <input {...input} className="form-check-input" type={type} />
+          {label}
+        </label>
+      </div>
+    );
+  }
+
+
   handleFormSubmit(values) {
     // Call api to sign in user
     return axios.post(`${ROOT_URL}/signin`, { ...values })
       .then(response => {
         // success response - pass action creator to update state
-        this.props.signinUser(response);
+        this.props.signinUser(response, _.isUndefined(values.rememberMe) ? false : true);
 
       })
       .catch(response => {
@@ -75,6 +87,9 @@ class Signin extends Component {
 
               {error && <div className="alert alert-danger"><strong>Error!</strong> {error}</div>}
               <button action="submit" className="btn btn-lg btn-primary btn-block" disabled={submitting}>Sign in</button>
+
+              <Field name="rememberMe" type="checkbox" component={this.renderCheckboxField} label="Remember me" />
+
               <Link to="/resetRequest" className="pull-right need-help">Need help? </Link>
               <span className="clearfix" />
             </form>

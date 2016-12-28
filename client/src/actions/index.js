@@ -21,22 +21,22 @@ import {
 
 export const ROOT_URL = '/api';
 
-export function signinUser( response ) {
+export function signinUser( response, rememberUser ) {
   return function(dispatch) {
     // - Save the JWT token
-    LocalStorageUtils.setUser(response);
+    LocalStorageUtils.setUser(response, rememberUser);
     // - Update state to indicate user is authenticated
     dispatch({ type: AUTH_USER,
       payload: response.data });
-    // - redirect to the route '/feature'
-    browserHistory.push('/feature');
+    // - redirect to the route '/profile'
+    browserHistory.push(`/profile/${response.data.username}`);
   };
 }
 
 export function signupUser( response ) {
   return function(dispatch) {
         dispatch({ type: AUTH_USER, payload: response.data });
-        LocalStorageUtils.setUser(response);
+        LocalStorageUtils.setUser(response, false);
         browserHistory.push('/feature');
   };
 }

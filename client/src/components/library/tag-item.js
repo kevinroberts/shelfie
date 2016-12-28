@@ -1,6 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import Qs from 'Qs';
 import * as actions from '../../actions';
 
 
@@ -9,21 +11,29 @@ class TagItem extends Component {
   handleTagClick () {
     this.props.setActiveTag(this.props.tag);
 
-    this.props.searchClips({
+    let criteria = {
       title: '',
-      sort: 'createdAt',
+      sort: this.props.sort,
       tags: this.props.tag._id
-    });
+    };
+
+    this.props.searchClips(criteria);
+
+    browserHistory.push(`/library?${Qs.stringify(criteria)}`);
   };
 
 
   render() {
 
     let { tag } = this.props;
+    const queryParams = this.props.queryParams.query;
 
     let activeClass = '';
 
     if (this.props.activeTag._id === tag._id) {
+      activeClass = ' active';
+    }
+    if (queryParams.tags && queryParams.tags === tag._id) {
       activeClass = ' active';
     }
 
@@ -44,9 +54,10 @@ class TagItem extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { auth, filterCriteria } = state;
+  const { auth, filterCriteria, clips } = state;
 
   return {
+    sort: clips.sort,
     activeTag : filterCriteria.tag,
     authenticated: auth.authenticated
   };

@@ -28,14 +28,27 @@ class Library extends Component {
     });
   }
 
+  renderTitle() {
+
+    if (this.props.activeTag.name) {
+      return (
+        <h2 className="text-xs-center">Public Library - {this.props.activeTag.name}</h2>
+      )
+    } else {
+      return (
+        <h2 className="text-xs-center">Public Library</h2>
+      )
+    }
+  }
+
   render() {
 
     return (
       <div className="row">
         <div className="col-sm-12">
-          <h2 className="text-xs-center">Public Library</h2>
+          {this.renderTitle()}
           <div className="row">
-            <LibraryFilter />
+            <LibraryFilter queryParams={this.props.location} />
             <div className="col-sm-10">
               <div className="card-columns">
                 {this.renderList()}
@@ -54,8 +67,11 @@ class Library extends Component {
 }
 
 function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated,
-            clips: state.clips };
+  const { filterCriteria, auth, clips } = state;
+
+  return { authenticated: auth.authenticated,
+            activeTag : filterCriteria.tag,
+            clips: clips };
 }
 
 export default connect(mapStateToProps, actions)(Library);
