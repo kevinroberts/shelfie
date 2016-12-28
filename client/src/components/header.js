@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Gravatar from 'react-gravatar';
+import NavLink from '../utils/nav-link';
 
 class Header extends Component {
   renderLogin() {
@@ -52,12 +53,8 @@ class Header extends Component {
     } else {
       // show a link to sign in or sign up
       return [
-        <li className="nav-item" key={1}>
-          <Link className="nav-link" to="/signin">Sign In</Link>
-        </li>,
-        <li className="nav-item" key={2}>
-          <Link className="nav-link" to="/signup">Register</Link>
-        </li>
+        <NavLink to="/signin" key={1}>Sign In</NavLink>,
+        <NavLink to="/signup" key={2}>Register</NavLink>,
       ];
     }
   }
@@ -74,15 +71,19 @@ class Header extends Component {
         <Link className="navbar-brand" to="/">Shelfie</Link>
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
           <ul className="nav navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link" href="#">My Library</a>
-            </li>
-            <li className="nav-item active">
-              <a className="nav-link" href="http://bootsnipp.com/snippets/featured/nav-account-manager" target="_blank">Favorites</a>
-            </li>
-            <li className={'nav-item ' + authVisible }>
-              <Link className="nav-link" to="/add-clip"><i className="fa fa-plus" aria-hidden="true" /> Add Clip</Link>
-            </li>
+
+            <NavLink to="/feature">
+              My Library
+            </NavLink>
+
+            <NavLink to="/feature">
+              Favorites
+            </NavLink>
+
+            <NavLink to="/add-clip" className={'nav-link ' + authVisible }>
+              <i className="fa fa-plus" aria-hidden="true" /> Add Clip
+            </NavLink>
+
           </ul>
 
           <ul className="nav navbar-nav pull-right">
