@@ -43,7 +43,7 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <IndexRedirect to="/library" />
         <Route path="library" component={Library}>
-          <Route path="?sort=:sort&page=:page&tags=:activeTag" component={Library} />
+          <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={Library} />
         </Route>
         <Route path="signin" component={Signin} />
         <Route path="signout" component={Signout} />

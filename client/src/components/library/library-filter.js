@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import TagItem from './tag-item'
 import Qs from 'Qs';
+import _ from 'lodash';
 import * as actions from '../../actions';
 
 class LibraryFilter extends Component {
@@ -33,6 +34,11 @@ class LibraryFilter extends Component {
     if (queryParams.tags) {
       criteria.tags = queryParams.tags;
       this.props.setActiveTag({  "_id": queryParams.tags });
+    }
+
+    if (queryParams.limit && queryParams.offset) {
+      criteria.limit = _.toNumber(queryParams.limit);
+      criteria.offset = _.toNumber(queryParams.offset);
     }
 
     this.props.searchClips(criteria);

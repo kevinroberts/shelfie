@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import { browserHistory } from 'react-router';
+import Qs from 'Qs';
 import UltimatePagination from '../../utils/pagination/UltimatePaginationBootstrap4';
 
 class Paginator extends Component {
@@ -14,7 +16,7 @@ class Paginator extends Component {
 
   onPageChangeFromPagination(newPage) {
 
-    const { limit, activeTag } = this.props;
+    const { limit, activeTag, sort } = this.props;
 
     let criteria = {
       offset: ((newPage-1) * limit),
@@ -24,6 +26,12 @@ class Paginator extends Component {
     if (activeTag._id) {
       criteria.tags = activeTag._id;
     }
+
+    if (sort) {
+      criteria.sort = sort;
+    }
+
+    browserHistory.push(`/library?${Qs.stringify(criteria)}`);
 
     this.props.searchClips(criteria);
   }
@@ -44,9 +52,9 @@ class Paginator extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { limit, offset, count, currentPage, totalPages } = state.clips;
+  const { limit, offset, count, currentPage, totalPages, sort } = state.clips;
 
-  return { limit, offset, count, currentPage, totalPages, activeTag : state.filterCriteria.tag,};
+  return { limit, offset, count, currentPage, totalPages, sort, activeTag : state.filterCriteria.tag,};
 };
 
 export default connect(mapStateToProps, actions)(Paginator);

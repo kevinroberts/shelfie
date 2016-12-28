@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import Qs from 'Qs';
+import _ from 'lodash';
 import * as actions from '../../actions';
 
 
@@ -10,12 +11,18 @@ class TagItem extends Component {
 
   handleTagClick () {
     this.props.setActiveTag(this.props.tag);
+    const queryParams = this.props.queryParams.query;
 
     let criteria = {
       title: '',
       sort: this.props.sort,
       tags: this.props.tag._id
     };
+
+    if (queryParams.limit && queryParams.offset) {
+      criteria.limit = _.toNumber(queryParams.limit);
+      criteria.offset = _.toNumber(queryParams.offset);
+    }
 
     this.props.searchClips(criteria);
 
