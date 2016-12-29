@@ -72,11 +72,11 @@ class Header extends Component {
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
           <ul className="nav navbar-nav">
 
-            <NavLink to="/feature">
+            <NavLink to="/feature" className={'nav-link ' + authVisible }>
               My Library
             </NavLink>
 
-            <NavLink to="/feature">
+            <NavLink to="/feature" className={'nav-link ' + authVisible }>
               Favorites
             </NavLink>
 

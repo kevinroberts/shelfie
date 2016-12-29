@@ -16,15 +16,12 @@ import '../styles/main.scss';
 
 const middleware = applyMiddleware(reduxThunk);
 
-let createStoreWithMiddleware;
-
-createStoreWithMiddleware = compose(
+let createStoreWithMiddleware = compose(
   middleware,
   reduxReactRouter({routes, createHistory})
 );
 
 const store = createStoreWithMiddleware(createStore)(reducers, window.__INITIAL_STATE__);
-
 
 const token = LocalStorageUtils.getToken();
 // If we have a token, consider the user to be signed in

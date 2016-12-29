@@ -20,6 +20,9 @@ export default(
     <Route path="library" component={Library}>
       <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={Library} />
     </Route>
+    {/*<Route path="mylibrary" component={MyLibrary}>*/}
+        {/*<Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={MyLibrary} />*/}
+    {/*</Route>*/}
     <Route path="signin" component={Signin} />
     <Route path="signout" component={Signout} />
     <Route path="signup" component={Signup} />

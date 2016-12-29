@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Progress from '../library/Progress'
 import DownloadButton from '../library/download-button';
+import FavoriteButton from './favorite-button';
 import { Link } from 'react-router';
 import { formatMilliseconds } from '../../utils/clip-utils';
 
@@ -82,10 +83,6 @@ class Clip extends Component {
 
   render() {
 
-    const faveTooltip = (
-      <Tooltip id="faveTooltip" className="tooltip tooltip-top">Add this clip to your favorites!</Tooltip>
-    );
-
     let filename = this.props.sourceUrl.substr(this.props.sourceUrl.lastIndexOf('/')+1, this.props.sourceUrl.length);
     const downloadTooltip = (
       <Tooltip id="downloadTooltip" className="tooltip tooltip-top">Download {filename}</Tooltip>
@@ -123,9 +120,7 @@ class Clip extends Component {
               <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" /></button>
             </div>
             <div className="btn-group" role="group">
-              <OverlayTrigger placement="top" overlay={faveTooltip}>
-                <button className="btn btn-secondary"><i className="fa fa-heart-o" /></button>
-              </OverlayTrigger>
+              <FavoriteButton />
             </div>
             <OverlayTrigger placement="top" overlay={downloadTooltip}>
               <div className="btn-group" role="group">
