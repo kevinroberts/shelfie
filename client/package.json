@@ -53,6 +53,7 @@
     "redux": "^3.0.4",
     "redux-audio": "^1.0.0",
     "redux-form": "^6.2.0",
+    "redux-router": "^2.1.2",
     "redux-thunk": "^2.0.1",
     "soundmanager2": "^2.97.20150601-a",
     "ultimate-pagination": "^0.8.0",

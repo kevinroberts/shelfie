@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+import { push } from 'redux-router';
 import { notifyUser } from '../utils/notifications'
 import LocalStorageUtils from '../utils/local-storage-utils';
 import Qs from 'Qs';
@@ -21,7 +21,7 @@ import {
 
 export const ROOT_URL = '/api';
 
-export function signinUser( response, rememberUser ) {
+export function signinUser( response, rememberUser, redirect="/" ) {
   return function(dispatch) {
     // - Save the JWT token
     LocalStorageUtils.setUser(response, rememberUser);
@@ -29,7 +29,10 @@ export function signinUser( response, rememberUser ) {
     dispatch({ type: AUTH_USER,
       payload: response.data });
     // - redirect to the route '/profile'
-    browserHistory.push(`/profile/${response.data.username}`);
+    if (redirect === '/') {
+      redirect = `/profile/${response.data.username}`
+    }
+    dispatch(push(redirect));
   };
 }
 
@@ -37,7 +40,8 @@ export function signupUser( response ) {
   return function(dispatch) {
         dispatch({ type: AUTH_USER, payload: response.data });
         LocalStorageUtils.setUser(response, false);
-        browserHistory.push('/feature');
+        dispatch(push(`/profile/${response.data.username}`));
+
   };
 }
 
@@ -47,7 +51,7 @@ export function editUser(response, passwordChanged) {
     if (passwordChanged) {
       LocalStorageUtils.clearUser();
       dispatch({type: UNAUTH_USER, payload: response.data});
-      browserHistory.push('/signin');
+      dispatch(push('/signin'));
     } else {
       dispatch({type: EDIT_USER, payload: response.data});
     }
@@ -63,8 +67,8 @@ export function removeClip(id, title) {
       headers: {authorization : LocalStorageUtils.getToken() } })
       .then(response => {
         notifyUser("Clip removed!", "Your clip \"" + title + "\" was successfully removed.", "/static/img/trash.png");
-        browserHistory.push('/');
         dispatch({type: REMOVE_CLIP});
+        dispatch(push('/'));
 
       })
       .catch(response => {
@@ -135,6 +139,7 @@ export function resetUploadedClips() {
 
 export function searchClips(...criteria) {
   return function(dispatch) {
+    dispatch(push(`/library?${Qs.stringify(criteria[0])}`));
     axios.get(`${ROOT_URL}/clips?${Qs.stringify(criteria[0])}`)
       .then(response => {
         dispatch({

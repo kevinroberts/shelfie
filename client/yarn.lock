@@ -3557,6 +3557,12 @@ redux-form@^6.2.0:
     lodash-es "^4.16.6"
     shallowequal "^0.2.2"
 
+redux-router:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/redux-router/-/redux-router-2.1.2.tgz#034724bad08f41baf754db4d22e2d858adb64f11"
+  dependencies:
+    deep-equal "^1.0.1"
+
 redux-thunk@^2.0.1:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.1.0.tgz#c724bfee75dbe352da2e3ba9bc14302badd89a98"

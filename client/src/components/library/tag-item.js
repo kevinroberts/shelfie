@@ -1,8 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import Qs from 'Qs';
 import _ from 'lodash';
 import * as actions from '../../actions';
 
@@ -26,7 +24,6 @@ class TagItem extends Component {
 
     this.props.searchClips(criteria);
 
-    browserHistory.push(`/library?${Qs.stringify(criteria)}`);
   };
 
 

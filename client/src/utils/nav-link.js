@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router'
 
 class NavLink extends Component {
   render() {
-    let isActive = this.context.router.isActive(this.props.to, true);
+    let isActive = this.props.router.location.pathname === this.props.to;
     let className = isActive ? "active" : "";
 
     return (
@@ -14,8 +15,11 @@ class NavLink extends Component {
   }
 }
 
-NavLink.contextTypes = {
-  router: React.PropTypes.object
-};
 
-export default NavLink;
+function mapStateToProps(state) {
+  return {
+    router : state.router
+  }
+}
+
+export default connect(mapStateToProps)(NavLink);

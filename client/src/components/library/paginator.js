@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { browserHistory } from 'react-router';
-import Qs from 'Qs';
 import UltimatePagination from '../../utils/pagination/UltimatePaginationBootstrap4';
 
 class Paginator extends Component {
@@ -30,8 +28,6 @@ class Paginator extends Component {
     if (sort) {
       criteria.sort = sort;
     }
-
-    browserHistory.push(`/library?${Qs.stringify(criteria)}`);
 
     this.props.searchClips(criteria);
   }

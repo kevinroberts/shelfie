@@ -12,6 +12,10 @@ class Signin extends Component {
 
   constructor(props) {
     super(props);
+    const redirectRoute = this.props.location.query.next || '/library';
+    this.state = {
+      redirectTo: redirectRoute
+    };
   }
 
   renderField ({ input, label, type, placeholder, meta: { touched, error } }) {
@@ -41,7 +45,7 @@ class Signin extends Component {
     return axios.post(`${ROOT_URL}/signin`, { ...values })
       .then(response => {
         // success response - pass action creator to update state
-        this.props.signinUser(response, _.isUndefined(values.rememberMe) ? false : true);
+        this.props.signinUser(response, _.isUndefined(values.rememberMe) ? false : true, this.state.redirectTo);
 
       })
       .catch(response => {

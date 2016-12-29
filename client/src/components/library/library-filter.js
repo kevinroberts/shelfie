@@ -1,9 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import TagItem from './tag-item'
-import Qs from 'Qs';
 import _ from 'lodash';
 import * as actions from '../../actions';
 
@@ -62,8 +60,6 @@ class LibraryFilter extends Component {
 
     this.props.searchClips(criteria);
 
-    browserHistory.push(`/library?${Qs.stringify(criteria)}`);
-
   }
 
   handleTagClick () {
@@ -74,7 +70,6 @@ class LibraryFilter extends Component {
       sort: 'createdAt',
     });
 
-    browserHistory.push('/library');
   };
 
 
