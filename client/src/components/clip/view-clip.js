@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import Loading from '../../utils/react-loading-animation';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { formatMilliseconds } from '../../utils/clip-utils';
 import TagList from './tag-list';
 import ActionsBar from './actions';
 import Wavesurfer from 'react-wavesurfer';
 import Gravatar from 'react-gravatar';
+import FavoriteButton from './favorite-button';
 import { Link } from 'react-router';
 import moment from 'moment';
 
@@ -71,10 +71,6 @@ class ViewClip extends Component {
       return <Loading margin={'11% auto'} />;
     }
 
-    const faveTooltip = (
-      <Tooltip id="faveTooltip" className="tooltip tooltip-top">Add this clip to your favorites!</Tooltip>
-    );
-
     let createdDate = moment(clip.createdAt).format('MMMM Do YYYY, h:mm a');
     let actionsVisibleToggle = 'invisible';
 
@@ -117,9 +113,7 @@ class ViewClip extends Component {
                   <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" aria-hidden="true" /></button>
                 </div>
                 <div className="btn-group" role="group">
-                  <OverlayTrigger placement="top" overlay={faveTooltip}>
-                    <button className="btn btn-secondary"><i className="fa fa-heart-o" aria-hidden="true" /></button>
-                  </OverlayTrigger>
+                  <FavoriteButton clipId={clip._id} />
                 </div>
                 <div className="btn-group" role="group">
                   <button type="button" className="btn btn-success" title="download this clip"><i className="fa fa-download" aria-hidden="true" /></button>
@@ -130,6 +124,7 @@ class ViewClip extends Component {
               {clip.description && <p className="clip-description lead">{clip.description}</p>}
 
               <div className="clip-userInfo">
+                <h4>Uploaded By</h4>
                 <Link className="float-sm-left" to={'/profile/' + clip._creator.username}>
                   <Gravatar email={clip._creator.email} size={100} className={'rounded'} />
                 </Link>

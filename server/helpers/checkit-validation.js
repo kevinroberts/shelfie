@@ -110,6 +110,17 @@ exports.clipValidation = {
   }]
 };
 
+exports.favoritesValidation = {
+  clipId: [{
+    rule: 'required',
+    message: 'A valid clip id is required.'
+  }],
+  action: [{
+    rule: 'required',
+    message: 'A type of action is required (add / remove ).'
+  }]
+};
+
 exports.editTagValidation = {
   _id: [{
     rule: 'required',

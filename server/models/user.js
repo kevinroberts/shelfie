@@ -13,6 +13,7 @@ const userSchema = new Schema({
   timezone: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  favoriteClips: [{ type: Schema.Types.ObjectId, ref: 'Clip' } ],
   clips: [{ type: Schema.Types.ObjectId, ref: 'Clip' } ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }

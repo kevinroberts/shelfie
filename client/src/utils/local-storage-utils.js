@@ -65,6 +65,24 @@ const util = {
     }
     return null;
   },
+  getFavoriteClips() {
+    if (isAvailable) {
+      if (localStorage.getCacheItem("user") === null) {
+        return null;
+      } else {
+        var user = localStorage.getCacheItem('user');
+        return user.favoriteClips;
+      }
+    }
+    return null;
+  },
+  updateUser(userObj) {
+    if (isAvailable) {
+      userObj.isJson = true;
+      return localStorage.setItem('user', JSON.stringify(userObj));
+    }
+    return null;
+  },
   setUser(responseData, rememberUser) {
     if (isAvailable) {
 
@@ -74,6 +92,7 @@ const util = {
         token: responseData.data.token,
         email: responseData.data.email,
         firstName: responseData.data.firstName,
+        favoriteClips: responseData.data.favoriteClips,
         lastName: responseData.data.lastName,
         username: responseData.data.username
       }, {days : days });

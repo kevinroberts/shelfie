@@ -11,5 +11,6 @@ export const FIND_CLIP = 'find_clip';
 export const RESET_CLIP = 'reset_clip';
 export const REMOVE_CLIP = 'remove_clip';
 export const ADD_UPLOADED_CLIP = 'add_uploaded_clip';
+export const UPDATE_FAVORITE_CLIPS = 'update_favorite_clips';
 export const RESET_UPLOADED = 'reset_uploaded';
 

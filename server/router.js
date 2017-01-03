@@ -1,6 +1,7 @@
 const Authentication = require('./controllers/authentication-controller');
 const ClipController = require('./controllers/clip-controller');
 const TagController = require('./controllers/tag-controller');
+const FavoritesController = require('./controllers/favorites-controller');
 const UploadController = require('./controllers/uploads-controller');
 const passportService = require('./services/passport');
 const passport = require('passport');
@@ -36,6 +37,9 @@ module.exports = function(app) {
   app.post('/edit-tags', requireAuth, TagController.editTag);
   app.get('/tags', TagController.getTags);
 
+  // handle favorite related requests
+  app.post('/favorite', requireAuth, FavoritesController.createRemoveFavorite);
+
   // handle user uploads
   app.post("/uploads", requireAuth, UploadController.onUpload);
   app.delete("/uploads/:uuid", UploadController.onDeleteFile);
@@ -56,7 +60,7 @@ module.exports = function(app) {
     app.use(express.static('../client'));
 
     app.get('*', (req, res) => {
-      // make user of custom error messages ?  if path does not contain relevant paths?
+      // make use of custom error messages ?
       res.sendFile(path.resolve('../client/index.html'))
     });
   }

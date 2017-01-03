@@ -15,6 +15,7 @@ import {
   FIND_CLIP,
   ADD_UPLOADED_CLIP,
   RESET_UPLOADED,
+  UPDATE_FAVORITE_CLIPS,
   REMOVE_CLIP,
   REQUEST_SUCCESS
 } from './types';
@@ -41,7 +42,6 @@ export function signupUser( response ) {
         dispatch({ type: AUTH_USER, payload: response.data });
         LocalStorageUtils.setUser(response, false);
         dispatch(push(`/profile/${response.data.username}`));
-
   };
 }
 
@@ -60,7 +60,6 @@ export function editUser(response, passwordChanged) {
 
 export function removeClip(id, title) {
   return function (dispatch) {
-
     axios({method: 'post',
       url: `${ROOT_URL}/remove-clip`,
       data: {clip: id},
@@ -74,9 +73,40 @@ export function removeClip(id, title) {
       .catch(response => {
         notifyUser("Error", "Your clip \"" + title + "\" could not be removed.", "/static/img/error.png");
       });
+  }
+}
 
+export function updateFavoriteClip(clipId, action) {
+  return function(dispatch) {
+    axios({method: 'post',
+      url: `${ROOT_URL}/favorite`,
+      data: {clipId: clipId, action: action},
+      headers: {authorization : LocalStorageUtils.getToken() } })
+      .then(response => {
+        let favoriteClips = LocalStorageUtils.getFavoriteClips();
 
+        if (action === 'remove') {
+          const index = favoriteClips.indexOf(clipId);
+          favoriteClips.splice(index, 1);
+          let userObj = LocalStorageUtils.getUser();
+          userObj.favoriteClips = favoriteClips;
+          LocalStorageUtils.updateUser(userObj);
+          dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
+          notifyUser("Favorite removed!", response.data.message, "/static/img/trash.png");
 
+        } else if (action === 'add') {
+          favoriteClips.push(clipId);
+          dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
+          let userObj = LocalStorageUtils.getUser();
+          userObj.favoriteClips = favoriteClips;
+          LocalStorageUtils.updateUser(userObj);
+          notifyUser("Favorite Added!", response.data.message, "/static/img/heart.png");
+        }
+
+      })
+      .catch(response => {
+        notifyUser("Error", response.data._error, "/static/img/error.png");
+      });
   }
 }
 

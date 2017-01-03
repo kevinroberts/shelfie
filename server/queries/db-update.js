@@ -15,7 +15,6 @@ var getAllClips = function(db, callback) {
 
 var updateClip = function(db, clipToUpdate, callback) {
   // Get the clips collection and update the source URL
-  // "http://static.vinberts.com/clips/mgs/alert_spotted.wav",
   let oldSourceUrl = clipToUpdate.sourceUrl;
   let newSourceUrl = '/static';
 
