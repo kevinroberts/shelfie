@@ -44,7 +44,7 @@ class TagItem extends Component {
     if (tag.clips.length === 0) {
       return (
         <li key={tag._id}>
-          {tag.name} <span className="tag tag-default tag-pill">{tag.clips.length}</span>
+          <a href="javascript:void(0)" title={`No clips tagged under ${tag.name}`} className="nav-link empty-clips-link"> {tag.name} <span className="tag tag-default tag-pill">{tag.clips.length}</span> </a>
         </li>
       )
     }

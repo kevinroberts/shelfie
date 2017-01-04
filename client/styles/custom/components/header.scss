@@ -4,27 +4,17 @@
 }
 
 input[type=text].nav-search-input {
-  min-width: 290px;
-  padding: 6px 10px 6px 30px;
+  min-width: 250px;
   color: #001A33;
   font-weight: 300;
-  background-color: transparent;
 }
-
 .nav-search {
-  position: relative;
-  background-color: #fef6ff;
-  border-radius: 3px;
 
-  i {
-    position: absolute;
-    top: 8px;
-    left: 10px;
-    color: gray;
-    pointer-events: none;
+  button {
+    line-height: 1.18;
   }
-}
 
+}
 .nav-login {
 
   i {

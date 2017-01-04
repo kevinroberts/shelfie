@@ -173,6 +173,7 @@ exports.getProfile = function (req, res, next) {
 
     user.username = userProfile.username;
     user.gravitarMd5 = crypto.createHash('md5').update(userProfile.email).digest("hex");
+    user.numberOfFaves = userProfile.favoriteClips ? userProfile.favoriteClips.length : 0;
     user.firstName = userProfile.firstName;
     user.lastName = userProfile.lastName;
     user.createdAt = userProfile.createdAt;

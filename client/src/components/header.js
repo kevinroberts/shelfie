@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Gravatar from 'react-gravatar';
 import NavLink from '../utils/nav-link';
+import LibrarySearch from './library/library-search';
 
 class Header extends Component {
   renderLogin() {
@@ -88,10 +89,7 @@ class Header extends Component {
 
           <ul className="nav navbar-nav pull-right">
             <li className="nav-item hidden-sm-down">
-              <form className="nav-search form-inline float-xs-left">
-                <i className="fa fa-search" aria-hidden="true" />
-                <input className="nav-search-input form-control" type="text" placeholder="Search" />
-              </form>
+              <LibrarySearch />
             </li>
             {this.renderLogin()}
           </ul>

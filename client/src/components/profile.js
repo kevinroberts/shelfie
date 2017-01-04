@@ -45,10 +45,10 @@ class Profile extends Component {
                     Clips
                   </li>
                   <li className="list-inline-item">
-                    <span>354</span>
-                    Followers
+                    <span>{this.props.user.numberOfFaves}</span>
+                    Favorites
                   </li>
-                  <li className="list-inline-item">
+                  <li className="list-inline-item invisible">
                     <span>186</span>
                     Photos
                   </li>
