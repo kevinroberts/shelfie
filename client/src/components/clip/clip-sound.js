@@ -120,7 +120,7 @@ class Clip extends Component {
               <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" /></button>
             </div>
             <div className="btn-group" role="group">
-              <FavoriteButton clipId={this.props._id} />
+              <FavoriteButton clipId={this.props._id} clipTitle={this.props.title} />
             </div>
             <OverlayTrigger placement="top" overlay={downloadTooltip}>
               <div className="btn-group" role="group">

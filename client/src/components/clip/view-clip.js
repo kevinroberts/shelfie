@@ -113,7 +113,7 @@ class ViewClip extends Component {
                   <button type="button" onClick={this.handleStop} className="btn btn-secondary hidden-lg-down"><i className="fa fa-stop" aria-hidden="true" /></button>
                 </div>
                 <div className="btn-group" role="group">
-                  <FavoriteButton clipId={clip._id} />
+                  <FavoriteButton clipId={clip._id} clipTitle={clip.title} />
                 </div>
                 <div className="btn-group" role="group">
                   <button type="button" className="btn btn-success" title="download this clip"><i className="fa fa-download" aria-hidden="true" /></button>

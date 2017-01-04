@@ -11,13 +11,13 @@ class FavoriteButton extends Component {
   }
 
   handleFavoriteRemove() {
-    console.log("Removing clip from favorites", this.props.clipId);
-    this.props.updateFavoriteClip(this.props.clipId, 'remove');
+    console.log("Removing clip from favorites", this.props.clipTitle);
+    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'remove');
   }
 
   handleFavoriteAdd() {
-    console.log("Adding clip to favorites", this.props.clipId);
-    this.props.updateFavoriteClip(this.props.clipId, 'add');
+    console.log("Adding clip to favorites", this.props.clipTitle);
+    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'add');
   }
 
   render() {

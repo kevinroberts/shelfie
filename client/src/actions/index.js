@@ -67,6 +67,7 @@ export function removeClip(id, title) {
       .then(response => {
         notifyUser("Clip removed!", "Your clip \"" + title + "\" was successfully removed.", "/static/img/trash.png");
         dispatch({type: REMOVE_CLIP});
+        dispatch({ type: RESET_UPLOADED });
         dispatch(push('/'));
 
       })
@@ -76,7 +77,7 @@ export function removeClip(id, title) {
   }
 }
 
-export function updateFavoriteClip(clipId, action) {
+export function updateFavoriteClip(clipId, clipTitle, action) {
   return function(dispatch) {
     axios({method: 'post',
       url: `${ROOT_URL}/favorite`,
@@ -92,7 +93,7 @@ export function updateFavoriteClip(clipId, action) {
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
           dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
-          notifyUser("Favorite removed!", response.data.message, "/static/img/trash.png");
+          notifyUser("Favorite removed!", `The clip ${clipTitle} has been removed from your favorites.`, "/static/img/trash.png");
 
         } else if (action === 'add') {
           favoriteClips.push(clipId);
@@ -100,7 +101,7 @@ export function updateFavoriteClip(clipId, action) {
           let userObj = LocalStorageUtils.getUser();
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
-          notifyUser("Favorite Added!", response.data.message, "/static/img/heart.png");
+          notifyUser("Favorite Added!", `The clip ${clipTitle} has been added to your favorites.`, "/static/img/heart.png");
         }
 
       })

@@ -6,7 +6,9 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const Checkit = require('checkit');
 const Validator = require('../helpers/checkit-validation');
-const EditTag = require('../queries/edit-tag')
+const EditTag = require('../queries/edit-tag');
+const ObjectID = require('mongodb').ObjectID;
+const async = require('async');
 const ClipController = require('./clip-controller');
 
 
@@ -104,6 +106,62 @@ exports.getTags = function (req, res, next) {
 
 };
 
+
+/**
+ * Removes the associated tag from a given clip
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*|void}
+ */
+exports.removeTag = function (req, res, next) {
+  const authedUser = req.user;
+
+  const tagId = req.body.tagId;
+  const clipId = req.body.clipId;
+
+  if (!tagId) {
+    return res.status(422).send({ _error: 'A tag id is required.'});
+  }
+  if (!clipId) {
+    return res.status(422).send({ _error: 'A tag id is required.'});
+  }
+
+  const clipIdObject = new ObjectID(clipId);
+
+  if (!_.find(authedUser.clips, clipIdObject)) {
+    return res.status(422).send({ _error: 'You may only edit clips that you have created.'});
+  }
+
+  async.waterfall([
+    function(done) {
+      // remove the tag from the clip
+      const updateClip = Clip.update({_id: clipId}, {$pullAll: { tags: [tagId] } } );
+      updateClip.then(function (updatedClip) {
+        done(null, updatedClip);
+      }).catch(function (err) {
+        done(err);
+      });
+    },function (updatedClip, done) {
+      // remove the clip from the tag
+      const updateTag = Tag.update({_id: tagId}, {$pullAll: { clips: [clipId] } } );
+      updateTag.then(function (updatedTag) {
+        done(null, updatedTag);
+      }).catch(function (err) {
+        done(err);
+      });
+
+    }], function(err, updatedTag) {
+      if (err) {
+        console.error('error occurred remove tag from clip: ', err);
+        return res.status(422).send({ _error: 'Error occurred trying to remove tag from clip.'});
+      } else {
+        return res.json({updatedTag});
+      }
+    });
+
+};
+
 exports.editTag = function (req, res, next) {
   const authedUser = req.user;
   const tagValidator = new Checkit(Validator.editTagValidation);
@@ -125,6 +183,10 @@ exports.editTag = function (req, res, next) {
       const addToClip = req.body.addToClip;
       const clipId = req.body.clipId;
       if (addToClip && clipId) {
+        const clipIdObject = new ObjectID(clipId);
+        if (!_.find(authedUser.clips, clipIdObject)) {
+          return res.status(422).send({ _error: 'You may only edit clips that you have created.'});
+        }
         ClipController.addTagToClip(clipId, validated._id, function (err, result) {
           if (err) {
             console.error('problem saving tag to clip', err);

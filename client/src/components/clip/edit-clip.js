@@ -143,14 +143,31 @@ class EditClip extends Component {
     }
   }
 
-  // TODO handle tag removal
   handleDelete(i) {
-    let tags = this.state.tags;
-    tags.splice(i, 1);
-    this.setState({tags: tags});
 
-    // enable submit button
-    this.refs.editClipSaveBtn.disabled="";
+    let tags = this.state.tags;
+    let removedTag = tags.splice(i, 1);
+    removedTag = removedTag[0];
+
+    axios({method: 'post',
+      url: `${ROOT_URL}/remove-tags`,
+      data: { tagId: removedTag.id, clipId: this.props.clip._id},
+      headers: {authorization : LocalStorageUtils.getToken() } })
+      .then(response => {
+
+        this.setState({tags: tags});
+
+        this.refs.editClipSaveBtn.disabled="";
+
+      })
+      .catch(response => {
+        this.setState({ tagError: _.has(response.data, '_error') ?
+          response.data._error : 'An error occurred trying to remove your tag. Please try again.'});
+        setTimeout(() => {
+          this.setState({ tagError: ''});
+        }, 3000);
+      });
+
   }
 
 
@@ -166,7 +183,7 @@ class EditClip extends Component {
       let existingClips = existingTag.clips;
       existingClips.push(this.props.clip._id);
 
-      // this is an existing tag post a request to add the clip to it
+      // this is an existing tag -> post a request to add the clip to it
       axios({method: 'post',
         url: `${ROOT_URL}/edit-tags`,
         data: { _id: existingTag._id, clips: existingClips, addToClip: true, clipId: this.props.clip._id},
@@ -190,7 +207,7 @@ class EditClip extends Component {
       // enable submit button
       this.refs.editClipSaveBtn.disabled="";
     } else {
-      // adding a brand new tag - post it to the API
+      // adding a brand new tag -> post it to the API
       axios({method: 'post',
         url: `${ROOT_URL}/tags`,
         data: {name: tag.name, clip: this.props.clip._id, addToClip: true},

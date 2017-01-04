@@ -4,6 +4,7 @@ import * as actions from '../../actions';
 import { ROOT_URL } from '../../actions/index'
 import LocalStorageUtils from '../../utils/local-storage-utils';
 import axios from 'axios';
+import { Link } from 'react-router';
 
 class UploadedClip extends Component {
 
@@ -76,7 +77,7 @@ class UploadedClip extends Component {
 
     return (
       <div className="uploaded-clip">
-        <h5 className="text-xs-center">Customize {clip.fileName}</h5>
+        <h5 className="text-xs-center"><Link to={`/clip/${clip.id}/edit`}>Customize {clip.fileName}</Link></h5>
 
         <div ref="successBlock" className="alert alert-success" style={{display: 'none'}}>
           <strong>Success!</strong> <span ref="successMsg">Your clip title was successfully updated.</span>

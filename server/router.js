@@ -35,6 +35,7 @@ module.exports = function(app) {
   // handle tag related requests
   app.post('/tags', requireAuth, TagController.createTag);
   app.post('/edit-tags', requireAuth, TagController.editTag);
+  app.post('/remove-tags', requireAuth, TagController.removeTag);
   app.get('/tags', TagController.getTags);
 
   // handle favorite related requests
