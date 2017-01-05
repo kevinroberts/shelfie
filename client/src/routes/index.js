@@ -19,7 +19,7 @@ export default(
   <Route path="/" component={App}>
     <IndexRedirect to="/library" />
     <Route path="library" component={Library}>
-      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={Library} />
+      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title=:title" component={Library} />
     </Route>
     {/*<Route path="mylibrary" component={MyLibrary}>*/}
         {/*<Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={MyLibrary} />*/}

@@ -3,13 +3,13 @@ const env = require('get-env')();
 
 /**
  * Searches through the Clip collection
- * @param {object} criteria An object with a name, age, and yearsActive
+ * @param {object} criteria An object with a title, tags etc..
  * @param {string} sortProperty The property to sort the results by
  * @param {String} sortOrder 'asc' or 'desc'
  * @param {Number} offset How many records to skip in the result set
  * @param {Number} limit How many records to return in the result set
- * @return {promise} A promise that resolves with the artists, count, offset, and limit
- * like this: { all: [clips], count: count, offset: offset, limit: limit }
+ * @return {promise} A promise that resolves with the clips, count, offset, sort, total pages, current page, and limit
+ * like this: { all: [clips], count: count, totalPages: totalPages, currentPage: currentPage, offset: offset, limit: limit }
  */
 module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => {
 

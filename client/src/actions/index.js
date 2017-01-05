@@ -69,7 +69,6 @@ export function removeClip(id, title) {
         dispatch({type: REMOVE_CLIP});
         dispatch({ type: RESET_UPLOADED });
         dispatch(push('/'));
-
       })
       .catch(response => {
         notifyUser("Error", "Your clip \"" + title + "\" could not be removed.", "/static/img/error.png");
@@ -190,7 +189,7 @@ export function findClip(id) {
           payload: response.data
         });
       }).catch(function (err) {
-      console.log("could not find requested clip", err);
+      notifyUser("Error", err.data._error, "/static/img/error.png");
       dispatch(push('/404'));
     });
   }

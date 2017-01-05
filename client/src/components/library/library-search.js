@@ -18,33 +18,41 @@ class LibrarySearch extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    const { activeTag } = this.props;
+
+    const queryParams = this.props.queryParams.query;
+
     let searchValue = this.refs.librarySearch.value;
 
     let criteria = {
       title: searchValue,
+      sort: 'createdAt'
     };
 
-    if (this.props.activeTag) {
-      criteria.tags = this.props.activeTag._id;
+    if (queryParams.sort) {
+      criteria.sort = queryParams.sort;
     }
 
-    console.log("search triggered criteria", criteria);
+    if (activeTag._id) {
+      criteria.tags = activeTag._id;
+    }
+
+    this.props.searchClips(criteria);
   }
 
 
 
   render() {
 
-
     return (
       <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>
         <div className="input-group nav-search">
           <input ref="librarySearch" className="form-control nav-search-input" type="text" placeholder="Search" />
           <span className="input-group-btn">
-                       <button className="btn btn-secondary" type="submit">
-                        <i className="fa fa-search" aria-hidden="true" />
-                       </button>
-                    </span>
+            <button className="btn btn-secondary" type="submit">
+              <i className="fa fa-search" aria-hidden="true" />
+            </button>
+          </span>
         </div>
       </form>
     )

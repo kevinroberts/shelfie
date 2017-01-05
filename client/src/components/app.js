@@ -9,7 +9,7 @@ export default class App extends Component {
     return (
       <div className="content">
         <div className="container">
-        <Header />
+        <Header queryParams={this.props.location} />
         </div>
         <div className="container-fluid">
           {this.props.children}

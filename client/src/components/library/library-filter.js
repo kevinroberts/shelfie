@@ -95,7 +95,7 @@ class LibraryFilter extends Component {
               <h4>Tags</h4>
               <ul className="list-unstyled nav nav-pills nav-stacked tag-list">
                 <li className="nav-item">
-                  <a className="nav-link" href="javascript:void(0)" onClick={this.handleTagClick.bind(this)}>All </a>
+                  <a className="nav-link" href="javascript:void(0)" onClick={this.handleTagClick.bind(this)}>All (clear filters)</a>
                 </li>
                 {rows}
               </ul>

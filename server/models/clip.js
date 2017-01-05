@@ -16,6 +16,7 @@ var ClipSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 }, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }});
 
+ClipSchema.index({title: 'text', description: 'text'});
 
 // Create the model class
 const ModelClass = mongoose.model('Clip', ClipSchema);

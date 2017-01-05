@@ -26,6 +26,7 @@ export function notifyUser(title, message, icon) {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
         const notification = new Notification(title,options);
+        setTimeout(notification.close.bind(notification), 3000);
       }
     });
   }

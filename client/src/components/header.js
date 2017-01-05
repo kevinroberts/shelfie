@@ -89,7 +89,7 @@ class Header extends Component {
 
           <ul className="nav navbar-nav pull-right">
             <li className="nav-item hidden-sm-down">
-              <LibrarySearch />
+              <LibrarySearch queryParams={this.props.queryParams} />
             </li>
             {this.renderLogin()}
           </ul>

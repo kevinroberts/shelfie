@@ -98,7 +98,7 @@ exports.findClip = function (req, res, next) {
     if (result) {
       res.json(result)
     } else {
-      return res.status(422).send({ _error: 'A clip could not be found for the given ID' });
+      return res.status(422).send({ _error: 'A sound clip could not be found for that ID number.' });
     }
   }).catch (function (err) {
       console.log("find clip query error:" , err);
@@ -132,8 +132,9 @@ exports.getClips = function (req, res, next) {
   let tags = req.query.tags ? _.split(req.query.tags, ',') : null;
   let sort = req.query.sort ? req.query.sort : 'createdAt';
   let sortOrder = req.query.sortOrder ? req.query.sortOrder : 'desc';
+  let title = req.query.title ? req.query.title : '';
 
-  let criteria = {title: ''};
+  let criteria = {title: title};
 
   if (tags) {
     criteria.tags = tags;
