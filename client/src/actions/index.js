@@ -189,7 +189,10 @@ export function findClip(id) {
           type: FIND_CLIP,
           payload: response.data
         });
-      });
+      }).catch(function (err) {
+      console.log("could not find requested clip", err);
+      dispatch(push('/404'));
+    });
   }
 }
 

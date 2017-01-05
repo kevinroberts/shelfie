@@ -12,6 +12,7 @@ import ResetRequest from '../components/auth/reset-request';
 import AddClip from '../components/clip/add-clip';
 import ViewClip from '../components/clip/view-clip';
 import EditClip from '../components/clip/edit-clip';
+import PageNotFound from '../components/page-not-found';
 import RequireAuth from '../components/auth/require-auth';
 
 export default(
@@ -33,5 +34,7 @@ export default(
     <Route path="resetRequest" component={ResetRequest} />
     <Route path="add-clip" component={RequireAuth(AddClip)} />
     <Route path="feature" component={RequireAuth(Feature)} />
+    <Route path="404" component={PageNotFound} />
+    <Route path="*" component={PageNotFound} />
   </Route>
 );

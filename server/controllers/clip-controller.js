@@ -10,6 +10,7 @@ const SearchClips = require('../queries/search-clips');
 const EditClip = require('../queries/edit-clip');
 const FindClip = require('../queries/find-clip');
 const RemoveClip = require('../queries/remove-clip');
+const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 const rimraf = require("rimraf");
 const xss = require('xss');
@@ -89,17 +90,26 @@ exports.findClip = function (req, res, next) {
     return res.status(422).send({ _error: 'ID is required to fetch clip' });
   }
 
-  FindClip(id).then((result = []) =>
-    res.json(result)
-  ).catch (function (err) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(422).send({ _error: 'ID is not valid' });
+  }
+
+  FindClip(id).then((result = []) => {
+    if (result) {
+      res.json(result)
+    } else {
+      return res.status(422).send({ _error: 'A clip could not be found for the given ID' });
+    }
+  }).catch (function (err) {
       console.log("find clip query error:" , err);
-      res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
+      res.status(422).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
     }
   );
 
 };
 
 exports.addTagToClip = function (clipID, tagID, cb) {
+
   Clip.findOne({ _id: clipID }, function(err, existingClip) {
 
     existingClip.tags.push(tagID);
@@ -148,6 +158,10 @@ exports.editClip = function (req, res, next) {
 
   clipValidator.run(req.body).then((validated)=>{
 
+    if (!mongoose.Types.ObjectId.isValid(validated._id)) {
+      return res.status(422).send({ _error: 'Clip ID is not valid' });
+    }
+
     // make sure this request is from the clip's original author
     var clipId = new ObjectID(validated._id);
     if (!_.find(authedUser.clips, clipId)) {
@@ -194,6 +208,10 @@ exports.removeClip = function (req, res, next) {
 
   if (!clipId) {
     return res.status(422).send({ _error: 'A clip id is required.'});
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(clipId)) {
+    return res.status(422).send({ _error: 'Clip ID is not valid' });
   }
 
   var query = Clip.findOne({_id: clipId});
