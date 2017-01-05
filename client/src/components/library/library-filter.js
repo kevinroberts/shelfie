@@ -25,6 +25,10 @@ class LibraryFilter extends Component {
       criteria.sort = queryParams.sort;
     }
 
+    if (queryParams.title) {
+      criteria.title = queryParams.title;
+    }
+
     if (activeTag._id) {
       criteria.tags = activeTag._id;
     }

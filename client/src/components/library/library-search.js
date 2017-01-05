@@ -1,18 +1,26 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import * as actions from '../../actions';
 
 class LibrarySearch extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {value: ''};
   }
 
   componentWillMount() {
-    //const queryParams = this.props.queryParams.query;
+    const queryParams = this.props.queryParams.query;
 
+    if (queryParams.title) {
+      this.setState({value: queryParams.title});
+    }
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
   }
 
   handleSubmit(event) {
@@ -22,7 +30,7 @@ class LibrarySearch extends Component {
 
     const queryParams = this.props.queryParams.query;
 
-    let searchValue = this.refs.librarySearch.value;
+    let searchValue = this.state.value;
 
     let criteria = {
       title: searchValue,
@@ -47,7 +55,7 @@ class LibrarySearch extends Component {
     return (
       <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>
         <div className="input-group nav-search">
-          <input ref="librarySearch" className="form-control nav-search-input" type="text" placeholder="Search" />
+          <input ref="librarySearch" className="form-control nav-search-input" type="text" placeholder="Search" value={this.state.value} onChange={this.handleChange.bind(this)} />
           <span className="input-group-btn">
             <button className="btn btn-secondary" type="submit">
               <i className="fa fa-search" aria-hidden="true" />

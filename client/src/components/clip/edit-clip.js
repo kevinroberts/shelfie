@@ -339,5 +339,3 @@ const form = reduxForm({
 });
 
 export default connect(mapStateToProps, actions)(form(EditClip));
-
-

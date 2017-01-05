@@ -8,7 +8,7 @@ import LibrarySearch from './library/library-search';
 class Header extends Component {
   renderLogin() {
     if (this.props.authenticated) {
-      // show a link to sign out
+      // if authenticated -> show user drop down menu
       return (
       <li className="nav-login nav-item dropdown">
         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">
