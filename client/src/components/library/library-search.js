@@ -19,6 +19,16 @@ class LibrarySearch extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // if title search was reset - clear the search box
+    if (nextProps.queryParams) {
+      var titleSearch = nextProps.queryParams.query.title;
+      if (!titleSearch) {
+        this.setState({value: ''});
+      }
+    }
+  }
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }

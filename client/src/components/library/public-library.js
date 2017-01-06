@@ -41,12 +41,21 @@ class Library extends Component {
     }
   }
 
+  renderSubTitle() {
+    if (this.props.clips.title) {
+      return (
+        <h4 className="text-xs-center">searching "{this.props.clips.title}"</h4>
+      )
+    }
+  }
+
   render() {
 
     return (
       <div className="row">
         <div className="col-sm-12">
           {this.renderTitle()}
+          {this.renderSubTitle()}
           <div className="row">
             <LibraryFilter queryParams={this.props.location} />
             <div className="col-sm-10">
