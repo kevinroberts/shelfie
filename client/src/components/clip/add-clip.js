@@ -54,21 +54,23 @@ class AddClip extends Component {
           }
         },
         validation: {
-          allowedExtensions: ['wav'],
+          allowedExtensions: ['wav', 'mp3'],
           itemLimit: 15,
           sizeLimit: 10485760 // 10 mB = 10 * 1024 * 1024 bytes
       },
         messages : {
-          typeError : "{file} has an invalid extension. Only files with the extension .wav are allowed."
+          typeError : "{file} has an invalid extension. Only files with the extension .wav or .mp3 are allowed."
         },
         callbacks: {
             onComplete: (id, name, response) => {
-            // handle completed upload
-            console.log('uploaded completed');
-            let newClip = {...response};
+              // handle completed upload
+              if (response.success) {
+                let newClip = {...response};
 
-            this.props.addUploadedClip(newClip);
-
+                this.props.addUploadedClip(newClip);
+              } else {
+                console.log("upload failed");
+              }
           },
           onValidate: (data, buttonContainer) => {
             console.log('validating upload...');
@@ -87,7 +89,7 @@ class AddClip extends Component {
       <div className="row col-sm-7 col-md-6 offset-md-3">
         <div className="card">
           <div className="card-header">
-            Upload new audio clips
+            Upload new audio clips (wav or mp3)
           </div>
           <div className="card-block">
             <h4 className="card-title">Click below to select files from your computer</h4>

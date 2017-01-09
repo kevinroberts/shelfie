@@ -2,10 +2,12 @@ var fs = require("fs"),
   rimraf = require("rimraf"),
   mkdirp = require("mkdirp"),
   multiparty = require('multiparty');
-var wavFileInfo = require('wav-file-info');
+const wavFileInfo = require('wav-file-info');
+const mm = require('musicmetadata');
 const Clip = require('../models/clip');
 const async = require('async');
 const xss = require('xss');
+const path = require('path');
 
 const uploadedFilesPath = process.env.UPLOADED_FILES_DIR + '/';
 const maxFileSize = process.env.MAX_FILE_SIZE || 0; // in bytes, 0 for unlimited
@@ -52,15 +54,29 @@ function onSimpleUpload(fields, file, res, user) {
     };
 
   file.name = fields.qqfilename;
+  file.ext = path.extname(file.path);
 
   if (isValid(file.size)) {
     // if file is valid -- process it and add to the User's clip inventory
     async.waterfall([
       function(done) {
-        wavFileInfo.infoByFilename(file.path, function(err, info){
-          if (err) { done(err); }
-          done(null, info);
-        });
+
+        if (file.ext === '.mp3') {
+          var readableStream = fs.createReadStream(file.path);
+
+          var parser = mm(readableStream, { duration: true, fileSize: file.size }, function (err, metadata) {
+            if (err) { done(err) }
+            readableStream.close();
+            done(null, metadata);
+          });
+
+        } else if (file.ext === '.wav') {
+          wavFileInfo.infoByFilename(file.path, function(err, info){
+            if (err) { done(err); }
+            done(null, info);
+          });
+        }
+
       },
       function (info, done) {
         moveUploadedFile(file, uuid, function(destFileLocation) {
@@ -73,17 +89,52 @@ function onSimpleUpload(fields, file, res, user) {
         const sourceLoc = destFileLocation.substr(
           destFileLocation.lastIndexOf('/client/') + 7, destFileLocation.length);
         let fileName = xss(file.name[0], {});
-        fileName = fileName.substr(0, fileName.lastIndexOf('.wav'));
-        let clip = new Clip({
-          title : fileName + ' ' + new Date().getTime(),
-          sourceUrl: sourceLoc,
-          length: Math.floor(info.duration * 1000),
-          fileSize: info.stats.size,
-          sampleRate: info.header.sample_rate,
-          audioChannels: info.header.num_channels,
-          bitsPerSample: info.header.bits_per_sample,
-          _creator: user._id
-        });
+
+        fileName = fileName.substr(0, fileName.lastIndexOf('.'));
+
+        let clip;
+
+        if (file.ext === '.mp3') {
+          const artist = info.artist ? info.artist[0] : '';
+          let title = info.title ? info.title : fileName;
+          if (artist) {
+            title = artist + ' - ' + title;
+          }
+          const album = info.album ? info.album : '';
+          const duration = info.duration ? Math.floor(info.duration * 1000) : 0;
+
+          clip = new Clip({
+            title : title + ' ' + new Date().getTime(),
+            sourceUrl: sourceLoc,
+            artist : artist,
+            album : album,
+            length: duration,
+            fileSize: file.size,
+            type: 'mp3',
+            _creator: user._id
+          });
+          if (info.track) {
+            clip.track = info.track;
+          }
+          if (info.disk) {
+            clip.disk = info.disk;
+          }
+          if (info.genre) {
+            clip.genre = info.genre;
+          }
+        } else {
+          clip = new Clip({
+            title : fileName + ' ' + new Date().getTime(),
+            sourceUrl: sourceLoc,
+            length: Math.floor(info.duration * 1000),
+            fileSize: info.stats.size,
+            sampleRate: info.header.sample_rate,
+            audioChannels: info.header.num_channels,
+            bitsPerSample: info.header.bits_per_sample,
+            type: 'wav',
+            _creator: user._id
+          });
+        }
 
         clip.save(function (err) {
           done(err, clip);
@@ -97,7 +148,7 @@ function onSimpleUpload(fields, file, res, user) {
       }], function(err, clip) {
       if (err) {
         console.log("error occurred trying to upload a clip: ", err);
-        responseData.error = "Problem with wav file format, please try again with another file.";
+        responseData.error = `Problem with ${file.ext} file format, please try again with another file.`;
         return res.send(responseData);
       }
       responseData.success = true;
