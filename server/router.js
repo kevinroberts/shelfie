@@ -27,6 +27,8 @@ module.exports = function(app) {
 
   // handle clip related requests
   app.get('/clips', ClipController.getClips);
+  app.get('/my-clips', requireAuth, ClipController.getMyClips);
+
   app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
   app.post('/edit-clip', requireAuth, ClipController.editClip);
@@ -37,6 +39,7 @@ module.exports = function(app) {
   app.post('/edit-tags', requireAuth, TagController.editTag);
   app.post('/remove-tags', requireAuth, TagController.removeTag);
   app.get('/tags', TagController.getTags);
+  app.get('/my-tags', requireAuth, TagController.getMyTags);
 
   // handle favorite related requests
   app.post('/favorite', requireAuth, FavoritesController.createRemoveFavorite);

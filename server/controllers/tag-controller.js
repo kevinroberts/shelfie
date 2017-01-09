@@ -81,7 +81,62 @@ exports.addClipToTag = function (tagID, clipID, cb) {
 };
 
 exports.getTags = function (req, res, next) {
+  let params = getTagSearchParamsFromRequest(req);
 
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+
+  SearchTags(params.criteria, 'name', params.offset, params.limit).then((result = []) =>
+      res.json(result)
+  ).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
+    }
+  );
+
+};
+
+exports.getMyTags = function (req, res, next) {
+  const authedUser = req.user;
+  let params = getTagSearchParamsFromRequest(req);
+
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+
+  SearchTags(params.criteria, 'name', params.offset, params.limit).then((tags = []) => {
+
+      _.each(tags.all, function (tag) {
+
+        var updatedTagClips = [];
+        // iterate through each tagged clip
+        _.each(tag.clips, function (taggedClip) {
+
+          // check each tagged clip to see if the user owns it -> if they do add it to the list
+          if (_.find(authedUser.clips, taggedClip)) {
+            updatedTagClips.push(taggedClip);
+          }
+
+        });
+
+        tag.clips = updatedTagClips;
+
+      });
+
+    return res.json(tags);
+
+
+  }).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
+    }
+  );
+
+};
+
+
+function getTagSearchParamsFromRequest(req) {
   let limit = req.query.limit ? _.toNumber(req.query.limit) : 150;
   let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
   let clips = req.query.clips ? _.split(req.query.clips, ',') : null;
@@ -92,19 +147,9 @@ exports.getTags = function (req, res, next) {
     criteria.clips = clips;
   }
 
-  if (!_.isInteger(limit) || !_.isInteger(offset)) {
-    return res.status(422).send({ _error: 'Invalid query format.' });
-  }
+  return ({limit, offset, clips, criteria});
 
-  SearchTags(criteria, 'name', offset, limit).then((result = []) =>
-      res.json(result)
-  ).catch (function (err) {
-      console.log("query error:" , err);
-      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
-    }
-  );
-
-};
+}
 
 
 /**

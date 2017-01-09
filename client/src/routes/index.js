@@ -13,6 +13,7 @@ import AddClip from '../components/clip/add-clip';
 import ViewClip from '../components/clip/view-clip';
 import EditClip from '../components/clip/edit-clip';
 import PageNotFound from '../components/page-not-found';
+import MyLibrary from '../components/library/myLibrary/my-library';
 import RequireAuth from '../components/auth/require-auth';
 
 export default(
@@ -21,9 +22,9 @@ export default(
     <Route path="library" component={Library}>
       <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title=:title" component={Library} />
     </Route>
-    {/*<Route path="mylibrary" component={MyLibrary}>*/}
-        {/*<Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit" component={MyLibrary} />*/}
-    {/*</Route>*/}
+    <Route path="my-library" component={RequireAuth(MyLibrary)}>
+        <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title:title" component={MyLibrary} />
+    </Route>
     <Route path="signin" component={Signin} />
     <Route path="signout" component={Signout} />
     <Route path="signup" component={Signup} />

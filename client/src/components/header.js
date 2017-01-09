@@ -73,7 +73,7 @@ class Header extends Component {
         <div className="navbar-toggleable-xs collapse" id="menu" aria-expanded="true">
           <ul className="nav navbar-nav">
 
-            <NavLink to="/feature" className={'nav-link ' + authVisible }>
+            <NavLink to="/my-library" className={'nav-link ' + authVisible }>
               My Library
             </NavLink>
 

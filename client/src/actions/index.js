@@ -11,6 +11,7 @@ import {
   EDIT_USER,
   SET_TAG_LIST,
   SEARCH_CLIPS,
+  SEARCH_MY_CLIPS,
   SET_ACTIVE_TAG,
   FIND_CLIP,
   ADD_UPLOADED_CLIP,
@@ -132,7 +133,9 @@ export function fetchProfile ( username ) {
           type: FETCH_PROFILE,
           payload: response.data
         });
-      });
+      }).catch(response => {
+      dispatch(push('/404'));
+    })
   };
 }
 
@@ -145,6 +148,20 @@ export function signoutUser() {
 export function getTagList() {
   return function(dispatch) {
     axios.get(`${ROOT_URL}/tags`)
+      .then(response => {
+        dispatch({
+          type: SET_TAG_LIST,
+          payload: response.data.all
+        });
+      });
+  }
+}
+
+export function getMyTagList() {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/my-tags`, {
+      headers: { authorization: LocalStorageUtils.getToken() }
+    })
       .then(response => {
         dispatch({
           type: SET_TAG_LIST,
@@ -174,6 +191,22 @@ export function searchClips(...criteria) {
       .then(response => {
         dispatch({
           type: SEARCH_CLIPS,
+          payload: response.data
+        });
+      });
+  }
+}
+
+export function searchMyClips(...criteria) {
+  return function(dispatch) {
+    dispatch(push(`/my-library?${Qs.stringify(criteria[0])}`));
+
+    axios.get(`${ROOT_URL}/my-clips?${Qs.stringify(criteria[0])}`, {
+      headers: { authorization: LocalStorageUtils.getToken() }
+    })
+      .then(response => {
+        dispatch({
+          type: SEARCH_MY_CLIPS,
           payload: response.data
         });
       });

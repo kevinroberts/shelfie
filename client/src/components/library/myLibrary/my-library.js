@@ -1,13 +1,13 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
-import LibraryFilter from './library-filter';
-import Paginator from './paginator';
+import * as actions from '../../../actions';
+import LibraryFilter from './my-library-filter';
+import Paginator from './my-paginator';
 // import Clip from '../clip/clip-reduxAudio-card';
-import Clip from '../clip/clip-sound';
+import Clip from '../../clip/clip-sound';
 
-class Library extends Component {
+class MyLibrary extends Component {
 
   constructor(props) {
     super(props);
@@ -21,7 +21,6 @@ class Library extends Component {
 
   renderList() {
     return this.props.clips.all.map(function (clip) {
-      // Browsers can only render 6 audio contexts per page
       return (
         <Clip key={clip._id} {...clip} />
       );
@@ -32,11 +31,11 @@ class Library extends Component {
 
     if (this.props.activeTag.name) {
       return (
-        <h2 className="text-xs-center">Public Library - {this.props.activeTag.name}</h2>
+        <h2 className="text-xs-center">My Library - {this.props.activeTag.name}</h2>
       )
     } else {
       return (
-        <h2 className="text-xs-center">Public Library</h2>
+        <h2 className="text-xs-center">My Clip Library</h2>
       )
     }
   }
@@ -76,12 +75,12 @@ class Library extends Component {
 }
 
 function mapStateToProps(state) {
-  const { filterCriteria, auth, clips } = state;
+  const { filterCriteria, auth, myClips } = state;
 
   return { authenticated: auth.authenticated,
-            activeTag : filterCriteria.tag,
-            clips: clips };
+    activeTag : filterCriteria.tag,
+    clips: myClips };
 }
 
-export default connect(mapStateToProps, actions)(Library);
+export default connect(mapStateToProps, actions)(MyLibrary);
 

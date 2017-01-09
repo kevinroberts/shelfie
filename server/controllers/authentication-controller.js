@@ -156,31 +156,40 @@ exports.resetPassword = function (req, res, next) {
 
 exports.getProfile = function (req, res, next) {
   const username = req.query.username;
-  const authedUser = req.user;
-  if (!username) {
-    return res.status(422).send({ field: 'username', error: 'You must provide username'});
-  }
+  const profileValidator = new Checkit(Validator.getProfileValidation);
 
-  // find profile of given username
-  User.findOne({ username: username }, function(err, userProfile) {
-    if (err) { return next(err); }
+  profileValidator.run(req.query).then((validated)=> {
 
-    let user = { isOwnProfile: false };
+    const authedUser = req.user;
 
-    if (authedUser.username === userProfile.username) {
-      user.isOwnProfile = true;
-    }
+    // find profile of given username
+    User.findOne({ username: username }, function(err, userProfile) {
+      if (err) { return next(err); }
 
-    user.username = userProfile.username;
-    user.gravitarMd5 = crypto.createHash('md5').update(userProfile.email).digest("hex");
-    user.numberOfFaves = userProfile.favoriteClips ? userProfile.favoriteClips.length : 0;
-    user.firstName = userProfile.firstName;
-    user.lastName = userProfile.lastName;
-    user.createdAt = userProfile.createdAt;
-    user.clips = userProfile.clips;
+      let user = { isOwnProfile: false };
 
-    res.json({ user });
+      if (authedUser) {
+        if (authedUser.username === userProfile.username) {
+          user.isOwnProfile = true;
+        }
+      }
+      user.username = userProfile.username;
+      user.gravitarMd5 = crypto.createHash('md5').update(userProfile.email).digest("hex");
+      user.numberOfFaves = userProfile.favoriteClips ? userProfile.favoriteClips.length : 0;
+      user.firstName = userProfile.firstName;
+      user.lastName = userProfile.lastName;
+      user.createdAt = userProfile.createdAt;
+      user.clips = userProfile.clips;
+
+      res.json({ user });
+    });
+
+
+  }).catch( function(err) {
+    console.log(err);
+    return res.status(422).send(err.toJSON());
   });
+
 
 };
 

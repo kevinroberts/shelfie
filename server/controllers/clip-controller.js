@@ -127,24 +127,32 @@ exports.addTagToClip = function (clipID, tagID, cb) {
 };
 
 exports.getClips = function (req, res, next) {
-  let limit = req.query.limit ? _.toNumber(req.query.limit) : 20;
-  let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
-  let tags = req.query.tags ? _.split(req.query.tags, ',') : null;
-  let sort = req.query.sort ? req.query.sort : 'createdAt';
-  let sortOrder = req.query.sortOrder ? req.query.sortOrder : 'desc';
-  let title = req.query.title ? req.query.title : '';
+  let params = getClipSearchParamsFromRequest(req);
 
-  let criteria = {title: title};
-
-  if (tags) {
-    criteria.tags = tags;
-  }
-
-  if (!_.isInteger(limit) || !_.isInteger(offset)) {
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
     return res.status(422).send({ _error: 'Invalid query format.' });
   }
 
-  SearchClips(criteria, sort, sortOrder, offset, limit).then((result = []) =>
+  SearchClips(params.criteria, params.sort, params.sortOrder, params.offset, params.limit).then((result = []) =>
+    res.json(result)
+  ).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' })
+    }
+  );
+};
+
+exports.getMyClips = function (req, res, next) {
+  const authedUser = req.user;
+  let params = getClipSearchParamsFromRequest(req);
+
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+  // set criteria to only get clips from the authorized user
+  params.criteria.creator = authedUser._id;
+
+  SearchClips(params.criteria, params.sort, params.sortOrder, params.offset, params.limit).then((result = []) =>
     res.json(result)
   ).catch (function (err) {
       console.log("query error:" , err);
@@ -303,5 +311,23 @@ function updateUserAndProcessClipFileRemoval(res, authedUser, clipId, clip) {
     console.error("error occurred trying to update user's clip removal", err);
     return res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' });
   });
+
+}
+
+function getClipSearchParamsFromRequest(req) {
+  let limit = req.query.limit ? _.toNumber(req.query.limit) : 20;
+  let offset = req.query.offset ? _.toNumber(req.query.offset) : 0;
+  let tags = req.query.tags ? _.split(req.query.tags, ',') : null;
+  let sort = req.query.sort ? req.query.sort : 'createdAt';
+  let sortOrder = req.query.sortOrder ? req.query.sortOrder : 'desc';
+  let title = req.query.title ? req.query.title : '';
+
+  let criteria = {title: title};
+
+  if (tags) {
+    criteria.tags = tags;
+  }
+
+  return ({limit, offset, tags, sort, sortOrder, title, criteria});
 
 }

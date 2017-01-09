@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
-import UltimatePagination from '../../utils/pagination/UltimatePaginationBootstrap4';
+import * as actions from '../../../actions';
+import UltimatePagination from '../../../utils/pagination/UltimatePaginationBootstrap4';
 
-class Paginator extends Component {
+class MyPaginator extends Component {
 
   constructor(props) {
     super(props);
@@ -33,7 +33,7 @@ class Paginator extends Component {
       criteria.title = queryParams.title;
     }
 
-    this.props.searchClips(criteria);
+    this.props.searchMyClips(criteria);
   }
 
   render() {
@@ -52,9 +52,9 @@ class Paginator extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { limit, offset, count, currentPage, totalPages, sort } = state.clips;
+  const { limit, offset, count, currentPage, totalPages, sort } = state.myClips;
 
   return { limit, offset, count, currentPage, totalPages, sort, activeTag : state.filterCriteria.tag,};
 };
 
-export default connect(mapStateToProps, actions)(Paginator);
+export default connect(mapStateToProps, actions)(MyPaginator);

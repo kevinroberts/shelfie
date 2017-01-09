@@ -81,6 +81,10 @@ const buildQuery = (criteria) => {
     query.tags = { $in : criteria.tags }
   }
 
+  if (criteria.creator) {
+    query._creator = { $eq : criteria.creator }
+  }
+
   if (criteria.length) {
     query.length = {
       $gte: criteria.length.min,

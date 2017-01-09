@@ -1,5 +1,6 @@
 const Clip = require('../models/clip');
 const Tag = require('../models/tag');
+const User = require('../models/user');
 
 exports.signUpValidation = {
   firstName: [{
@@ -43,6 +44,21 @@ exports.signUpValidation = {
     rule: 'email',
     message: 'A valid email address is required to register.'
   }]
+};
+
+exports.getProfileValidation = {
+  username: [{rule: 'required',
+    message: 'A username is required.'},
+    {
+      rule: function(val, params, context) {
+        var query = User.findOne({username: val});
+
+        return query.then(function (user) {
+          if (!user) {
+            throw new Error('You must provide a valid username.');
+          }
+        });
+      }}],
 };
 
 exports.editProfileValidation = {
