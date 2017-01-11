@@ -39,6 +39,7 @@ class LibrarySearch extends Component {
     const { activeTag } = this.props;
 
     const queryParams = this.props.queryParams.query;
+    const pathname = this.props.queryParams.pathname;
 
     let searchValue = this.state.value;
 
@@ -55,7 +56,12 @@ class LibrarySearch extends Component {
       criteria.tags = activeTag._id;
     }
 
-    this.props.searchClips(criteria);
+    if (pathname === '/library') {
+      this.props.searchClips(criteria);
+    } else {
+      this.props.searchMyClips(criteria);
+    }
+
   }
 
 
