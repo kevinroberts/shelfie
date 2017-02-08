@@ -135,6 +135,26 @@ exports.getMyTags = function (req, res, next) {
 
 };
 
+exports.getFavoriteTags = function (req, res, next) {
+  const authedUser = req.user;
+  let params = getTagSearchParamsFromRequest(req);
+
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+
+  params.criteria.clips = authedUser.favoriteClips;
+
+  SearchTags(params.criteria, 'name', params.offset, params.limit).then((result = []) =>
+    res.json(result)
+  ).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while tyring to process your request. Please try again later.' })
+    }
+  );
+
+};
+
 
 function getTagSearchParamsFromRequest(req) {
   let limit = req.query.limit ? _.toNumber(req.query.limit) : 150;

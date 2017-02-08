@@ -28,6 +28,7 @@ module.exports = function(app) {
   // handle clip related requests
   app.get('/clips', ClipController.getClips);
   app.get('/my-clips', requireAuth, ClipController.getMyClips);
+  app.get('/favorite-clips', requireAuth, ClipController.getMyFavoriteClips);
 
   app.get('/clip', ClipController.findClip);
   app.post('/clip', requireAuth, ClipController.createClip);
@@ -40,6 +41,7 @@ module.exports = function(app) {
   app.post('/remove-tags', requireAuth, TagController.removeTag);
   app.get('/tags', TagController.getTags);
   app.get('/my-tags', requireAuth, TagController.getMyTags);
+  app.get('/favorite-tags', requireAuth, TagController.getFavoriteTags);
 
   // handle favorite related requests
   app.post('/favorite', requireAuth, FavoritesController.createRemoveFavorite);

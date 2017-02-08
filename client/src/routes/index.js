@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRedirect } from 'react-router';
+import {Route, IndexRedirect} from 'react-router';
 import App from '../components/app';
 import Profile from '../components/profile';
 import Feature from '../components/feature';
@@ -14,28 +14,32 @@ import ViewClip from '../components/clip/view-clip';
 import EditClip from '../components/clip/edit-clip';
 import PageNotFound from '../components/page-not-found';
 import MyLibrary from '../components/library/myLibrary/my-library';
+import MyFavorites from '../components/library/myFavorites/my-favorites';
 import RequireAuth from '../components/auth/require-auth';
 
 export default(
   <Route path="/" component={App}>
-    <IndexRedirect to="/library" />
+    <IndexRedirect to="/library"/>
     <Route path="library" component={Library}>
-      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title=:title" component={Library} />
+      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title=:title" component={Library}/>
     </Route>
     <Route path="my-library" component={RequireAuth(MyLibrary)}>
-        <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title:title" component={MyLibrary} />
+      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title:title" component={MyLibrary}/>
     </Route>
-    <Route path="signin" component={Signin} />
-    <Route path="signout" component={Signout} />
-    <Route path="signup" component={Signup} />
-    <Route path="profile/:username" component={RequireAuth(Profile)} />
-    <Route path="clip/:id" component={ViewClip} />
-    <Route path="clip/:id/edit" component={EditClip} />
-    <Route path="resetPassword/:key" component={ResetPassword} />
-    <Route path="resetRequest" component={ResetRequest} />
-    <Route path="add-clip" component={RequireAuth(AddClip)} />
-    <Route path="feature" component={RequireAuth(Feature)} />
-    <Route path="404" component={PageNotFound} />
-    <Route path="*" component={PageNotFound} />
+    <Route path="my-favorites" component={RequireAuth(MyFavorites)}>
+      <Route path="?sort=:sort&offset=:offset&tags=:activeTag&limit=:limit&title:title" component={MyFavorites}/>
+    </Route>
+    <Route path="signin" component={Signin}/>
+    <Route path="signout" component={Signout}/>
+    <Route path="signup" component={Signup}/>
+    <Route path="profile/:username" component={RequireAuth(Profile)}/>
+    <Route path="clip/:id" component={ViewClip}/>
+    <Route path="clip/:id/edit" component={EditClip}/>
+    <Route path="resetPassword/:key" component={ResetPassword}/>
+    <Route path="resetRequest" component={ResetRequest}/>
+    <Route path="add-clip" component={RequireAuth(AddClip)}/>
+    <Route path="feature" component={RequireAuth(Feature)}/>
+    <Route path="404" component={PageNotFound}/>
+    <Route path="*" component={PageNotFound}/>
   </Route>
 );

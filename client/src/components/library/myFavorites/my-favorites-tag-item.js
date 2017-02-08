@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as actions from '../../../actions';
 
-
-class MyTagItem extends Component {
+class MyFavoritesTagItem extends Component {
 
   handleTagClick () {
     this.props.setActiveTag(this.props.tag);
@@ -22,7 +21,7 @@ class MyTagItem extends Component {
       criteria.offset = _.toNumber(queryParams.offset);
     }
 
-    this.props.searchMyClips(criteria);
+    this.props.searchMyFavorites(criteria);
 
   };
 
@@ -58,13 +57,13 @@ class MyTagItem extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { auth, filterCriteria, myClips } = state;
+  const { auth, filterCriteria, myFavorites } = state;
 
   return {
-    sort: myClips.sort,
+    sort: myFavorites.sort,
     activeTag : filterCriteria.tag,
     authenticated: auth.authenticated
   };
 };
 
-export default connect(mapStateToProps, actions)(MyTagItem);
+export default connect(mapStateToProps, actions)(MyFavoritesTagItem);

@@ -16,6 +16,12 @@ class Profile extends Component {
     this.props.fetchProfile(this.props.params.username);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.username !== this.props.params.username) {
+      this.props.fetchProfile(nextProps.params.username);
+    }
+  }
+
   render() {
     const { user } = this.props;
 

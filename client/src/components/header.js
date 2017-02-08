@@ -77,7 +77,7 @@ class Header extends Component {
               My Library
             </NavLink>
 
-            <NavLink to="/feature" className={'nav-link ' + authVisible }>
+            <NavLink to="/my-favorites" className={'nav-link ' + authVisible }>
               Favorites
             </NavLink>
 

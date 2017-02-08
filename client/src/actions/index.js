@@ -12,6 +12,7 @@ import {
   SET_TAG_LIST,
   SEARCH_CLIPS,
   SEARCH_MY_CLIPS,
+  SEARCH_FAVORITE_CLIPS,
   SET_ACTIVE_TAG,
   FIND_CLIP,
   ADD_UPLOADED_CLIP,
@@ -66,13 +67,13 @@ export function removeClip(id, title) {
       data: {clip: id},
       headers: {authorization : LocalStorageUtils.getToken() } })
       .then(response => {
-        notifyUser("Clip removed!", "Your clip \"" + title + "\" was successfully removed.", "/static/img/trash.png");
+        notifyUser("Clip removed!", `Your clip "${title}" was successfully removed.`, "/static/img/trash.png");
         dispatch({type: REMOVE_CLIP});
         dispatch({ type: RESET_UPLOADED });
         dispatch(push('/'));
       })
       .catch(response => {
-        notifyUser("Error", "Your clip \"" + title + "\" could not be removed.", "/static/img/error.png");
+        notifyUser("Error", `Your clip "${title}" could not be removed.`, "/static/img/error.png");
       });
   }
 }
@@ -93,7 +94,7 @@ export function updateFavoriteClip(clipId, clipTitle, action) {
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
           dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
-          notifyUser("Favorite removed!", `The clip ${clipTitle} has been removed from your favorites.`, "/static/img/trash.png");
+          notifyUser('Favorite removed!', `The clip ${clipTitle} has been removed from your favorites.`, "/static/img/trash.png");
 
         } else if (action === 'add') {
           favoriteClips.push(clipId);
@@ -101,7 +102,7 @@ export function updateFavoriteClip(clipId, clipTitle, action) {
           let userObj = LocalStorageUtils.getUser();
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
-          notifyUser("Favorite Added!", `The clip ${clipTitle} has been added to your favorites.`, "/static/img/heart.png");
+          notifyUser('Favorite Added!', `The clip ${clipTitle} has been added to your favorites.`, "/static/img/heart.png");
         }
 
       })
@@ -171,6 +172,20 @@ export function getMyTagList() {
   }
 }
 
+export function getFavoritesTagList() {
+  return function(dispatch) {
+    axios.get(`${ROOT_URL}/favorite-tags`, {
+      headers: { authorization: LocalStorageUtils.getToken() }
+    })
+      .then(response => {
+        dispatch({
+          type: SET_TAG_LIST,
+          payload: response.data.all
+        });
+      });
+  }
+}
+
 export function setActiveTag(tag) {
 
   return { type: SET_ACTIVE_TAG, payload: tag };
@@ -213,6 +228,22 @@ export function searchMyClips(...criteria) {
   }
 }
 
+export function searchMyFavorites(...criteria) {
+  return function(dispatch) {
+    dispatch(push(`/my-favorites?${Qs.stringify(criteria[0])}`));
+
+    axios.get(`${ROOT_URL}/favorite-clips?${Qs.stringify(criteria[0])}`, {
+      headers: { authorization: LocalStorageUtils.getToken() }
+    })
+      .then(response => {
+        dispatch({
+          type: SEARCH_FAVORITE_CLIPS,
+          payload: response.data
+        });
+      });
+  }
+}
+
 export function findClip(id) {
   return function(dispatch) {
     axios.get(`${ROOT_URL}/clip?id=${id}`)
@@ -222,7 +253,7 @@ export function findClip(id) {
           payload: response.data
         });
       }).catch(function (err) {
-      notifyUser("Error", err.data._error, "/static/img/error.png");
+      notifyUser('Error', err.data._error, '/static/img/error.png');
       dispatch(push('/404'));
     });
   }

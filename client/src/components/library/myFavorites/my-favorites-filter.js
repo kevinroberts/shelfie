@@ -1,11 +1,11 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import TagItem from './my-tag-item'
+import TagItem from './my-favorites-tag-item'
 import _ from 'lodash';
 import * as actions from '../../../actions';
 
-class MyLibraryFilter extends Component {
+class FavoritesLibraryFilter extends Component {
 
   constructor(props) {
     super(props);
@@ -43,11 +43,11 @@ class MyLibraryFilter extends Component {
       criteria.offset = _.toNumber(queryParams.offset);
     }
 
-    this.props.searchMyClips(criteria);
+    this.props.searchMyFavorites(criteria);
   }
 
   componentDidMount() {
-    this.props.getMyTagList();
+    this.props.getFavoritesTagList();
   }
 
   handleSortChange(event) {
@@ -62,14 +62,14 @@ class MyLibraryFilter extends Component {
       criteria.tags = this.props.activeTag._id;
     }
 
-    this.props.searchMyClips(criteria);
+    this.props.searchMyFavorites(criteria);
 
   }
 
   handleTagClick () {
     this.props.setActiveTag({  "_id": '', "name" : "" });
 
-    this.props.searchMyClips({
+    this.props.searchMyFavorites({
       title: '',
       sort: 'createdAt',
     });
@@ -111,15 +111,15 @@ class MyLibraryFilter extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { filterCriteria, auth, myClips } = state;
+  const { filterCriteria, auth, myFavorites } = state;
 
   return {
     tags: filterCriteria.tags,
-    sort: myClips.sort,
+    sort: myFavorites.sort,
     authenticated: auth.authenticated,
     activeTag : filterCriteria.tag
   };
 };
 
-export default connect(mapStateToProps, actions)(MyLibraryFilter);
+export default connect(mapStateToProps, actions)(FavoritesLibraryFilter);
 

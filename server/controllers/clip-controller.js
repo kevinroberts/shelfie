@@ -161,6 +161,26 @@ exports.getMyClips = function (req, res, next) {
   );
 };
 
+exports.getMyFavoriteClips = function (req, res, next) {
+  const authedUser = req.user;
+  let params = getClipSearchParamsFromRequest(req);
+
+  if (!_.isInteger(params.limit) || !_.isInteger(params.offset)) {
+    return res.status(422).send({ _error: 'Invalid query format.' });
+  }
+
+  // set criteria to only get clips from the authorized user's list of favorites
+  params.criteria.favoriteClips = authedUser.favoriteClips;
+
+  SearchClips(params.criteria, params.sort, params.sortOrder, params.offset, params.limit).then((result = []) =>
+    res.json(result)
+  ).catch (function (err) {
+      console.log("query error:" , err);
+      res.status(500).send({ _error: 'A server error occurred while trying to process your request. Please try again later.' })
+    }
+  );
+};
+
 exports.editClip = function (req, res, next) {
   const authedUser = req.user;
   const clipValidator = new Checkit(Validator.editClipValidation);

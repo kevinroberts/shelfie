@@ -73,6 +73,10 @@ module.exports = (criteria, sortProperty, sortOrder, offset = 0, limit = 20) => 
 const buildQuery = (criteria) => {
   const query = {};
 
+  if (criteria.favoriteClips) {
+    query._id = { $in : criteria.favoriteClips }
+  }
+
   if (criteria.title) {
     query.$text = { $search: criteria.title };
   }

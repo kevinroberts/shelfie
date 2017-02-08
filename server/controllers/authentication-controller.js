@@ -22,7 +22,7 @@ exports.signin = function(req, res, next) {
 
 exports.signup = function(req, res, next) {
   const signupValidator = new Checkit(Validator.signUpValidation);
-  signupValidator.run(req.body).then((validated)=>{
+  signupValidator.run(req.body).then((validated) => {
 
     // See if a user with the given email exists
     User.findOne({ username: validated.username }, function(err, existingUserWithUsername) {
@@ -67,7 +67,7 @@ exports.signup = function(req, res, next) {
 
 exports.resetRequest = function (req, res, next) {
   const resetValidator = new Checkit(Validator.resetRequestValidation);
-  resetValidator.run(req.body).then((validated)=> {
+  resetValidator.run(req.body).then((validated) => {
 
     async.waterfall([
       function(done) {
@@ -116,7 +116,7 @@ exports.resetRequest = function (req, res, next) {
 
 exports.resetPassword = function (req, res, next) {
   const resetValidator = new Checkit(Validator.resetPasswordValidation);
-  resetValidator.run(req.body).then((validated)=> {
+  resetValidator.run(req.body).then((validated) => {
     async.waterfall([
       function(done) {
         User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
