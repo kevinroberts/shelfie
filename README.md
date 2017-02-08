@@ -1,5 +1,4 @@
-# shelfie
-
+# shelfie [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/kevinroberts/shelfie)
 A web based application to manage and organize WAV sound files (clips) for a group of users. 
 WAV files can be created and updated from any user account. A user can also favorite and tag clips to organize their collection.
 
