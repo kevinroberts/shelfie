@@ -246,7 +246,7 @@ exports.editProfile = function (req, res, next) {
 
       }, function (user, done) {
         if (passChanged) {
-          emailer.sendPasswordChangedEmail(user.email, user.username, function (error, response) {
+          emailer.sendPasswordChangedEmail(user, function (error, response) {
             done(error, user);
           });
         } else {
