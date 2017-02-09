@@ -20,6 +20,7 @@ app.use(morgan('combined'));
 //app.use(cors());
 app.use(bodyParser.json({limit: '15mb', type: '*/json'}));
 router(app);
+app.disable('x-powered-by');
 
 // Server Setup
 const port = process.env.PORT || 3090;
