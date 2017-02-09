@@ -2,7 +2,7 @@ import axios from 'axios';
 import { push } from 'redux-router';
 import { notifyUser } from '../utils/notifications'
 import LocalStorageUtils from '../utils/local-storage-utils';
-import Qs from 'Qs';
+import Qs from 'qs';
 import {
   AUTH_USER,
   UNAUTH_USER,

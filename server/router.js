@@ -63,11 +63,11 @@ module.exports = function(app) {
     //   res.status(err.status || 500).sendFile(Path.join(PUBLIC_DIR, "errors/500.html"))
     // })
 
-    app.use(express.static('../client'));
+    app.use(express.static(process.env.STATIC_SERVE_DIR));
 
     app.get('*', (req, res) => {
       // make use of custom error messages ?
-      res.sendFile(path.resolve('../client/index.html'))
+      res.sendFile(path.resolve(`${process.env.STATIC_SERVE_DIR}/index.html`))
     });
   }
 
