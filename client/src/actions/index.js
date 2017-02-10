@@ -22,7 +22,7 @@ import {
   REQUEST_SUCCESS
 } from './types';
 
-export const ROOT_URL = '/api';
+export const ROOT_URL = process.env.NODE_ENV !== 'production' ? '/api' : '';
 
 export function signinUser( response, rememberUser, redirect="/" ) {
   return function(dispatch) {
