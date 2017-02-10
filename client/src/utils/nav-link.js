@@ -6,10 +6,13 @@ class NavLink extends Component {
   render() {
     let isActive = this.props.router.location.pathname === this.props.to;
     let className = isActive ? "active" : "";
+    let passedProps = {...this.props};
+    delete passedProps.router;
+    delete passedProps.dispatch;
 
     return (
       <li className={"nav-item " + className}>
-        <Link className="nav-link" {...this.props}/>
+        <Link className="nav-link" {...passedProps}/>
       </li>
     );
   }
