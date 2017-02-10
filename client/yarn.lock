@@ -3401,6 +3401,18 @@ react-gravatar@^2.6.1:
     md5 "^2.1.0"
     query-string "^4.2.2"
 
+react-notification-system-redux:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-notification-system-redux/-/react-notification-system-redux-1.0.11.tgz#f59ca6c817b95a18687ced02eb6e1c4e721b807e"
+  dependencies:
+    react-notification-system "^0.2.7"
+
+react-notification-system@^0.2.7, react-notification-system@0.2.x:
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/react-notification-system/-/react-notification-system-0.2.11.tgz#c954ab7f3c355b34ca5f85d6b3fc4236070e7788"
+  dependencies:
+    object-assign "^4.0.1"
+
 react-overlays@^0.6.10:
   version "0.6.10"
   resolved "https://registry.yarnpkg.com/react-overlays/-/react-overlays-0.6.10.tgz#e7e52dad47f00a0fc784eb044428c3a9e874bfa3"

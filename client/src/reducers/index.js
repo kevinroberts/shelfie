@@ -7,7 +7,8 @@ import MyClipReducer from './MyClipReducer';
 import MyFavoritesReducer from './MyFavoritesReducer';
 import FilterCriteriaReducer from './FilterCriteriaReducer';
 import UploadedReducer from './uploaded-reducer';
-import { audioReducer as audio } from 'redux-audio'
+import { audioReducer as audio } from 'redux-audio';
+import {reducer as notifications} from 'react-notification-system-redux';
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   audio,
   uploaded: UploadedReducer,
   auth: authReducer,
-  router: routerStateReducer
+  router: routerStateReducer,
+  notifications
 });
 
 export default rootReducer;

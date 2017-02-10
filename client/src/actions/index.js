@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { push } from 'redux-router';
-import { notifyUser } from '../utils/notifications'
 import LocalStorageUtils from '../utils/local-storage-utils';
+import Notifications from 'react-notification-system-redux';
 import Qs from 'qs';
 import {
   AUTH_USER,
@@ -67,13 +67,25 @@ export function removeClip(id, title) {
       data: {clip: id},
       headers: {authorization : LocalStorageUtils.getToken() } })
       .then(response => {
-        notifyUser("Clip removed!", `Your clip "${title}" was successfully removed.`, "/static/img/trash.png");
+        const notificationOpts = {
+          title: "Clip removed!",
+          message: `Your clip "${title}" was successfully removed.`,
+          position: 'tr',
+          autoDismiss: 3,
+        };
+        dispatch(Notifications.success(notificationOpts));
         dispatch({type: REMOVE_CLIP});
         dispatch({ type: RESET_UPLOADED });
         dispatch(push('/'));
       })
       .catch(response => {
-        notifyUser("Error", `Your clip "${title}" could not be removed.`, "/static/img/error.png");
+        const notificationOpts = {
+          title: "Error occurred",
+          message:  `Your clip "${title}" could not be removed.`,
+          position: 'tr',
+          autoDismiss: 5,
+        };
+        dispatch(Notifications.error(notificationOpts));
       });
   }
 }
@@ -94,20 +106,37 @@ export function updateFavoriteClip(clipId, clipTitle, action) {
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
           dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
-          notifyUser('Favorite removed!', `The clip ${clipTitle} has been removed from your favorites.`, "/static/img/trash.png");
-
+          const notificationOpts = {
+            title: 'Favorite removed',
+            message: `The clip ${clipTitle} has been removed from your favorites.`,
+            position: 'tr',
+            autoDismiss: 3,
+          };
+          dispatch(Notifications.success(notificationOpts));
         } else if (action === 'add') {
           favoriteClips.push(clipId);
           dispatch({type: UPDATE_FAVORITE_CLIPS, payload: favoriteClips});
           let userObj = LocalStorageUtils.getUser();
           userObj.favoriteClips = favoriteClips;
           LocalStorageUtils.updateUser(userObj);
-          notifyUser('Favorite Added!', `The clip ${clipTitle} has been added to your favorites.`, "/static/img/heart.png");
+          const notificationOpts = {
+            title: 'Favorite Added!',
+            message: `The clip ${clipTitle} has been added to your favorites.`,
+            position: 'tr',
+            autoDismiss: 3,
+          };
+          dispatch(Notifications.success(notificationOpts));
         }
 
       })
       .catch(response => {
-        notifyUser("Error", response.data._error, "/static/img/error.png");
+        const notificationOpts = {
+          title: 'Error...',
+          message: response.data._error,
+          position: 'tr',
+          autoDismiss: 5,
+        };
+        dispatch(Notifications.error(notificationOpts));
       });
   }
 }
@@ -253,7 +282,13 @@ export function findClip(id) {
           payload: response.data
         });
       }).catch(function (err) {
-      notifyUser('Error', err.data._error, '/static/img/error.png');
+      const notificationOpts = {
+        title: 'Error...',
+        message: response.data._error,
+        position: 'tr',
+        autoDismiss: 10,
+      };
+      dispatch(Notifications.error(notificationOpts));
       dispatch(push('/404'));
     });
   }

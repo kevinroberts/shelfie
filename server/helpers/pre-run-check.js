@@ -19,7 +19,7 @@ try {
     console.warn("A MAX_FILE_SIZE should be defined - please define one in process env");
   }
   if (!process.env.STATIC_SERVE_DIR) {
-    console.warn("A STATIC_SERVE_DIR should be defined - please define one in process env");
+    throw new Error("A STATIC_SERVE_DIR should be defined - please define one in process env");
   }
 } catch (e) {
   console.error(e);
