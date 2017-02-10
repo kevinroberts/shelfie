@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "build": "webpack -p --define process.env.NODE_ENV=\"production\" --progress --colors",
+    "build": "NODE_ENV=production webpack -p --define process.env.NODE_ENV=\"production\" --progress --colors",
     "test:watch": "npm run test -- --watch"
   },
   "author": "Kevin Roberts",
