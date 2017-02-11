@@ -1,7 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import * as actions from '../../../actions';
 
 
@@ -17,9 +16,10 @@ class MyTagItem extends Component {
       tags: this.props.tag._id
     };
 
+    // reset limit and offset if this is a new tag click
     if (queryParams.limit && queryParams.offset) {
-      criteria.limit = _.toNumber(queryParams.limit);
-      criteria.offset = _.toNumber(queryParams.offset);
+      criteria.limit = 20;
+      criteria.offset = 0;
     }
 
     this.props.searchMyClips(criteria);
