@@ -7,7 +7,9 @@ import TagList from './tag-list';
 import ActionsBar from './actions';
 import Wavesurfer from 'react-wavesurfer';
 import Gravatar from 'react-gravatar';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import FavoriteButton from './favorite-button';
+import DownloadButton from '../library/download-button';
 import { Link } from 'react-router';
 import moment from 'moment';
 
@@ -77,6 +79,10 @@ class ViewClip extends Component {
     if (clip._creator.username === this.props.username) {
       actionsVisibleToggle = '';
     }
+    let filename = clip.sourceUrl.substr(clip.sourceUrl.lastIndexOf('/')+1, clip.sourceUrl.length);
+    const downloadTooltip = (
+      <Tooltip id="downloadTooltip" className="tooltip tooltip-top">Download {filename}</Tooltip>
+    );
 
     return (
       <div>
@@ -115,9 +121,11 @@ class ViewClip extends Component {
                 <div className="btn-group" role="group">
                   <FavoriteButton clipId={clip._id} clipTitle={clip.title} />
                 </div>
-                <div className="btn-group" role="group">
-                  <button type="button" className="btn btn-success" title="download this clip"><i className="fa fa-download" aria-hidden="true" /></button>
-                </div>
+                <OverlayTrigger placement="top" overlay={downloadTooltip}>
+                  <div className="btn-group" role="group">
+                    <DownloadButton className="btn btn-success" filename={clip.sourceUrl}  />
+                  </div>
+                </OverlayTrigger>
                 <TagList tags={clip.tags} />
               </div>
               <div className="clip-subTitle text-muted">added {createdDate}</div>
