@@ -28,7 +28,7 @@ class MyFavoritesTagItem extends Component {
 
   render() {
 
-    let { tag } = this.props;
+    let { tag, favoriteClips } = this.props;
     const queryParams = this.props.queryParams.query;
 
     let activeClass = '';
@@ -40,29 +40,42 @@ class MyFavoritesTagItem extends Component {
       activeClass = ' active';
     }
 
+    // only count the clips contained in the favorites list
+    let clipNumber = tag.clips.reduce(function (sum, clip) {
+      if (favoriteClips) {
+        if (_.indexOf(favoriteClips, clip) !== -1) {
+          return sum + 1
+        } else {
+          return sum
+        }
+      } else {
+        return sum
+      }
+    }, 0);
+
     if (tag.clips.length === 0) {
       return (
         <li key={tag._id}>
-          <a href="javascript:void(0)" title={`No clips tagged under ${tag.name}`} className="nav-link empty-clips-link"> {tag.name} <span className="tag tag-default tag-pill">{tag.clips.length}</span> </a>
+          <a href="javascript:void(0)" title={`No clips tagged under ${tag.name}`} className="nav-link empty-clips-link"> {tag.name} <span className="tag tag-default tag-pill">{clipNumber}</span> </a>
         </li>
       )
     }
 
     return (
       <li key={tag._id} className="nav-item">
-        <a href="javascript:void(0)" onClick={this.handleTagClick.bind(this)} className={'nav-link ' + activeClass}>{tag.name} <span className="tag tag-default tag-pill">{tag.clips.length}</span></a>
+        <a href="javascript:void(0)" onClick={this.handleTagClick.bind(this)} className={'nav-link ' + activeClass}>{tag.name} <span className="tag tag-default tag-pill">{clipNumber}</span></a>
       </li>
     )
   };
 }
 
 const mapStateToProps = (state) => {
-  const { auth, filterCriteria, myFavorites } = state;
+  const { filterCriteria, myFavorites } = state;
 
   return {
     sort: myFavorites.sort,
     activeTag : filterCriteria.tag,
-    authenticated: auth.authenticated
+    favoriteClips: state.auth.favoriteClips
   };
 };
 
