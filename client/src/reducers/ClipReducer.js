@@ -3,7 +3,7 @@ import {
   FIND_CLIP,
   REMOVE_CLIP,
   RESET_CLIP
-} from '../actions/types';
+} from '../actions/types'
 
 const INITIAL_STATE = {
   all: [],
@@ -13,19 +13,19 @@ const INITIAL_STATE = {
   title: '',
   sort: 'createdAt',
   limit: 20
-};
+}
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SEARCH_CLIPS:
-      return action.payload;
+      return action.payload
     case FIND_CLIP:
-      return { ...state, clip: action.payload };
+      return { ...state, clip: action.payload }
     case RESET_CLIP:
-      return { ...state, clip: null };
+      return { ...state, clip: null }
     case REMOVE_CLIP:
-      return {...state, clip: null};
+      return {...state, clip: null}
     default:
-      return state;
+      return state
   }
-};
+}

@@ -1,111 +1,110 @@
-import { setExpiration, getExpiration } from './local-cache';
+/* eslint-disable no-unused-vars */
+import { setExpiration, getExpiration } from './local-cache'
 
-const isAvailable = (function isAvailableIffe() {
-  const test = 'test';
+const isAvailable = (function isAvailableIffe () {
+  const test = 'test'
   try {
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
+    window.localStorage.setItem(test, test)
+    window.localStorage.removeItem(test)
+    return true
   } catch (e) {
-    return false;
+    return false
   }
-}());
+}())
 
 const util = {
-  get(key) {
+  get (key) {
     if (isAvailable) {
-      return localStorage.getItem(key);
+      return window.localStorage.getItem(key)
     }
-    return null;
+    return null
   },
 
-  remove(key) {
+  remove (key) {
     if (isAvailable) {
-      return localStorage.removeItem(key);
+      return window.localStorage.removeItem(key)
     }
-    return null;
+    return null
   },
 
-  set(key, value) {
+  set (key, value) {
     if (isAvailable) {
-      return localStorage.setItem(key, value);
+      return window.localStorage.setItem(key, value)
     }
 
-    return null;
+    return null
   },
-  getToken() {
+  getToken () {
     if (isAvailable) {
-      if (localStorage.getCacheItem("user") === null) {
-        return null;
+      if (window.localStorage.getCacheItem('user') === null) {
+        return null
       } else {
-        var user = localStorage.getCacheItem('user');
-        return user.token;
+        var user = window.localStorage.getCacheItem('user')
+        return user.token
       }
     }
-    return null;
+    return null
   },
-  getUsername() {
+  getUsername () {
     if (isAvailable) {
-      if (localStorage.getCacheItem("user") === null) {
-        return null;
+      if (window.localStorage.getCacheItem('user') === null) {
+        return null
       } else {
-        var user = localStorage.getCacheItem('user');
-        return user.username;
+        var user = window.localStorage.getCacheItem('user')
+        return user.username
       }
     }
-    return null;
+    return null
   },
-  getUser() {
+  getUser () {
     if (isAvailable) {
-      if (localStorage.getCacheItem("user") === null) {
-        return null;
+      if (window.localStorage.getCacheItem('user') === null) {
+        return null
       } else {
-        return localStorage.getCacheItem('user');
+        return window.localStorage.getCacheItem('user')
       }
     }
-    return null;
+    return null
   },
-  getFavoriteClips() {
+  getFavoriteClips () {
     if (isAvailable) {
-      if (localStorage.getCacheItem("user") === null) {
-        return null;
+      if (window.localStorage.getCacheItem('user') === null) {
+        return null
       } else {
-        var user = localStorage.getCacheItem('user');
-        return user.favoriteClips;
+        var user = window.localStorage.getCacheItem('user')
+        return user.favoriteClips
       }
     }
-    return null;
+    return null
   },
-  updateUser(userObj) {
+  updateUser (userObj) {
     if (isAvailable) {
-      userObj.isJson = true;
-      return localStorage.setItem('user', JSON.stringify(userObj));
+      userObj.isJson = true
+      return window.localStorage.setItem('user', JSON.stringify(userObj))
     }
-    return null;
+    return null
   },
-  setUser(responseData, rememberUser) {
+  setUser (responseData, rememberUser) {
     if (isAvailable) {
+      const days = rememberUser ? 30 : 1
 
-      const days = rememberUser ? 30 : 1;
-
-      return localStorage.setCacheItem('user', {
+      return window.localStorage.setCacheItem('user', {
         token: responseData.data.token,
         email: responseData.data.email,
         firstName: responseData.data.firstName,
         favoriteClips: responseData.data.favoriteClips,
         lastName: responseData.data.lastName,
         username: responseData.data.username
-      }, {days : days });
-
+      }, { days: days })
     }
-    return null;
+    return null
   },
-  clearUser() {
+  clearUser () {
     if (isAvailable) {
-      return localStorage.removeItem('user');
+      return window.localStorage.removeItem('user')
     }
-    return null;
+    return null
   }
-};
+}
 
-export default util;
+export default util

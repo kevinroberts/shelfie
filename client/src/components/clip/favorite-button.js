@@ -1,32 +1,27 @@
-import React from 'react';
-import { Component } from 'react';
-import * as actions from '../../actions';
-import { connect } from 'react-redux';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import React, { Component } from 'react'
+import * as actions from '../../actions'
+import { connect } from 'react-redux'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 class FavoriteButton extends Component {
 
-  constructor(props) {
-    super(props);
+  handleFavoriteRemove () {
+    console.log('Removing clip from favorites', this.props.clipTitle)
+    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'remove')
   }
 
-  handleFavoriteRemove() {
-    console.log("Removing clip from favorites", this.props.clipTitle);
-    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'remove');
+  handleFavoriteAdd () {
+    console.log('Adding clip to favorites', this.props.clipTitle)
+    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'add')
   }
 
-  handleFavoriteAdd() {
-    console.log("Adding clip to favorites", this.props.clipTitle);
-    this.props.updateFavoriteClip(this.props.clipId, this.props.clipTitle, 'add');
-  }
-
-  render() {
+  render () {
     const faveTooltipAdd = (
-      <Tooltip id="faveTooltip" className="tooltip tooltip-top">Add this clip to your favorites!</Tooltip>
-    );
+      <Tooltip id='faveTooltip' className='tooltip tooltip-top'>Add this clip to your favorites!</Tooltip>
+    )
     const faveTooltipRemove = (
-      <Tooltip id="faveTooltip" className="tooltip tooltip-top">Remove this clip to your favorites!</Tooltip>
-    );
+      <Tooltip id='faveTooltip' className='tooltip tooltip-top'>Remove this clip to your favorites!</Tooltip>
+    )
 
     if (!this.props.authenticated) {
       return <span />
@@ -34,14 +29,18 @@ class FavoriteButton extends Component {
 
     if (this.props.favoriteClips && this.props.favoriteClips.includes(this.props.clipId)) {
       return (
-        <OverlayTrigger placement="top" overlay={faveTooltipRemove}>
-          <button onClick={this.handleFavoriteRemove.bind(this)} className="btn btn-secondary"><i className="fa fa-heart favoriteClip"/></button>
+        <OverlayTrigger placement='top' overlay={faveTooltipRemove}>
+          <button onClick={this.handleFavoriteRemove.bind(this)} className='btn btn-secondary'>
+            <i className='fa fa-heart favoriteClip' />
+          </button>
         </OverlayTrigger>
       )
     } else {
       return (
-        <OverlayTrigger placement="top" overlay={faveTooltipAdd}>
-          <button onClick={this.handleFavoriteAdd.bind(this)} className="btn btn-secondary"><i className="fa fa-heart-o"/></button>
+        <OverlayTrigger placement='top' overlay={faveTooltipAdd}>
+          <button onClick={this.handleFavoriteAdd.bind(this)} className='btn btn-secondary'>
+            <i className='fa fa-heart-o' />
+          </button>
         </OverlayTrigger>
       )
     }
@@ -49,9 +48,8 @@ class FavoriteButton extends Component {
 
 }
 
-function mapStateToProps(state) {
-  return { authenticated: state.auth.authenticated,
-            favoriteClips: state.auth.favoriteClips };
+function mapStateToProps (state) {
+  return { authenticated: state.auth.authenticated, favoriteClips: state.auth.favoriteClips }
 }
 
-export default connect(mapStateToProps, actions)(FavoriteButton);
+export default connect(mapStateToProps, actions)(FavoriteButton)

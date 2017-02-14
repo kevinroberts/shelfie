@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {push} from 'redux-router';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { push } from 'redux-router'
 
-export default function(ComposedComponent) {
+export default function (ComposedComponent) {
   class Authentication extends Component {
 
-    componentWillMount() {
-      this.checkAuth(this.props.authenticated);
+    componentWillMount () {
+      this.checkAuth(this.props.authenticated)
     }
 
-    componentWillUpdate(nextProps) {
-      this.checkAuth(nextProps.authenticated);
+    componentWillUpdate (nextProps) {
+      this.checkAuth(nextProps.authenticated)
     }
 
     checkAuth (isAuthenticated) {
       if (!isAuthenticated) {
-        let redirectAfterLogin = this.props.location.pathname;
+        let redirectAfterLogin = this.props.location.pathname
         this.props
-          .dispatch(push(`/signin?next=${redirectAfterLogin}`));
+          .dispatch(push(`/signin?next=${redirectAfterLogin}`))
       }
     }
 
@@ -25,19 +25,17 @@ export default function(ComposedComponent) {
       return (
         <div>
           {this.props.authenticated === true
-            ? <ComposedComponent {...this.props}/>
+            ? <ComposedComponent {...this.props} />
             : null
           }
         </div>
       )
-
     }
-
   }
 
-  function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
+  function mapStateToProps (state) {
+    return {authenticated: state.auth.authenticated}
   }
 
-  return connect(mapStateToProps)(Authentication);
+  return connect(mapStateToProps)(Authentication)
 }

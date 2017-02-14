@@ -1,6 +1,6 @@
 import {
-  SEARCH_MY_CLIPS,
-} from '../actions/types';
+  SEARCH_MY_CLIPS
+} from '../actions/types'
 
 const INITIAL_STATE = {
   all: [],
@@ -10,13 +10,13 @@ const INITIAL_STATE = {
   title: '',
   sort: 'createdAt',
   limit: 20
-};
+}
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SEARCH_MY_CLIPS:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}

@@ -1,19 +1,19 @@
 import {
   ADD_UPLOADED_CLIP,
-  RESET_UPLOADED,
-} from '../actions/types';
+  RESET_UPLOADED
+} from '../actions/types'
 
 const INITIAL_STATE = {
   uploadedClips: []
-};
+}
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_UPLOADED_CLIP:
-      return { ...state, uploadedClips: [...state.uploadedClips, action.payload] };
+      return { ...state, uploadedClips: [...state.uploadedClips, action.payload] }
     case RESET_UPLOADED:
-      return { ...state, uploadedClips: [] };
+      return { ...state, uploadedClips: [] }
     default:
-      return state;
+      return state
   }
-};
+}

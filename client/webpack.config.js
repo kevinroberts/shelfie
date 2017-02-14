@@ -1,5 +1,5 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -12,11 +12,11 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: require.resolve("wavesurfer.js"), loader: "expose-loader?$!expose-loader?jQuery" },
+      { test: require.resolve('wavesurfer.js'), loader: 'expose-loader?$!expose-loader?jQuery' },
       { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
       {
         test: /\.css$/,
-        loader:'style!css!'
+        loader: 'style!css!'
       },
       {
         test: /\.scss$/,
@@ -39,8 +39,8 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     contentBase: './',
-    proxy:{
-      '/api/*' : {
+    proxy: {
+      '/api/*': {
         target: 'http://127.0.0.1:3090/',
         changeOrigin: true,
         pathRewrite: {
@@ -49,7 +49,7 @@ module.exports = {
       }
     },
     headers: {
-      "Cache-Control": "no-cache",
+      'Cache-Control': 'no-cache'
     }
   }
-};
+}

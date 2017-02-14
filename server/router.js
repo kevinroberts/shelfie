@@ -53,8 +53,6 @@ module.exports = function(app) {
 
   // Express only serves static assets in production
   if (env === 'prod') {
-
-
     // app.use((req, res, cb) => {
     //   res.status(404).sendFile(Path.join(PUBLIC_DIR, "errors/404.html"))
     // })

@@ -1,65 +1,58 @@
-import React from 'react';
+import React from 'react'
 
 const DownloadButton = React.createClass({
 
   propTypes: {
     filename: React.PropTypes.string,
     label: React.PropTypes.string,
-    style: React.PropTypes.object,
+    style: React.PropTypes.object
   },
 
-  getDefaultProps() {
+  getDefaultProps () {
     return {
       filename: 'file.txt',
       label: '',
-      style: {  },
+      style: {}
     }
   },
 
-  handleDownloadClick: function(event) {
-
-    function magicDownload(fileName){
-
+  handleDownloadClick: function (event) {
+    function magicDownload (fileName) {
       // create hidden link
-      var element = document.createElement('a');
-      document.body.appendChild(element);
-      element.setAttribute('href', fileName);
-      element.setAttribute('download', fileName);
-      element.style.display = '';
+      var element = document.createElement('a')
+      document.body.appendChild(element)
+      element.setAttribute('href', fileName)
+      element.setAttribute('download', fileName)
+      element.style.display = ''
 
-      element.click();
+      element.click()
 
-      document.body.removeChild(element);
-      event.stopPropagation();
+      document.body.removeChild(element)
+      event.stopPropagation()
     }
 
     magicDownload(this.props.filename)
-
   },
 
-  renderLabel() {
+  renderLabel () {
     if (!this.props.label) {
-      return <i className="fa fa-download" aria-hidden="true" />;
+      return <i className='fa fa-download' aria-hidden='true' />
     } else {
-      return <span></span>
+      return <span />
     }
   },
 
-  render: function() {
-
-    if (this.props.label) {
-
-    }
+  render: function () {
+    // if (this.props.label) {
+    //
+    // }
     return (
-      <button style={ this.props.style }
-         className={this.props.className}
-         onClick={ this.handleDownloadClick }>
+      <button style={this.props.style} className={this.props.className} onClick={this.handleDownloadClick}>
         {this.renderLabel}
-        <i className="fa fa-download" aria-hidden="true" />
+        <i className='fa fa-download' aria-hidden='true' />
       </button>
-    );
+    )
   }
 })
-
 
 export default DownloadButton

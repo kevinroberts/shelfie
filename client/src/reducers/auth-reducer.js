@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash'
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -7,7 +7,7 @@ import {
   REQUEST_SUCCESS,
   UPDATE_FAVORITE_CLIPS,
   FETCH_MESSAGE
-} from '../actions/types';
+} from '../actions/types'
 
 const INITIAL_STATE = {
   successMessage: '',
@@ -18,30 +18,45 @@ const INITIAL_STATE = {
   firstName: '',
   favoriteClips: [],
   lastName: ''
-};
+}
 
-export default function(state = INITIAL_STATE, action) {
-  switch(action.type) {
+export default function (state = INITIAL_STATE, action) {
+  switch (action.type) {
     case AUTH_USER:
-      return { ...state, successMessage: '', error: '', loginMessage: '', authenticated: true,
-        username: action.payload.username, email: action.payload.email,
+      return {
+        ...state,
+        successMessage: '',
+        error: '',
+        loginMessage: '',
+        authenticated: true,
+        username: action.payload.username,
+        email: action.payload.email,
         favoriteClips: action.payload.favoriteClips,
-        firstName: action.payload.firstName, lastName: action.payload.lastName };
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName
+      }
     case UNAUTH_USER:
-      return { ...state, authenticated: false,
-        username: '', email: '', fistName: '', favoriteClips: [],
-        lastName: '', loginMessage: _.has(action, 'payload.message') ? action.payload.message : '' };
+      return {
+        ...state,
+        authenticated: false,
+        username: '',
+        email: '',
+        fistName: '',
+        favoriteClips: [],
+        lastName: '',
+        loginMessage: _.has(action, 'payload.message') ? action.payload.message : ''
+      }
     case FETCH_PROFILE:
-      return {...state, user: action.payload.user};
+      return {...state, user: action.payload.user}
     case UPDATE_FAVORITE_CLIPS:
-      return {...state, favoriteClips: action.payload};
+      return {...state, favoriteClips: action.payload}
     case REQUEST_SUCCESS:
-      return { ...state };
+      return {...state}
     case EDIT_USER:
-      return { ...state, firstName: action.payload.firstName, lastName: action.payload.lastName, user: action.payload};
+      return {...state, firstName: action.payload.firstName, lastName: action.payload.lastName, user: action.payload}
     case FETCH_MESSAGE:
-      return { ...state, message: action.payload };
+      return {...state, message: action.payload}
   }
 
-  return state;
+  return state
 }
