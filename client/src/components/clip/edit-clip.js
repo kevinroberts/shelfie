@@ -303,16 +303,6 @@ class EditClip extends Component {
 
 }
 
-function validate (formProps) {
-  const errors = {}
-
-  if (!formProps.title) {
-    errors.title = 'Please enter a title.'
-  }
-
-  return errors
-}
-
 function mapStateToProps (state) {
   const {filterCriteria, clips, auth} = state
 
@@ -320,8 +310,7 @@ function mapStateToProps (state) {
 }
 
 const form = reduxForm({
-  form: 'edit-clip',
-  validate
+  form: 'edit-clip'
 })
 
 export default connect(mapStateToProps, actions)(form(EditClip))
