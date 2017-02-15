@@ -19,25 +19,25 @@ const Ellipsis = ({onClick}) => (
 
 const FirstPageLink = ({isActive, onClick}) => (
   <li className='page-item'>
-    <a className='page-link' href='javascript:void(0)' onClick={onClick}>&laquo</a>
+    <a className='page-link' href='javascript:void(0)' onClick={onClick}>&laquo;</a>
   </li>
 )
 
 const PreviousPageLink = ({isActive, onClick}) => (
   <li className='page-item'>
-    <a title='Previous page' className='page-link' href='javascript:void(0)' onClick={onClick}>&lsaquo</a>
+    <a title='Previous page' className='page-link' href='javascript:void(0)' onClick={onClick}>&lsaquo;</a>
   </li>
 )
 
 const NextPageLink = ({isActive, onClick}) => (
   <li className='page-item'>
-    <a title='Next page' className='page-link' href='javascript:void(0)' onClick={onClick}>&rsaquo</a>
+    <a title='Next page' className='page-link' href='javascript:void(0)' onClick={onClick}>&rsaquo;</a>
   </li>
 )
 
 const LastPageLink = ({isActive, onClick}) => (
   <li className='page-item'>
-    <a className='page-link' href='javascript:void(0)' onClick={onClick}>&raquo</a>
+    <a className='page-link' href='javascript:void(0)' onClick={onClick}>&raquo;</a>
   </li>
 )
 
