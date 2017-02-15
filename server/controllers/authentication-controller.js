@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const emailer = require('../services/email-helper')
 const Checkit = require('checkit')
 const Validator = require('../helpers/checkit-validation')
+const log = require('../helpers/logging')
 const xss = require('xss')
 
 function tokenForUser (user) {
@@ -15,6 +16,7 @@ function tokenForUser (user) {
 exports.signin = function (req, res, next) {
   // User has already had their email and password auth'd
   // We just need to give them a token
+  req.log.info('user sign in request ', req.user)
   res.send({ token: tokenForUser(req.user),
     username: req.user.username,
     email: req.user.email,
@@ -51,7 +53,7 @@ exports.signup = function (req, res, next) {
           password: validated.password
         })
 
-        user.save(function(err) {
+        user.save(function (err) {
           if (err) { return next(err) }
           // Respond to request indicating the user was created
           res.json({ token: tokenForUser(user), username: user.username, email: user.email, firstName: user.firstName, lastName: user.firstName, favoriteClips: [] })
@@ -59,7 +61,7 @@ exports.signup = function (req, res, next) {
       })
     })
   }).catch(function (err) {
-    console.log(err)
+    req.log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -77,7 +79,7 @@ exports.resetRequest = function (req, res, next) {
       function (token, done) {
         User.findOne({ email: validated.email }, function (err, user) {
           if (err) {
-            console.error('error occurred trying to fetch user for reset request', err)
+            log.error('error occurred trying to fetch user for reset request', err)
           }
           if (!user) {
             return res.status(422).send({ _error: 'No account with that email address exists' })
@@ -99,14 +101,14 @@ exports.resetRequest = function (req, res, next) {
       }
     ], function (err, response) {
       if (err) {
-        console.log('error sending reset request', err)
+        req.log.error('error sending reset request', err)
         return res.status(422).send({ _error: 'Error with sending email - please try again' })
       } else {
         return res.json({message: `An e-mail has been sent to ${validated.email} with further instructions.`})
       }
     })
   }).catch(function (err) {
-    console.log(err)
+    req.log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -118,7 +120,7 @@ exports.resetPassword = function (req, res, next) {
       function (done) {
         User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
           if (err) {
-            console.error('error occurred trying to fetch user for reset request reset token ' + req.params.token, err)
+            log.error('error occurred trying to fetch user for reset request reset token ' + req.params.token, err)
           }
           if (!user) {
             return res.status(422).send({ _error: 'Password reset token is invalid or has expired.' })
@@ -134,7 +136,7 @@ exports.resetPassword = function (req, res, next) {
           })
         })
       },
-      function(user, done) {
+      function (user, done) {
         // send the user a confirmation email that their password has just been changed
         emailer.sendPasswordChangedEmail(user, function (error, response) {
           done(error, response)
@@ -142,13 +144,13 @@ exports.resetPassword = function (req, res, next) {
       }
     ], function (err, response) {
       if (err) {
-        console.error('an error has occurred trying to send password change email', err)
+        log.error('an error has occurred trying to send password change email', err)
       } else {
         return res.json({message: `The password for your account has been updated.`})
       }
     })
   }).catch(function (err) {
-    console.log(err)
+    log.log(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -161,7 +163,7 @@ exports.getProfile = function (req, res, next) {
     const authedUser = req.user
 
     // find profile of given username
-    User.findOne({ username: username }, function(err, userProfile) {
+    User.findOne({ username: username }, function (err, userProfile) {
       if (err) { return next(err) }
 
       let user = { isOwnProfile: false }
@@ -182,7 +184,7 @@ exports.getProfile = function (req, res, next) {
       res.json({ user })
     })
   }).catch(function (err) {
-    console.log(err)
+    log.log(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -199,7 +201,7 @@ exports.editProfile = function (req, res, next) {
 
     async.waterfall([
       function (done) {
-        User.findOne({ username: authedUser.username }, function(err, userProfile) {
+        User.findOne({ username: authedUser.username }, function (err, userProfile) {
           if (err) { return next(err) }
 
           if (firstName && lastName) {
@@ -225,7 +227,6 @@ exports.editProfile = function (req, res, next) {
               }
 
               done(err, userProfile)
-
             })
           } else {
             userProfile.message = 'No changes were processed.'
@@ -243,13 +244,13 @@ exports.editProfile = function (req, res, next) {
       }
     ], function (err, user) {
       if (err) {
-        console.error('an error has occurred trying to edit profile', err)
+        log.error('an error has occurred trying to edit profile', err)
       } else {
         return res.json({ message: user.message, firstName: user.firstName, lastName: user.lastName, email: user.email, createdAt: user.createdAt, isOwnProfile: true })
       }
     })
-  }).catch( function(err) {
-    console.log('error trying to validate edit profile', err)
+  }).catch(function (err) {
+    log.log('error trying to validate edit profile', err)
     return res.status(422).send(err.toJSON())
   })
 }

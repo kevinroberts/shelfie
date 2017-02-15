@@ -1,4 +1,4 @@
-const Tag = require('../models/tag');
+const Tag = require('../models/tag')
 
 /**
  * Edits a single tag in the Tags collection
@@ -7,5 +7,5 @@ const Tag = require('../models/tag');
  * @return {promise} A promise that resolves when the record is edited
  */
 module.exports = (_id, tagProps) => {
-  return Tag.update({ _id }, tagProps);
-};
+  return Tag.update({ _id }, tagProps)
+}

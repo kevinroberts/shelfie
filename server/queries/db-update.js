@@ -1,53 +1,56 @@
-var MongoClient = require('mongodb').MongoClient;
-var _ = require('lodash');
+const log = require('../helpers/logging')
+var MongoClient = require('mongodb').MongoClient
+var _ = require('lodash')
 
-var getAllClips = function(db, callback) {
+var getAllClips = function (db, callback) {
   // Get the clips collection
-  var collection = db.collection('clips');
+  var collection = db.collection('clips')
 
-  collection.find({}).toArray(function(err, clips) {
-    // console.log("Found the following records");
-    // console.dir(clips);
-    callback(clips);
-  });
+  collection.find({}).toArray(function (err, clips) {
+    if (err) {
+      log.error('error on find', err)
+    }
+    // console.log('Found the following records')
+    // console.dir(clips)
+    callback(clips)
+  })
+}
 
-};
-
-var updateClip = function(db, clipToUpdate, callback) {
+var updateClip = function (db, clipToUpdate, callback) {
   // Get the clips collection and update the source URL
-  let oldSourceUrl = clipToUpdate.sourceUrl;
-  let newSourceUrl = '/static';
+  let oldSourceUrl = clipToUpdate.sourceUrl
+  let newSourceUrl = '/static'
 
-  oldSourceUrl = oldSourceUrl.substr(oldSourceUrl.indexOf('/clips/'), oldSourceUrl.length);
+  oldSourceUrl = oldSourceUrl.substr(oldSourceUrl.indexOf('/clips/'), oldSourceUrl.length)
 
-  newSourceUrl = newSourceUrl + oldSourceUrl;
-  console.log('new url ', newSourceUrl);
+  newSourceUrl = newSourceUrl + oldSourceUrl
+  log.debug('new url ', newSourceUrl)
 
-  var collection = db.collection('clips');
+  var collection = db.collection('clips')
 
-  collection.updateOne({ _id : clipToUpdate._id }
-    , { $set: { sourceUrl : newSourceUrl } }, function(err, result) {
+  collection.updateOne({ _id: clipToUpdate._id }
+    , { $set: { sourceUrl: newSourceUrl } }, function (err, result) {
       if (err) {
-        console.log('error ', err);
+        log.error('error on db update', err)
       }
-      callback(result);
-    });
-};
+      callback(result)
+    })
+}
 
-
-MongoClient.connect(process.env.MONGO_CONNECTION_STRING, function(err, db) {
-  console.log("Connected correctly to server");
+MongoClient.connect(process.env.MONGO_CONNECTION_STRING, function (err, db) {
+  if (err) {
+    log.error('could not connect to db', err)
+  }
+  log.debug('Connected correctly to db server')
 
   getAllClips(db, function (clips) {
-    console.log("clips returned: ", clips.length);
+    log.debug('clips returned: ', clips.length)
     _.forEach(clips, function (clip) {
-      console.log("clip - ", clip._id);
+      log.debug('clip - ', clip._id)
       updateClip(db, clip, function (result) {
-        console.log("clip updated.");
-      });
+        log.debug('clip updated.')
+      })
     })
-  });
-});
-
-
+  })
+})
 

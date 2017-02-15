@@ -1,4 +1,4 @@
-const Clip = require('../models/clip');
+const Clip = require('../models/clip')
 
 /**
  * Edits a single clip in the Clips collection
@@ -7,5 +7,5 @@ const Clip = require('../models/clip');
  * @return {promise} A promise that resolves when the record is edited
  */
 module.exports = (_id, clipProps) => {
-  return Clip.update({ _id }, clipProps);
-};
+  return Clip.update({ _id }, clipProps)
+}

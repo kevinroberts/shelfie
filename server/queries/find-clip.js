@@ -1,4 +1,4 @@
-const Clip = require('../models/clip');
+const Clip = require('../models/clip')
 
 /**
  * Finds a single clip in the clip collection.
@@ -10,5 +10,5 @@ module.exports = (_id) => {
     path: 'tags'
   }).populate({
     path: '_creator'
-  });
-};
+  })
+}

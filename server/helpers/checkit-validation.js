@@ -1,6 +1,6 @@
-const Clip = require('../models/clip');
-const Tag = require('../models/tag');
-const User = require('../models/user');
+const Clip = require('../models/clip')
+const Tag = require('../models/tag')
+const User = require('../models/user')
 
 exports.signUpValidation = {
   firstName: [{
@@ -44,37 +44,39 @@ exports.signUpValidation = {
     rule: 'email',
     message: 'A valid email address is required to register.'
   }]
-};
+}
 
 exports.getProfileValidation = {
-  username: [{rule: 'required',
-    message: 'A username is required.'},
-    {
-      rule: function(val, params, context) {
-        var query = User.findOne({username: val});
-
-        return query.then(function (user) {
-          if (!user) {
-            throw new Error('You must provide a valid username.');
-          }
-        });
-      }}],
-};
+  username: [{
+    rule: 'required',
+    message: 'A username is required.'
+  },
+  {
+    rule: function (val, params, context) {
+      var query = User.findOne({username: val})
+      return query.then(function (user) {
+        if (!user) {
+          throw new Error('You must provide a valid username.')
+        }
+      })
+    }
+  }]
+}
 
 exports.editProfileValidation = {
   password: [{
     rule: 'minLength:7',
     message: 'Your password must contain a minimum of 7 characters.'
   }],
-  firstName: [ {
+  firstName: [{
     rule: 'maxLength:50',
     message: 'Sorry, we cannot store first names longer than 50 characters.'
   }],
-  lastName: [ {
+  lastName: [{
     rule: 'maxLength:50',
     message: 'Sorry, we cannot store last names longer than 50 characters.'
   }]
-};
+}
 
 exports.resetRequestValidation = {
   email: [{
@@ -84,7 +86,7 @@ exports.resetRequestValidation = {
     rule: 'email',
     message: 'You must provide a valid email address.'
   }]
-};
+}
 
 exports.resetPasswordValidation = {
   password: [{
@@ -94,37 +96,39 @@ exports.resetPasswordValidation = {
     rule: 'minLength:7',
     message: 'Your password must contain a minimum of 7 characters.'
   }]
-};
+}
 
 exports.clipValidation = {
   title: [{
     rule: 'minLength:3',
     message: 'Your title must be a minimum of 3 characters.'
-  }, {rule: 'required',
-    message: 'A clip title is required.'},
-    {
-      rule: function(val, params, context) {
-        var query = Clip.findOne({title: val});
-
-        return query.then(function (existingClip) {
-          if (existingClip) {
-            throw new Error('A clip with that title already exists. Please select a different title.');
-          }
-        });
-      }}],
-  sourceUrl: [ {
+  }, {
+    rule: 'required',
+    message: 'A clip title is required.'
+  },
+  {
+    rule: function (val, params, context) {
+      var query = Clip.findOne({title: val})
+      return query.then(function (existingClip) {
+        if (existingClip) {
+          throw new Error('A clip with that title already exists. Please select a different title.')
+        }
+      })
+    }
+  }],
+  sourceUrl: [{
     rule: 'required',
     message: 'You must provide a source url'
   }],
-  description: [ {
+  description: [{
     rule: 'maxLength:200',
     message: 'Description must be less than 200 characters'
   }],
-  length: [ {
+  length: [{
     rule: 'numeric',
     message: 'The length must be a numeric value (measured in milliseconds)'
   }]
-};
+}
 
 exports.favoritesValidation = {
   clipId: [{
@@ -135,7 +139,7 @@ exports.favoritesValidation = {
     rule: 'required',
     message: 'A type of action is required (add / remove ).'
   }]
-};
+}
 
 exports.editTagValidation = {
   _id: [{
@@ -144,17 +148,17 @@ exports.editTagValidation = {
   }],
   name: [
     {
-      rule: function(val, params, context) {
-        var query = Tag.findOne({name: val});
+      rule: function (val, params, context) {
+        var query = Tag.findOne({name: val})
 
         return query.then(function (existingTag) {
           if (existingTag) {
-            throw new Error('A tag with that name already exists. Please select a different name.');
+            throw new Error('A tag with that name already exists. Please select a different name.')
           }
-        });
-      }}]
-};
-
+        })
+      }
+    }]
+}
 
 exports.editClipValidation = {
   _id: [{
@@ -163,25 +167,26 @@ exports.editClipValidation = {
   }],
   title: [
     {
-    rule: function(val, params, context) {
-      var query = Clip.findOne({title: val});
+      rule: function (val, params, context) {
+        var query = Clip.findOne({title: val})
 
-      return query.then(function (existingClip) {
-        if (existingClip) {
-          throw new Error('A clip with that title already exists. Please select a different title.');
-        }
-      });
-  }}],
-  sourceUrl: [ {
+        return query.then(function (existingClip) {
+          if (existingClip) {
+            throw new Error('A clip with that title already exists. Please select a different title.')
+          }
+        })
+      }
+    }],
+  sourceUrl: [{
     rule: 'minLength:3',
     message: 'You must provide a source url'
   }],
-  description: [ {
+  description: [{
     rule: 'maxLength:200',
     message: 'Description must be less than 200 characters'
   }],
-  length: [ {
+  length: [{
     rule: 'numeric',
     message: 'The length must be a numeric value (measured in milliseconds)'
   }]
-};
+}

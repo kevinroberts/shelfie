@@ -1,5 +1,6 @@
-const Tag = require('../models/tag');
-const env = require('get-env')();
+const log = require('../helpers/logging')
+const Tag = require('../models/tag')
+const now = require('performance-now')
 
 /**
  * Searches through the Tag collection
@@ -14,38 +15,35 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
   const query = Tag.find(buildQuery(criteria))
     .sort({ [sortProperty]: 1 })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
 
-  if (env !== 'prod') {
-    console.time('search tags operation');
-  }
+  var t0 = now()
 
   return Promise.all([query, Tag.find(buildQuery(criteria)).count()])
     .then((results) => {
-      if (env !== 'prod') {
-        console.timeEnd('search tags operation');
-      }
+      var t1 = now()
+      log.debug('search tags operation finished took: ' + (t1 - t0).toFixed(3) + ' milliseconds.')
       return {
         all: results[0],
         count: results[1],
         offset: offset,
-        totalPages: Math.ceil(results[1]/ limit),
+        totalPages: Math.ceil(results[1] / limit),
         currentPage: offset / limit + 1,
         limit: limit
-      };
-    });
-};
+      }
+    })
+}
 
 const buildQuery = (criteria) => {
-  const query = {};
+  const query = {}
 
   if (criteria.name) {
-    query.$text = { $search: criteria.name };
+    query.$text = { $search: criteria.name }
   }
 
   if (criteria.clips) {
-    query.clips = { $in : criteria.clips }
+    query.clips = { $in: criteria.clips }
   }
 
-  return query;
-};
+  return query
+}

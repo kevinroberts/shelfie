@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 var RemovedClipSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' },
-  clipId : { type: String },
+  clipId: { type: String },
   title: { type: String, unique: false, required: true },
   sourceUrl: String,
   description: String,
@@ -14,12 +14,11 @@ var RemovedClipSchema = new Schema({
   fileSize: Number, // number in bytes 16000 -> 16kB
   processed: Boolean,
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-}, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }});
-
+  updatedAt: { type: Date, default: Date.now }
+}, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }})
 
 // Create the model class
-const ModelClass = mongoose.model('RemovedClip', RemovedClipSchema);
+const ModelClass = mongoose.model('RemovedClip', RemovedClipSchema)
 
 // Export the model
-module.exports = ModelClass;
+module.exports = ModelClass

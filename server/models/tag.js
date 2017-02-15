@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 var TagSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -7,10 +7,10 @@ var TagSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   clips: [{ type: Schema.Types.ObjectId, ref: 'Clip' }]
-}, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }});
+}, {timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }})
 
 // Create the model class
-const ModelClass = mongoose.model('Tag', TagSchema);
+const ModelClass = mongoose.model('Tag', TagSchema)
 
 // Export the model
-module.exports = ModelClass;
+module.exports = ModelClass
