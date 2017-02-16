@@ -41,8 +41,8 @@ class Paginator extends Component {
 
         <UltimatePagination currentPage={this.props.currentPage} totalPages={this.props.totalPages} onChange={this.onPageChangeFromPagination} />
 
-        <div className='invisible'>
-          {this.props.count} Clips Found
+        <div className='small text-muted clip-count'>
+          ({this.props.count} total Clips)
         </div>
       </div>
     )
