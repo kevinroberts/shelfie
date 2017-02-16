@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../../actions'
 import LibraryFilter from './my-library-filter'
 import Paginator from './my-paginator'
+import DocumentTitle from 'react-document-title'
 // import Clip from '../clip/clip-reduxAudio-card';
 import Clip from '../../clip/clip-sound'
 
@@ -44,23 +45,25 @@ class MyLibrary extends Component {
 
   render () {
     return (
-      <div className='row'>
-        <div className='col-sm-12'>
-          {this.renderTitle()}
-          {this.renderSubTitle()}
-          <div className='row'>
-            <LibraryFilter queryParams={this.props.location} />
-            <div className='col-sm-10'>
-              <div className='card-columns'>
-                {this.renderList()}
-              </div>
-              <div className='row'>
-                {this.renderPaginator()}
+      <DocumentTitle title={'Shelfie - ' + this.props.username + '\'s library'}>
+        <div className='row'>
+          <div className='col-sm-12'>
+            {this.renderTitle()}
+            {this.renderSubTitle()}
+            <div className='row'>
+              <LibraryFilter queryParams={this.props.location} />
+              <div className='col-sm-10'>
+                <div className='card-columns'>
+                  {this.renderList()}
+                </div>
+                <div className='row'>
+                  {this.renderPaginator()}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </DocumentTitle>
     )
   }
 }
@@ -69,6 +72,7 @@ function mapStateToProps (state) {
   const { filterCriteria, auth, myClips } = state
 
   return { authenticated: auth.authenticated,
+    username: auth.username,
     activeTag: filterCriteria.tag,
     clips: myClips }
 }

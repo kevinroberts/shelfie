@@ -51,6 +51,7 @@
     "react-addons-css-transition-group": "^15.4.1",
     "react-audio-player": "^0.3.0",
     "react-bootstrap": "^0.30.7",
+    "react-document-title": "^2.0.2",
     "react-dom": "^15.4.2",
     "react-fine-uploader": "^0.3.0",
     "react-gravatar": "^2.6.1",
