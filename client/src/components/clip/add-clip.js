@@ -17,6 +17,10 @@ class AddClip extends Component {
     }
   }
 
+  componentDidMount () {
+    this.props.resetUploadedClips()
+  }
+
   clearRecentUploads () {
     this.props.resetUploadedClips()
   }
