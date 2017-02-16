@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Field, reduxForm, SubmissionError } from 'redux-form'
 import * as actions from '../../actions'
+import DocumentTitle from 'react-document-title'
 import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -66,31 +67,31 @@ class ResetRequest extends Component {
     const {error, handleSubmit, submitting} = this.props
 
     return (
+      <DocumentTitle title={'Shelfie - Password reset'}>
+        <div className='row form-gap'>
+          {this.renderSuccess()}
+          <div className={'col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
+            <div className='card card-block'>
+              <div className='text-xs-center'>
+                <i className='fa fa-lock fa-4x' aria-hidden='true' />
+                <h4 className='card-title text-center'>Forgot Password?</h4>
+                <p className='card-text'>You can reset your password here.</p>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='form'>
+                  <Field name='email' type='email' component={this.renderField} label='Email' placeholder='email address' />
 
-      <div className='row form-gap'>
-        {this.renderSuccess()}
-        <div className={'col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
-          <div className='card card-block'>
-            <div className='text-xs-center'>
-              <i className='fa fa-lock fa-4x' aria-hidden='true' />
-              <h4 className='card-title text-center'>Forgot Password?</h4>
-              <p className='card-text'>You can reset your password here.</p>
-              <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='form'>
-                <Field name='email' type='email' component={this.renderField} label='Email' placeholder='email address' />
-
-                <div className='form-group'>
-                  {error && <div className='alert alert-danger'><strong>Error!</strong> {error}</div>}
-                  <button className='btn btn-lg btn-primary btn-block' type='submit' disabled={submitting}>Reset
-                    Password
-                  </button>
-                </div>
-              </form>
+                  <div className='form-group'>
+                    {error && <div className='alert alert-danger'><strong>Error!</strong> {error}</div>}
+                    <button className='btn btn-lg btn-primary btn-block' type='submit' disabled={submitting}>Reset
+                      Password
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
+
           </div>
-
         </div>
-      </div>
-
+      </DocumentTitle>
     )
   }
 }

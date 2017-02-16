@@ -6,6 +6,7 @@ import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import LocalStorageUtils from '../../utils/local-storage-utils'
+import DocumentTitle from 'react-document-title'
 
 class ResetPassword extends Component {
 
@@ -84,23 +85,25 @@ class ResetPassword extends Component {
     const {handleSubmit, submitting} = this.props
 
     return (
-      <div className='row form-gap'>
-        {this.renderSuccess()}
-        <div className={'card col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
-          <div className='card-block'>
-            <h4 className='card-title'>Choose a new password</h4>
-            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='card-text'>
+      <DocumentTitle title={'Shelfie - Password reset'}>
+        <div className='row form-gap'>
+          {this.renderSuccess()}
+          <div className={'card col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
+            <div className='card-block'>
+              <h4 className='card-title'>Choose a new password</h4>
+              <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='card-text'>
 
-              <Field name='password' type='password' component={this.renderField} label='New Password:' placeholder='new password' />
+                <Field name='password' type='password' component={this.renderField} label='New Password:' placeholder='new password' />
 
-              <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password:' placeholder='confirm password' />
+                <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password:' placeholder='confirm password' />
 
-              {this.renderAlert()}
-              <button action='submit' className='btn btn-primary' disabled={submitting}>Reset Password!</button>
-            </form>
+                {this.renderAlert()}
+                <button action='submit' className='btn btn-primary' disabled={submitting}>Reset Password!</button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </DocumentTitle>
     )
   }
 

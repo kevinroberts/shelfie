@@ -4,6 +4,7 @@ import * as actions from '../../actions'
 import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import DocumentTitle from 'react-document-title'
 
 class Signup extends Component {
 
@@ -40,29 +41,31 @@ class Signup extends Component {
     const {error, handleSubmit, submitting} = this.props
 
     return (
-      <div className='row form-gap'>
-        <div className='col-sm-7 col-md-5 offset-md-3'>
-          <form className='card' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-            <h3 className='card-header'><i className='fa fa-user-plus' aria-hidden='true' /> Sign up</h3>
-            <div className='card-block'>
-              <label>Name:</label>
+      <DocumentTitle title={'Shelfie - Please sign in'}>
+        <div className='row form-gap'>
+          <div className='col-sm-7 col-md-5 offset-md-3'>
+            <form className='card' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+              <h3 className='card-header'><i className='fa fa-user-plus' aria-hidden='true' /> Sign up</h3>
+              <div className='card-block'>
+                <label>Name:</label>
 
-              <div className='row sign-up-name'>
-                <Field name='firstName' type='text' component={this.renderInlineField} label='First Name' />
-                <Field name='lastName' type='text' component={this.renderInlineField} label='Last Name' />
+                <div className='row sign-up-name'>
+                  <Field name='firstName' type='text' component={this.renderInlineField} label='First Name' />
+                  <Field name='lastName' type='text' component={this.renderInlineField} label='Last Name' />
+                </div>
+
+                <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Your Username' />
+                <Field name='email' type='email' component={this.renderField} label='Email ' placeholder='Your Email' />
+                <Field name='password' type='password' component={this.renderField} label='Password' placeholder='New Password' />
+                <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password' placeholder='Re-enter Password' />
+                {error && <div className='error row'>{error}</div>}
+
+                <button action='submit' className='btn btn-primary' disabled={submitting}>Sign up!</button>
               </div>
-
-              <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Your Username' />
-              <Field name='email' type='email' component={this.renderField} label='Email ' placeholder='Your Email' />
-              <Field name='password' type='password' component={this.renderField} label='Password' placeholder='New Password' />
-              <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password' placeholder='Re-enter Password' />
-              {error && <div className='error row'>{error}</div>}
-
-              <button action='submit' className='btn btn-primary' disabled={submitting}>Sign up!</button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
+      </DocumentTitle>
     )
   }
 }

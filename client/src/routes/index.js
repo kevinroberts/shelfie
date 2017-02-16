@@ -2,7 +2,6 @@ import React from 'react'
 import {Route, IndexRedirect} from 'react-router'
 import App from '../components/app'
 import Profile from '../components/profile'
-import Feature from '../components/feature'
 import Library from '../components/library/public-library'
 import Signin from '../components/auth/signin'
 import Signout from '../components/auth/signout'
@@ -38,7 +37,6 @@ export default(
     <Route path='resetPassword/:key' component={ResetPassword} />
     <Route path='resetRequest' component={ResetRequest} />
     <Route path='add-clip' component={RequireAuth(AddClip)} />
-    <Route path='feature' component={RequireAuth(Feature)} />
     <Route path='404' component={PageNotFound} />
     <Route path='*' component={PageNotFound} />
   </Route>
