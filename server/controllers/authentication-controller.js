@@ -60,7 +60,7 @@ exports.signup = function (req, res, next) {
       })
     })
   }).catch(function (err) {
-    log.log(err)
+    log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -100,14 +100,14 @@ exports.resetRequest = function (req, res, next) {
       }
     ], function (err, response) {
       if (err) {
-        req.log.error('error sending reset request', err)
+        log.error('error sending reset request', err)
         return res.status(422).send({ _error: 'Error with sending email - please try again' })
       } else {
         return res.json({message: `An e-mail has been sent to ${validated.email} with further instructions.`})
       }
     })
   }).catch(function (err) {
-    log.log(err)
+    log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -149,7 +149,7 @@ exports.resetPassword = function (req, res, next) {
       }
     })
   }).catch(function (err) {
-    log.log(err)
+    log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -183,7 +183,7 @@ exports.getProfile = function (req, res, next) {
       res.json({ user })
     })
   }).catch(function (err) {
-    log.log(err)
+    log.error(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -249,7 +249,7 @@ exports.editProfile = function (req, res, next) {
       }
     })
   }).catch(function (err) {
-    log.log('error trying to validate edit profile', err)
+    log.error('error trying to validate edit profile', err)
     return res.status(422).send(err.toJSON())
   })
 }

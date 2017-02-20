@@ -122,7 +122,7 @@ exports.getClips = function (req, res, next) {
   SearchClips(params.criteria, params.sort, params.sortOrder, params.offset, params.limit).then((result = []) =>
     res.json(result)
   ).catch(function (err) {
-    log.log('query error:', err)
+    log.error('query error:', err)
     res.status(500).send({_error: 'A server error occurred while trying to process your request. Please try again later.'})
   })
 }
