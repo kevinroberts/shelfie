@@ -60,7 +60,7 @@ exports.signup = function (req, res, next) {
       })
     })
   }).catch(function (err) {
-    req.log.error(err)
+    log.log(err)
     return res.status(422).send(err.toJSON())
   })
 }
@@ -107,7 +107,7 @@ exports.resetRequest = function (req, res, next) {
       }
     })
   }).catch(function (err) {
-    req.log.error(err)
+    log.log(err)
     return res.status(422).send(err.toJSON())
   })
 }

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcrypt-nodejs')
 mongoose.Promise = global.Promise
 
-// Define our model
+// Define our User model
 const userSchema = new Schema({
   username: { type: String, unique: true },
   email: { type: String, unique: true, lowercase: true },
@@ -13,6 +13,7 @@ const userSchema = new Schema({
   timezone: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  isAdmin: { type: Boolean, default: false },
   favoriteClips: [{ type: Schema.Types.ObjectId, ref: 'Clip' }],
   clips: [{ type: Schema.Types.ObjectId, ref: 'Clip' }],
   createdAt: { type: Date, default: Date.now },
