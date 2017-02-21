@@ -20,7 +20,7 @@ let createStoreWithMiddleware = compose(
   reduxReactRouter({routes, createHistory})
 )
 
-const store = createStoreWithMiddleware(createStore)(reducers, window.__INITIAL_STATE__)
+const store = createStoreWithMiddleware(createStore)(reducers, process.env.NODE_ENV !== 'production' ? window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() : window.__INITIAL_STATE__)
 
 const token = LocalStorageUtils.getToken()
 // If we have a token, consider the user to be signed in

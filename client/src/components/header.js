@@ -63,6 +63,7 @@ class Header extends Component {
 
   render () {
     let authVisible = this.props.authenticated ? '' : 'invisible'
+    let adminVisible = this.props.isAdmin ? '' : 'invisible'
 
     return (
       <nav className='navbar navbar-fixed-top navbar-dark bg-primary' role='navigation'>
@@ -78,11 +79,15 @@ class Header extends Component {
               </NavLink>
 
               <NavLink to='/my-favorites' className={'nav-link ' + authVisible}>
-                Favorites
+                <i className='fa fa-heart' aria-hidden='true' /> Favorites
               </NavLink>
 
               <NavLink to='/add-clip' className={'nav-link ' + authVisible}>
                 <i className='fa fa-plus' aria-hidden='true' /> Add Clip
+              </NavLink>
+
+              <NavLink to='/admin' className={'nav-link ' + adminVisible}>
+                <i className='fa fa-cog' aria-hidden='true' /> Admin
               </NavLink>
 
             </ul>
@@ -104,6 +109,7 @@ class Header extends Component {
 function mapStateToProps (state) {
   return {
     authenticated: state.auth.authenticated,
+    isAdmin: state.auth.isAdmin,
     username: state.auth.username,
     email: state.auth.email
   }

@@ -6,7 +6,6 @@ import Qs from 'qs'
 import {
   AUTH_USER,
   UNAUTH_USER,
-  FETCH_MESSAGE,
   FETCH_PROFILE,
   EDIT_USER,
   SET_TAG_LIST,
@@ -17,6 +16,7 @@ import {
   FIND_CLIP,
   ADD_UPLOADED_CLIP,
   RESET_UPLOADED,
+  LOAD_SETTINGS,
   UPDATE_FAVORITE_CLIPS,
   REMOVE_CLIP,
   REQUEST_SUCCESS
@@ -297,15 +297,15 @@ export function findClip (id) {
   }
 }
 
-export function fetchMessage () {
+export function fetchSiteSettings () {
   return function (dispatch) {
-    axios.get(`${ROOT_URL}/message`, {
+    axios.get(`${ROOT_URL}/settings`, {
       headers: {authorization: LocalStorageUtils.getToken()}
     })
       .then(response => {
         dispatch({
-          type: FETCH_MESSAGE,
-          payload: response.data.message
+          type: LOAD_SETTINGS,
+          payload: response.data
         })
       })
   }

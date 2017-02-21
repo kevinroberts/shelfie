@@ -3,8 +3,8 @@ const ClipController = require('./controllers/clip-controller')
 const TagController = require('./controllers/tag-controller')
 const FavoritesController = require('./controllers/favorites-controller')
 const UploadController = require('./controllers/uploads-controller')
-const passportService = require('./services/passport')
-const passport = require('passport')
+const SiteSettingsController = require('./controllers/site-controller')
+const passport = require('./services/passport')
 const path = require('path')
 const express = require('express')
 const env = require('get-env')()
@@ -13,9 +13,8 @@ const bruteforce = require('./services/bruteforce_check')
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
 
-module.exports = function(app) {
-
-  app.get('/message', requireAuth, function(req, res) {
+module.exports = function (app) {
+  app.get('/message', requireAuth, function (req, res) {
     res.send({ message: 'You have successfully authenticated' })
   })
   app.get('/profile', requireAuth, Authentication.getProfile)
@@ -49,6 +48,10 @@ module.exports = function(app) {
   // handle user uploads
   app.post('/uploads', requireAuth, UploadController.onUpload)
   app.delete('/uploads/:uuid', UploadController.onDeleteFile)
+
+  // handle site settings
+  app.get('/settings', requireAuth, SiteSettingsController.getSiteSettings)
+  app.post('/settings', requireAuth, SiteSettingsController.editSiteSettings)
 
   // Express only serves static assets in production
   if (env === 'prod') {

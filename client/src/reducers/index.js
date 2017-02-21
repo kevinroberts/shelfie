@@ -7,6 +7,7 @@ import MyClipReducer from './MyClipReducer'
 import MyFavoritesReducer from './MyFavoritesReducer'
 import FilterCriteriaReducer from './FilterCriteriaReducer'
 import UploadedReducer from './uploaded-reducer'
+import SiteSettingsReducer from './site-settings-reducer'
 import { audioReducer as audio } from 'redux-audio'
 import {reducer as notifications} from 'react-notification-system-redux'
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   myClips: MyClipReducer,
   myFavorites: MyFavoritesReducer,
   filterCriteria: FilterCriteriaReducer,
+  site: SiteSettingsReducer,
   audio,
   uploaded: UploadedReducer,
   auth: authReducer,

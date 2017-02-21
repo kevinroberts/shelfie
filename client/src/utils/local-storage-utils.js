@@ -94,6 +94,7 @@ const util = {
         firstName: responseData.data.firstName,
         favoriteClips: responseData.data.favoriteClips,
         lastName: responseData.data.lastName,
+        isAdmin: responseData.data.isAdmin,
         username: responseData.data.username
       }, { days: days })
     }

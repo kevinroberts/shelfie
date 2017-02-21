@@ -5,8 +5,7 @@ import {
   FETCH_PROFILE,
   EDIT_USER,
   REQUEST_SUCCESS,
-  UPDATE_FAVORITE_CLIPS,
-  FETCH_MESSAGE
+  UPDATE_FAVORITE_CLIPS
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -33,6 +32,7 @@ export default function (state = INITIAL_STATE, action) {
         email: action.payload.email,
         favoriteClips: action.payload.favoriteClips,
         firstName: action.payload.firstName,
+        isAdmin: action.payload.isAdmin,
         lastName: action.payload.lastName
       }
     case UNAUTH_USER:
@@ -41,6 +41,7 @@ export default function (state = INITIAL_STATE, action) {
         authenticated: false,
         username: '',
         email: '',
+        isAdmin: false,
         fistName: '',
         favoriteClips: [],
         lastName: '',
@@ -54,8 +55,6 @@ export default function (state = INITIAL_STATE, action) {
       return {...state}
     case EDIT_USER:
       return {...state, firstName: action.payload.firstName, lastName: action.payload.lastName, user: action.payload}
-    case FETCH_MESSAGE:
-      return {...state, message: action.payload}
   }
 
   return state

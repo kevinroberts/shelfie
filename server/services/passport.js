@@ -52,3 +52,4 @@ const jwtLogin = new JwtStrategy(jwtOptions, function (payload, done) {
 // Tell passport to use this strategy
 passport.use(jwtLogin)
 passport.use(localLogin)
+module.exports = passport

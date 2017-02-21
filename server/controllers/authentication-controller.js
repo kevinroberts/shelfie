@@ -21,6 +21,7 @@ exports.signin = function (req, res, next) {
     email: req.user.email,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
+    isAdmin: req.user.isAdmin,
     favoriteClips: req.user.favoriteClips })
 }
 
@@ -55,7 +56,7 @@ exports.signup = function (req, res, next) {
         user.save(function (err) {
           if (err) { return next(err) }
           // Respond to request indicating the user was created
-          res.json({ token: tokenForUser(user), username: user.username, email: user.email, firstName: user.firstName, lastName: user.firstName, favoriteClips: [] })
+          res.json({ token: tokenForUser(user), username: user.username, email: user.email, firstName: user.firstName, isAdmin: false, lastName: user.firstName, favoriteClips: [] })
         })
       })
     })

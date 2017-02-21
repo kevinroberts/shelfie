@@ -24,7 +24,7 @@ const app = express()
 const router = require('./router')
 const mongoose = require('mongoose')
 // const cors = require('cors')
-// require('./queries/db-update') // DB import helper script
+require('./queries/db-update') // DB init helper script
 
 // DB Setup
 mongoose.connect(process.env.MONGO_CONNECTION_STRING)

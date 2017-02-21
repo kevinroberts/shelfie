@@ -1,6 +1,7 @@
 const Clip = require('../models/clip')
 const Tag = require('../models/tag')
 const User = require('../models/user')
+const Site = require('../models/site')
 
 exports.signUpValidation = {
   firstName: [{
@@ -29,6 +30,15 @@ exports.signUpValidation = {
   }, {
     rule: 'maxLength:60',
     message: 'Your username cannot be longer than 60 characters.'
+  }, {
+    rule: function (val, params, context) {
+      var query = Site.findOne({runModeID: process.env.NODE_ENV})
+      return query.then(function (site) {
+        if (site.registrationEnabled === false) {
+          throw new Error('Sorry, new user registrations are currently only available by invite only.')
+        }
+      })
+    }
   }],
   password: [{
     rule: 'required',
