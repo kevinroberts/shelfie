@@ -27,10 +27,18 @@ class ViewClip extends Component {
     this.handlePosChange = this.handlePosChange.bind(this)
     this.handleFinish = this.handleFinish.bind(this)
     this.handleStop = this.handleStop.bind(this)
+    this.handleOnReady = this.handleOnReady.bind(this)
   }
 
   componentDidMount () {
     this.props.findClip(this.props.params.id)
+  }
+
+  // sets up auto-play when clip is ready
+  handleOnReady () {
+    this.setState({
+      playing: true
+    })
   }
 
   handleFinish () {
@@ -116,6 +124,7 @@ class ViewClip extends Component {
                 audioFile={clip.sourceUrl}
                 pos={this.state.pos}
                 onPosChange={this.handlePosChange}
+                onReady={this.handleOnReady}
                 playing={this.state.playing}
                 onFinish={this.handleFinish}
               />
