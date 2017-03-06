@@ -96,7 +96,7 @@ function renderFullPage (meta, req) {
     <html>
       <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# music: http://ogp.me/ns/music#">
         ${meta}
-        <meta property="og:url" content="http://vinberts.com${req.url}" />
+        <meta property="og:url" content="https://vinberts.com${req.url}" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
