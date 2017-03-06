@@ -73,29 +73,30 @@ module.exports = function (app) {
         console.log('this is a clip page', match)
         FindClip(match[1]).then((result = []) => {
           if (result) {
-            console.log('rendering clip meta', renderFullPage(getClipMeta(result)))
-            res.send(renderFullPage(getClipMeta(result)))
+            console.log('rendering clip meta', renderFullPage(getClipMeta(result), req))
+            res.send(renderFullPage(getClipMeta(result), req))
           } else {
             res.send(renderFullPage(getBaseMeta()))
           }
         }).catch(function (err) {
           log.error('find clip query error:', err)
-          res.send(renderFullPage(''))
+          res.send(renderFullPage(getBaseMeta(), req))
         })
       } else {
-        res.send(renderFullPage(getBaseMeta()))
+        res.send(renderFullPage(getBaseMeta(), req))
       }
       // res.sendFile(path.resolve(`${process.env.STATIC_SERVE_DIR}/index.html`))
     })
   }
 }
 
-function renderFullPage (meta) {
+function renderFullPage (meta, req) {
   return `
     <!doctype html>
     <html>
       <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# music: http://ogp.me/ns/music#">
         ${meta}
+        <meta property="og:url" content="http://vinberts.com${req.url}" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
