@@ -55,7 +55,7 @@ function onSimpleUpload (fields, file, res, user) {
   var responseData = {success: false}
 
   file.name = fields.qqfilename
-  file.ext = path.extname(file.path)
+  file.ext = path.extname(file.path).toLowerCase()
 
   if (isValid(file.size)) {
     // if file is valid -- process it and add to the User's clip inventory
