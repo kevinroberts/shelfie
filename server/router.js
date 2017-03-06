@@ -71,8 +71,9 @@ module.exports = function (app) {
       var match = RegExp('^/clip/(.*)$', 'g').exec(req.url)
       if (match) {
         console.log('this is a clip page', match)
-        FindClip(match[0]).then((result = []) => {
+        FindClip(match[1]).then((result = []) => {
           if (result) {
+            console.log('rendering clip meta', renderFullPage(getClipMeta(result)))
             res.send(renderFullPage(getClipMeta(result)))
           } else {
             res.send(renderFullPage(getBaseMeta()))
@@ -93,7 +94,7 @@ function renderFullPage (meta) {
   return `
     <!doctype html>
     <html>
-      <head>
+      <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# music: http://ogp.me/ns/music#">
         ${meta}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -135,7 +136,8 @@ function getClipMeta (clip) {
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="music.song" />
     <meta property="og:title" content="${clip.title}" />
-    <meta property="og:url" content="https://vinberts.com${clip.sourceUrl}" />
+    <meta property="og:site_name" content="Shelfie" />
+    <meta property="og:audio" content="https://vinberts.com${clip.sourceUrl}" />
     `
 }
 

@@ -59,7 +59,7 @@ class MyLibrary extends Component {
           {this.renderTitle()}
           {this.renderSubTitle()}
           <div className='row'>
-            <LibraryFilter queryParams={this.props.location}/>
+            <LibraryFilter queryParams={this.props.location} />
             <div className='col-sm-10'>
               <div className='card-columns'>
                 {this.renderList()}
