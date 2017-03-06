@@ -138,6 +138,7 @@ function getClipMeta (clip) {
     <meta property="og:type" content="music.song" />
     <meta property="og:title" content="${clip.title}" />
     <meta property="og:site_name" content="Shelfie" />
+    <meta property="og:image" content="/static/img/favicon/favicon-96x96.png" />
     <meta property="og:audio" content="https://vinberts.com${clip.sourceUrl}" />
     `
 }
@@ -147,5 +148,6 @@ function getBaseMeta () {
     <title>Shelfie - Library</title>
     <meta property="og:description" content="Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account." />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="/static/img/favicon/favicon-96x96.png" />
     `
 }
