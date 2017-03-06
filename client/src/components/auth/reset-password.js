@@ -6,7 +6,7 @@ import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import LocalStorageUtils from '../../utils/local-storage-utils'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 
 class ResetPassword extends Component {
 
@@ -24,7 +24,7 @@ class ResetPassword extends Component {
     return (
       <fieldset className='form-group'>
         <label>{label}</label>
-        <input {...input} placeholder={placeholder} className='form-control' type={type} />
+        <input {...input} placeholder={placeholder} className='form-control' type={type}/>
         {touched && error && <div className='error'>{error}</div>}
       </fieldset>
     )
@@ -85,25 +85,32 @@ class ResetPassword extends Component {
     const {handleSubmit, submitting} = this.props
 
     return (
-      <DocumentTitle title={'Shelfie - Password reset'}>
-        <div className='row form-gap'>
-          {this.renderSuccess()}
-          <div className={'card col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
-            <div className='card-block'>
-              <h4 className='card-title'>Choose a new password</h4>
-              <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='card-text'>
+      <div className='row form-gap'>
+        <Helmet title={'Shelfie - Password reset'}
+                meta={[
+                  {
+                    name: 'description',
+                    content: 'Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account.'
+                  },
+                  {property: 'og:type', content: 'website'}
+                ]}
+        />
+        {this.renderSuccess()}
+        <div className={'card col-sm-6 col-md-4 offset-md-4 ' + this.state.hiddenForm}>
+          <div className='card-block'>
+            <h4 className='card-title'>Choose a new password</h4>
+            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className='card-text'>
 
-                <Field name='password' type='password' component={this.renderField} label='New Password:' placeholder='new password' />
+              <Field name='password' type='password' component={this.renderField} label='New Password:' placeholder='new password' />
 
-                <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password:' placeholder='confirm password' />
+              <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password:' placeholder='confirm password' />
 
-                {this.renderAlert()}
-                <button action='submit' className='btn btn-primary' disabled={submitting}>Reset Password!</button>
-              </form>
-            </div>
+              {this.renderAlert()}
+              <button action='submit' className='btn btn-primary' disabled={submitting}>Reset Password!</button>
+            </form>
           </div>
         </div>
-      </DocumentTitle>
+      </div>
     )
   }
 

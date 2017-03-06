@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 
 class Signout extends Component {
   componentWillMount () {
@@ -10,9 +10,21 @@ class Signout extends Component {
 
   render () {
     return (
-      <DocumentTitle title={'Shelfie - sign out'}>
-        <div>Sorry to see you go...</div>
-      </DocumentTitle>
+      <div className='row form-gap'>
+        <Helmet title={'Shelfie - Sign out'}
+                meta={[
+                  {
+                    name: 'description',
+                    content: 'Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account.'
+                  },
+                  {property: 'og:type', content: 'website'}
+                ]}
+        />
+        <center>
+          <iframe src='//giphy.com/embed/d2Zktmc1QMCTXtfi' width='480' height='360' frameBorder='0' class='giphy-embed' allowFullScreen />
+          <h1>See yah!</h1>
+        </center>
+      </div>
     )
   }
 }

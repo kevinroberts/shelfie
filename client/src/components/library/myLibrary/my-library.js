@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../../actions'
 import LibraryFilter from './my-library-filter'
 import Paginator from './my-paginator'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 // import Clip from '../clip/clip-reduxAudio-card';
 import Clip from '../../clip/clip-sound'
 
@@ -11,7 +11,7 @@ class MyLibrary extends Component {
 
   renderPaginator () {
     if (this.props.clips.all.length) {
-      return <Paginator queryParams={this.props.location} />
+      return <Paginator queryParams={this.props.location}/>
     }
   }
 
@@ -45,36 +45,45 @@ class MyLibrary extends Component {
 
   render () {
     return (
-      <DocumentTitle title={'Shelfie - ' + this.props.username + '\'s library'}>
-        <div className='row'>
-          <div className='col-sm-12'>
-            {this.renderTitle()}
-            {this.renderSubTitle()}
-            <div className='row'>
-              <LibraryFilter queryParams={this.props.location} />
-              <div className='col-sm-10'>
-                <div className='card-columns'>
-                  {this.renderList()}
-                </div>
-                <div className='row'>
-                  {this.renderPaginator()}
-                </div>
+      <div className='row'>
+        <Helmet title={'Shelfie - ' + this.props.username + '\'s library'}
+          meta={[
+            {
+              name: 'description',
+              content: 'A collection of ' + this.props.username + '\'s clips on Shelfie.'
+            },
+            {property: 'og:type', content: 'website'}
+          ]}
+        />
+        <div className='col-sm-12'>
+          {this.renderTitle()}
+          {this.renderSubTitle()}
+          <div className='row'>
+            <LibraryFilter queryParams={this.props.location}/>
+            <div className='col-sm-10'>
+              <div className='card-columns'>
+                {this.renderList()}
+              </div>
+              <div className='row'>
+                {this.renderPaginator()}
               </div>
             </div>
           </div>
         </div>
-      </DocumentTitle>
+      </div>
     )
   }
 }
 
 function mapStateToProps (state) {
-  const { filterCriteria, auth, myClips } = state
+  const {filterCriteria, auth, myClips} = state
 
-  return { authenticated: auth.authenticated,
+  return {
+    authenticated: auth.authenticated,
     username: auth.username,
     activeTag: filterCriteria.tag,
-    clips: myClips }
+    clips: myClips
+  }
 }
 
 export default connect(mapStateToProps, actions)(MyLibrary)

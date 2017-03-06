@@ -4,14 +4,14 @@ import * as actions from '../../actions'
 import { ROOT_URL } from '../../actions/index'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 
 class Signup extends Component {
 
   renderField ({input, label, type, placeholder, meta: {touched, error}}) {
     return (<fieldset className='form-group'>
       <label>{label + ':'}</label>
-      <input {...input} placeholder={placeholder} className='form-control' type={type} />
+      <input {...input} placeholder={placeholder} className='form-control' type={type}/>
       {touched && error && <div className='error'>{error}</div>}
     </fieldset>)
   }
@@ -19,7 +19,7 @@ class Signup extends Component {
   renderInlineField ({input, label, type, meta: {touched, error}}) {
     return (<div className='col-xs-6 col-md-6'>
       <label className='sr-only'>{label}</label>
-      <input className='form-control' {...input} placeholder={label} type={type} />
+      <input className='form-control' {...input} placeholder={label} type={type}/>
       {touched && error && <div className='error row'>{error}</div>}
     </div>)
   }
@@ -41,31 +41,38 @@ class Signup extends Component {
     const {error, handleSubmit, submitting} = this.props
 
     return (
-      <DocumentTitle title={'Shelfie - Please sign in'}>
-        <div className='row form-gap'>
-          <div className='col-sm-7 col-md-5 offset-md-3'>
-            <form className='card' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-              <h3 className='card-header'><i className='fa fa-user-plus' aria-hidden='true' /> Sign up</h3>
-              <div className='card-block'>
-                <label>Name:</label>
+      <div className='row form-gap'>
+        <Helmet title={'Shelfie - new user registration'}
+                meta={[
+                  {
+                    name: 'description',
+                    content: 'Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account.'
+                  },
+                  {property: 'og:type', content: 'website'}
+                ]}
+        />
+        <div className='col-sm-7 col-md-5 offset-md-3'>
+          <form className='card' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            <h3 className='card-header'><i className='fa fa-user-plus' aria-hidden='true' /> Sign up</h3>
+            <div className='card-block'>
+              <label>Name:</label>
 
-                <div className='row sign-up-name'>
-                  <Field name='firstName' type='text' component={this.renderInlineField} label='First Name' />
-                  <Field name='lastName' type='text' component={this.renderInlineField} label='Last Name' />
-                </div>
-
-                <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Your Username' />
-                <Field name='email' type='email' component={this.renderField} label='Email ' placeholder='Your Email' />
-                <Field name='password' type='password' component={this.renderField} label='Password' placeholder='New Password' />
-                <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password' placeholder='Re-enter Password' />
-                {error && <div className='error row'>{error}</div>}
-
-                <button action='submit' className='btn btn-primary' disabled={submitting}>Sign up!</button>
+              <div className='row sign-up-name'>
+                <Field name='firstName' type='text' component={this.renderInlineField} label='First Name' />
+                <Field name='lastName' type='text' component={this.renderInlineField} label='Last Name' />
               </div>
-            </form>
-          </div>
+
+              <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Your Username' />
+              <Field name='email' type='email' component={this.renderField} label='Email ' placeholder='Your Email' />
+              <Field name='password' type='password' component={this.renderField} label='Password' placeholder='New Password' />
+              <Field name='passwordConfirm' type='password' component={this.renderField} label='Confirm Password' placeholder='Re-enter Password' />
+              {error && <div className='error row'>{error}</div>}
+
+              <button action='submit' className='btn btn-primary' disabled={submitting}>Sign up!</button>
+            </div>
+          </form>
         </div>
-      </DocumentTitle>
+      </div>
     )
   }
 }

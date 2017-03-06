@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { ROOT_URL } from '../../actions/index'
@@ -38,7 +38,7 @@ class AddClip extends Component {
     }
     return this.props.uploadedClips.map(function (clip) {
       return (
-        <UploadedClip key={clip.id} clip={clip} />
+        <UploadedClip key={clip.id} clip={clip}/>
       )
     })
   }
@@ -89,29 +89,36 @@ class AddClip extends Component {
     })
 
     return (
-      <DocumentTitle title={'Shelfie - Add / Upload Clips'}>
-        <div className='row col-sm-7 col-md-6 offset-md-3'>
-          <div className='card'>
-            <div className='card-header'>
-              Upload new audio clips (wav or mp3)
-            </div>
-            <div className='card-block'>
-              <h4 className='card-title'>Click below to select files from your computer</h4>
-              {this.state.errorMsg &&
-              <div className='alert alert-danger'><strong>Error!</strong> {this.state.errorMsg}</div>}
+      <div className='row col-sm-7 col-md-6 offset-md-3'>
+        <Helmet title={'Shelfie - Add / Upload Clips'}
+                meta={[
+                  {
+                    name: 'description',
+                    content: 'Add new clips to shelfie and expand the collection.'
+                  },
+                  {property: 'og:type', content: 'website'}
+                ]}
+        />
+        <div className='card'>
+          <div className='card-header'>
+            Upload new audio clips (wav or mp3)
+          </div>
+          <div className='card-block'>
+            <h4 className='card-title'>Click below to select files from your computer</h4>
+            {this.state.errorMsg &&
+            <div className='alert alert-danger'><strong>Error!</strong> {this.state.errorMsg}</div>}
 
-              <Gallery uploader={uploader} />
+            <Gallery uploader={uploader}/>
 
-              <div className='uploaded-clips'>
-                {this.renderClearButton()}
-                {this.renderUploadedClips()}
-              </div>
-
+            <div className='uploaded-clips'>
+              {this.renderClearButton()}
+              {this.renderUploadedClips()}
             </div>
 
           </div>
+
         </div>
-      </DocumentTitle>
+      </div>
     )
   }
 }

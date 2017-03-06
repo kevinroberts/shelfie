@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import _ from 'lodash'
 import { Link } from 'react-router'
-import DocumentTitle from 'react-document-title'
+import Helmet from 'react-helmet'
 
 class Signin extends Component {
 
@@ -22,7 +22,7 @@ class Signin extends Component {
     return (
       <span>
         <label className='sr-only'>{label}</label>
-        <input {...input} placeholder={placeholder} className='form-control' type={type} />
+        <input {...input} placeholder={placeholder} className='form-control' type={type}/>
         {touched && error && <div className='error'>{error}</div>}
       </span>
     )
@@ -32,7 +32,7 @@ class Signin extends Component {
     return (
       <div className='form-check pull-left need-help'>
         <label className='form-check-label'>
-          <input {...input} className='form-check-input' type={type} />
+          <input {...input} className='form-check-input' type={type}/>
           {label}
         </label>
       </div>
@@ -75,32 +75,41 @@ class Signin extends Component {
     const {error, handleSubmit, submitting} = this.props // pristine, reset (available too)
 
     return (
-      <DocumentTitle title={'Shelfie - Please sign in'}>
-        <div className='row form-gap'>
-          <div className='col-sm-6 col-md-4 offset-md-4'>
-            {this.renderMessage()}
-            <h1 className='text-xs-center login-title'>Sign in to continue</h1>
+      <div className='row form-gap'>
+        <Helmet title={'Shelfie - Please sign in'}
+                meta={[
+                  {
+                    name: 'description',
+                    content: 'Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account.'
+                  },
+                  {property: 'og:type', content: 'website'}
+                ]}
+        />
+        <div className='col-sm-6 col-md-4 offset-md-4'>
+          {this.renderMessage()}
+          <h1 className='text-xs-center login-title'>Sign in to continue</h1>
 
-            <div className='account-wall'>
-              <img className='profile-img' src='/static/img/photo.png' alt='empty profile image' />
-              <form className='form-signin' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Username or Email' />
-                <Field name='password' type='password' component={this.renderField} label='Password' placeholder='Password' />
+          <div className='account-wall'>
+            <img className='profile-img' src='/static/img/photo.png' alt='empty profile image'/>
+            <form className='form-signin' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+              <Field name='username' type='text' component={this.renderField} label='Username'
+                     placeholder='Username or Email'/>
+              <Field name='password' type='password' component={this.renderField} label='Password'
+                     placeholder='Password'/>
 
-                {error && <div className='alert alert-danger'><strong>Error!</strong> {error}</div>}
-                <button action='submit' className='btn btn-lg btn-primary btn-block' disabled={submitting}>Sign in
-                </button>
+              {error && <div className='alert alert-danger'><strong>Error!</strong> {error}</div>}
+              <button action='submit' className='btn btn-lg btn-primary btn-block' disabled={submitting}>Sign in
+              </button>
 
-                <Field name='rememberMe' type='checkbox' component={this.renderCheckboxField} label='Remember me' />
+              <Field name='rememberMe' type='checkbox' component={this.renderCheckboxField} label='Remember me'/>
 
-                <Link to='/resetRequest' className='pull-right need-help'>Need help? </Link>
-                <span className='clearfix' />
-              </form>
-            </div>
-            <Link to='/signup' className='text-center new-account'>Create an account </Link>
+              <Link to='/resetRequest' className='pull-right need-help'>Need help? </Link>
+              <span className='clearfix'/>
+            </form>
           </div>
+          <Link to='/signup' className='text-center new-account'>Create an account </Link>
         </div>
-      </DocumentTitle>
+      </div>
     )
   }
 }
