@@ -5,10 +5,11 @@ const FavoritesController = require('./controllers/favorites-controller')
 const UploadController = require('./controllers/uploads-controller')
 const SiteSettingsController = require('./controllers/site-controller')
 const passport = require('./services/passport')
-const path = require('path')
 const express = require('express')
 const env = require('get-env')()
 const bruteforce = require('./services/bruteforce_check')
+const FindClip = require('./queries/find-clip')
+const log = require('./helpers/logging')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
@@ -66,7 +67,82 @@ module.exports = function (app) {
     app.use(express.static(process.env.STATIC_SERVE_DIR))
 
     app.get('*', (req, res) => {
-      res.sendFile(path.resolve(`${process.env.STATIC_SERVE_DIR}/index.html`))
+      console.log('request url: ', req.url)
+      var match = RegExp('^/clip/(.*)$', 'g').exec(req.url)
+      if (match) {
+        console.log('this is a clip page', match)
+        FindClip(match[0]).then((result = []) => {
+          if (result) {
+            res.send(renderFullPage(getClipMeta(result)))
+          } else {
+            res.send(renderFullPage(getBaseMeta()))
+          }
+        }).catch(function (err) {
+          log.error('find clip query error:', err)
+          res.send(renderFullPage(''))
+        })
+      } else {
+        res.send(renderFullPage(getBaseMeta()))
+      }
+      // res.sendFile(path.resolve(`${process.env.STATIC_SERVE_DIR}/index.html`))
     })
   }
+}
+
+function renderFullPage (meta) {
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        ${meta}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/style.css" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/static/img/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
+      </head>
+      <body>
+      <div id="root"></div>
+      <!--Bootstrap 4 libraries-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+      <!--main javascript bundle-->
+      <script src="/bundle.js"></script>
+      </body>
+    </html>
+    `
+}
+
+function getClipMeta (clip) {
+  var description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
+  return `
+    <title>${clip.title}</title>
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="music.song" />
+    <meta property="og:title" content="${clip.title}" />
+    <meta property="og:url" content="https://vinberts.com${clip.sourceUrl}" />
+    `
+}
+
+function getBaseMeta () {
+  return `
+    <title>Shelfie - Library</title>
+    <meta property="og:description" content="Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account." />
+    <meta property="og:type" content="website" />
+    `
 }

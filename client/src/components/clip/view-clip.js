@@ -36,9 +36,9 @@ class ViewClip extends Component {
 
   // sets up auto-play when clip is ready
   handleOnReady () {
-    this.setState({
-      playing: true
-    })
+    // this.setState({
+    //   playing: true
+    // })
   }
 
   handleFinish () {
@@ -94,17 +94,7 @@ class ViewClip extends Component {
 
     return (
       <div>
-        <Helmet title={clip.title}
-          meta={[
-            {
-              name: 'description',
-              content: clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
-            },
-            {property: 'og:type', content: 'music.song'},
-            {property: 'og:title', content: clip.title},
-            {property: 'og:url', content: `https://vinberts.com${clip.sourceUrl}`}
-          ]}
-        />
+        <Helmet title={clip.title} />
         <ActionsBar />
         <div className='row md-content-spacer'>
           <div className='col-sm-7 offset-sm-2'>

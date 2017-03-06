@@ -90,21 +90,19 @@ class Signin extends Component {
           <h1 className='text-xs-center login-title'>Sign in to continue</h1>
 
           <div className='account-wall'>
-            <img className='profile-img' src='/static/img/photo.png' alt='empty profile image'/>
+            <img className='profile-img' src='/static/img/photo.png' alt='empty profile image' />
             <form className='form-signin' onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-              <Field name='username' type='text' component={this.renderField} label='Username'
-                     placeholder='Username or Email'/>
-              <Field name='password' type='password' component={this.renderField} label='Password'
-                     placeholder='Password'/>
+              <Field name='username' type='text' component={this.renderField} label='Username' placeholder='Username or Email' />
+              <Field name='password' type='password' component={this.renderField} label='Password' placeholder='Password' />
 
               {error && <div className='alert alert-danger'><strong>Error!</strong> {error}</div>}
               <button action='submit' className='btn btn-lg btn-primary btn-block' disabled={submitting}>Sign in
               </button>
 
-              <Field name='rememberMe' type='checkbox' component={this.renderCheckboxField} label='Remember me'/>
+              <Field name='rememberMe' type='checkbox' component={this.renderCheckboxField} label='Remember me' />
 
               <Link to='/resetRequest' className='pull-right need-help'>Need help? </Link>
-              <span className='clearfix'/>
+              <span className='clearfix' />
             </form>
           </div>
           <Link to='/signup' className='text-center new-account'>Create an account </Link>
