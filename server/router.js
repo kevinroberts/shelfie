@@ -117,6 +117,26 @@ function renderFullPage (meta, req) {
         <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
+        <!-- Piwik -->
+<script type="text/javascript">
+    var _paq = _paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+    var u="//vinberts.piwikpro.com//";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 1]);
+    var d=document, g=d.createElement('script'), 
+    s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; 
+    g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+<noscript><p>
+  <img src="//vinberts.piwikpro.com/piwik.php?idsite=1" 
+  style="border:0;" alt="" /></p>
+  </noscript>
+<!-- End Piwik Code -->
       </head>
       <body>
       <div id="root"></div>
@@ -136,12 +156,14 @@ function getClipMeta (clip) {
   let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
   return `
     <title>${clip.title}</title>
+    <meta property="og:title" content="${clip.title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="music.song" />
     <meta property="music:duration" content="${duration}" />
     <meta property="og:title" content="${clip.title}" />
     <meta property="og:site_name" content="Shelfie" />
     <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
+    <meta property="og:image:secure_url" content="https://vinberts.com/static/img/wave.jpg" />
     <meta property="og:audio" content="https://vinberts.com${clip.sourceUrl}" />
     <meta property="og:audio:secure_url" content="https://vinberts.com${clip.sourceUrl}" />
     `
@@ -153,5 +175,6 @@ function getBaseMeta () {
     <meta property="og:description" content="Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
+    <meta property="og:image:secure_url" content="https://vinberts.com/static/img/wave.jpg" />
     `
 }
