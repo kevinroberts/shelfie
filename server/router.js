@@ -10,6 +10,7 @@ const env = require('get-env')()
 const bruteforce = require('./services/bruteforce_check')
 const FindClip = require('./queries/find-clip')
 const log = require('./helpers/logging')
+const xss = require('xss')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
@@ -68,7 +69,7 @@ module.exports = function (app) {
 
     app.get('*', (req, res) => {
       console.log('request url: ', req.url)
-      var match = RegExp('^/clip/(.*)$', 'g').exec(req.url)
+      var match = RegExp('^/clip/([0-9a-fA-F]{24}).*$', 'g').exec(req.url)
       if (match) {
         console.log('this is a clip page', match)
         FindClip(match[1]).then((result = []) => {
@@ -96,7 +97,7 @@ function renderFullPage (meta, req) {
     <html>
       <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# music: http://ogp.me/ns/music#">
         ${meta}
-        <meta property="og:url" content="https://vinberts.com${req.url}" />
+        <meta property="og:url" content="https://vinberts.com${xss(req.url, {})}" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -136,10 +137,12 @@ function getClipMeta (clip) {
     <title>${clip.title}</title>
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="music.song" />
+    <meta property="music:duration" content="${clip.length / 1000}" />
     <meta property="og:title" content="${clip.title}" />
     <meta property="og:site_name" content="Shelfie" />
-    <meta property="og:image" content="https://vinberts.com/static/img/favicon/favicon-96x96.png" />
+    <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
     <meta property="og:audio" content="https://vinberts.com${clip.sourceUrl}" />
+    <meta property="og:audio:secure_url" content="https://vinberts.com${clip.sourceUrl}" />
     `
 }
 
@@ -148,6 +151,6 @@ function getBaseMeta () {
     <title>Shelfie - Library</title>
     <meta property="og:description" content="Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://vinberts.com/static/img/favicon/favicon-96x96.png" />
+    <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
     `
 }
