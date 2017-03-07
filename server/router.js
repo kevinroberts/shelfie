@@ -155,7 +155,7 @@ function renderFullPage (meta, req) {
 function getClipMeta (clip) {
   let description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
   let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
-  let sourceUrl = `https://vinberts.com${queryString.stringify(clip.sourceUrl)}`
+  let sourceUrl = `https://vinberts.com${queryString.escape(clip.sourceUrl)}`
   return `
     <title>${clip.title}</title>
     <meta property="og:title" content="${clip.title}" />
