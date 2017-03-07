@@ -155,7 +155,8 @@ function renderFullPage (meta, req) {
 function getClipMeta (clip) {
   let description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
   let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
-  let sourceUrl = `https://vinberts.com${queryString.escape(clip.sourceUrl)}`
+  let sourceUrl = `http://vinberts.com${queryString.escape(clip.sourceUrl)}`
+  let sourceUrlSecure = `https://vinberts.com${queryString.escape(clip.sourceUrl)}`
   return `
     <title>${clip.title}</title>
     <meta property="og:title" content="${clip.title}" />
@@ -166,7 +167,7 @@ function getClipMeta (clip) {
     <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
     <meta property="og:image:secure_url" content="https://vinberts.com/static/img/wave.jpg" />
     <meta property="og:audio" content="${sourceUrl}" />
-    <meta property="og:audio:secure_url" content="${sourceUrl}" />
+    <meta property="og:audio:secure_url" content="${sourceUrlSecure}" />
     <meta property="og:audio:type" content="audio/vnd.facebook.bridge" />
     `
 }
