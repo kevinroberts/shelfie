@@ -11,7 +11,6 @@ const bruteforce = require('./services/bruteforce_check')
 const FindClip = require('./queries/find-clip')
 const log = require('./helpers/logging')
 const xss = require('xss')
-const queryString = require('querystring');
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
@@ -155,8 +154,8 @@ function renderFullPage (meta, req) {
 function getClipMeta (clip) {
   let description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
   let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
-  let sourceUrl = `http://vinberts.com${queryString.escape(clip.sourceUrl)}`
-  let sourceUrlSecure = `https://vinberts.com${queryString.escape(clip.sourceUrl)}`
+  let sourceUrl = `http://vinberts.com${encodeURI(clip.sourceUrl)}`
+  let sourceUrlSecure = `https://vinberts.com${encodeURI(clip.sourceUrl)}`
   return `
     <title>${clip.title}</title>
     <meta property="og:title" content="${clip.title}" />
