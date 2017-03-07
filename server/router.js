@@ -132,12 +132,13 @@ function renderFullPage (meta, req) {
 }
 
 function getClipMeta (clip) {
-  var description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
+  let description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
+  let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
   return `
     <title>${clip.title}</title>
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="music.song" />
-    <meta property="music:duration" content="${clip.length / 1000}" />
+    <meta property="music:duration" content="${duration}" />
     <meta property="og:title" content="${clip.title}" />
     <meta property="og:site_name" content="Shelfie" />
     <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
