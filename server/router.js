@@ -117,26 +117,6 @@ function renderFullPage (meta, req) {
         <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
-        <!-- Piwik -->
-<script type="text/javascript">
-    var _paq = _paq || [];
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
-    (function() {
-    var u="//vinberts.piwikpro.com//";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', 1]);
-    var d=document, g=d.createElement('script'), 
-    s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; 
-    g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-    })();
-    </script>
-<noscript><p>
-  <img src="//vinberts.piwikpro.com/piwik.php?idsite=1" 
-  style="border:0;" alt="" /></p>
-  </noscript>
-<!-- End Piwik Code -->
       </head>
       <body>
       <div id="root"></div>
