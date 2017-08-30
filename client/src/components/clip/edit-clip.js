@@ -113,6 +113,8 @@ class EditClip extends Component {
       headers: {authorization: LocalStorageUtils.getToken()}
     })
       .then(response => {
+        // update reducers
+        this.props.updateClips(values)
         // display a success message to the user
         this.setState({requestSuccess: true, successMessage: response.data.message})
         setTimeout(() => {

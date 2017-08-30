@@ -19,6 +19,7 @@ import {
   LOAD_SETTINGS,
   UPDATE_FAVORITE_CLIPS,
   REMOVE_CLIP,
+  UPDATE_CLIPS,
   REQUEST_SUCCESS
 } from './types'
 
@@ -58,6 +59,15 @@ export function editUser (response, passwordChanged) {
     } else {
       dispatch({type: EDIT_USER, payload: response.data})
     }
+  }
+}
+
+/* updateClips
+ *  Accepts a newly updated clip and updates the reducer state with the new clip details
+ */
+export function updateClips (updatedClip) {
+  return function (dispatch) {
+    dispatch({type: UPDATE_CLIPS, payload: updatedClip})
   }
 }
 

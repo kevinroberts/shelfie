@@ -14,6 +14,7 @@ const xss = require('xss')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
+const BASE_URL = process.env.HOST_URL;
 
 module.exports = function (app) {
   app.get('/message', requireAuth, function (req, res) {
@@ -56,6 +57,7 @@ module.exports = function (app) {
   app.post('/settings', requireAuth, SiteSettingsController.editSiteSettings)
 
   // Express only serves static assets in production
+  // production will proxy the API through an HTTP server like NGINX
   if (env === 'prod') {
     // app.use((req, res, cb) => {
     //   res.status(404).sendFile(Path.join(PUBLIC_DIR, "errors/404.html"))
@@ -97,7 +99,7 @@ function renderFullPage (meta, req) {
     <html>
       <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# music: http://ogp.me/ns/music#">
         ${meta}
-        <meta property="og:url" content="https://vinberts.com${xss(req.url, {})}" />
+        <meta property="og:url" content="${BASE_URL}${xss(req.url, {})}" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -134,7 +136,7 @@ function renderFullPage (meta, req) {
 function getClipMeta (clip) {
   let description = clip.description || `a clip titled ${clip.title} by ${clip._creator.username}`
   let duration = clip.length < 1000 ? 1 : Math.round(clip.length / 1000)
-  let sourceUrlSecure = `https://vinberts.com${encodeURI(clip.sourceUrl)}`
+  let sourceUrlSecure = `${BASE_URL}${encodeURI(clip.sourceUrl)}`
   return `
     <title>${clip.title}</title>
     <meta property="og:title" content="${clip.title}" />
@@ -142,8 +144,8 @@ function getClipMeta (clip) {
     <meta property="og:type" content="website" />
     <meta property="music:duration" content="${duration}" />
     <meta property="og:site_name" content="Shelfie" />
-    <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
-    <meta property="og:image:secure_url" content="https://vinberts.com/static/img/wave.jpg" />
+    <meta property="og:image" content="${BASE_URL}/static/img/wave.jpg" />
+    <meta property="og:image:secure_url" content="${BASE_URL}/static/img/wave.jpg" />
     <meta property="og:audio:secure_url" content="${sourceUrlSecure}" />
     <meta property="og:audio:type" content="audio/vnd.facebook.bridge" />
     `
@@ -155,7 +157,7 @@ function getBaseMeta () {
     <meta property="og:description" content="Shelfie is a web based application to manage and organize WAV sound files (clips) for a group of users. WAV files can be created and updated from any user account." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Shelfie - Audio Clip Library" />
-    <meta property="og:image" content="https://vinberts.com/static/img/wave.jpg" />
-    <meta property="og:image:secure_url" content="https://vinberts.com/static/img/wave.jpg" />
+    <meta property="og:image" content="${BASE_URL}/static/img/wave.jpg" />
+    <meta property="og:image:secure_url" content="${BASE_URL}/static/img/wave.jpg" />
     `
 }

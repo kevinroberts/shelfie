@@ -221,7 +221,7 @@ exports.removeClip = function (req, res, next) {
     return res.status(422).send({_error: 'Clip ID is not valid'})
   }
 
-  var query = Clip.findOne({_id: clipId})
+  const query = Clip.findOne({_id: clipId})
 
   query.then(function (clip) {
     if (!clip._creator.equals(authedUser._id)) {
