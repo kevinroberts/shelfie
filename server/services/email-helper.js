@@ -7,7 +7,7 @@ function resetEmail (toEmail, resetLink) {
   const toEmailObj = new helper.Email(toEmail)
   const subject = 'Shelfie Password Reset'
 
-  const content = new helper.Content('text/plain', `Please visit this link to reset your password (only valid for the next hour):\n 
+  const content = new helper.Content('text/plain', `Please visit this link to reset your password (the link will only be valid for the next hour):\n 
    ${resetLink} \n\n
    If you did not request this, please ignore this email and your password will remain unchanged.`)
 
@@ -32,14 +32,14 @@ function passwordChangedEmail (user) {
 
 function send (toSend, callback) {
   const sg = require('sendgrid')(process.env.SENDGRID_API_KEY)
-  var requestBody = toSend
-  var emptyRequest = require('sendgrid-rest').request
-  var requestPost = JSON.parse(JSON.stringify(emptyRequest))
+  let requestBody = toSend
+  let emptyRequest = require('sendgrid-rest').request
+  let requestPost = JSON.parse(JSON.stringify(emptyRequest))
   requestPost.method = 'POST'
   requestPost.path = '/v3/mail/send'
   requestPost.body = requestBody
   sg.API(requestPost, function (error, response) {
-    log.debug('send-grid email sent: ', response.statusCode)
+    log.debug('send-grid email sent with status code: ', response.statusCode)
     log.debug(response.body)
     log.debug(response.headers)
     callback(error, response)

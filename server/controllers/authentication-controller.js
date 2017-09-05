@@ -1,4 +1,4 @@
-const jwt = require('jwt-simple')
+const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 const async = require('async')
 const crypto = require('crypto')
@@ -10,7 +10,8 @@ const xss = require('xss')
 
 function tokenForUser (user) {
   const timestamp = new Date().getTime()
-  return jwt.encode({ sub: user.id, iat: timestamp }, process.env.APP_SECRET)
+  // tokens will expire 1 day after they are issued
+  return jwt.sign({ sub: user.id, iat: timestamp }, process.env.APP_SECRET, { expiresIn: '1d' })
 }
 
 exports.signin = function (req, res, next) {
@@ -72,7 +73,7 @@ exports.resetRequest = function (req, res, next) {
     async.waterfall([
       function (done) {
         crypto.randomBytes(20, function (err, buf) {
-          var token = buf.toString('hex')
+          const token = buf.toString('hex')
           done(err, token)
         })
       },

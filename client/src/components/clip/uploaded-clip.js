@@ -39,7 +39,7 @@ class UploadedClip extends Component {
         method: 'post',
         url: `${ROOT_URL}/edit-clip`,
         data: submitObj,
-        headers: { authorization: LocalStorageUtils.getToken() }
+        headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
       })
         .then(response => {
           this.refs.submitBtn.disabled = false

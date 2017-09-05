@@ -48,7 +48,7 @@ class ProfileEdit extends Component {
       data: {
         ...values
       },
-      headers: {authorization: LocalStorageUtils.getToken()}
+      headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
     }).then(response => {
       this.props.reset()
 

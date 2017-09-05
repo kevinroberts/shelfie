@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.1.4",
-    "aws-sdk": "^2.7.11",
+    "aws-sdk": "^2.109.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
     "bunyan": "^1.8.5",
@@ -24,7 +24,9 @@
     "express-brute": "^1.0.1",
     "express-brute-mongo": "^1.0.0",
     "get-env": "^0.5.10",
+    "jsonwebtoken": "^7.4.3",
     "jwt-simple": "^0.5.0",
+    "lodash": "^4.17.4",
     "moment": "^2.16.0",
     "mongodb": "^2.2.11",
     "mongoose": "^4.4.7",
@@ -33,14 +35,15 @@
     "musicmetadata": "^2.0.5",
     "nodemon": "^1.9.1",
     "passport": "^0.3.2",
-    "passport-jwt": "^2.0.0",
+    "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
-    "performance-now": "^2.0.0",
+    "performance-now": "^2.1.0",
     "rimraf": "^2.5.4",
     "rotating-file-stream": "^1.1.9",
     "sendgrid": "^4.7.1",
+    "sendgrid-rest": "^2.4.0",
     "wav-file-info": "^0.0.7",
-    "xss": "^0.3.1"
+    "xss": "^0.3.4"
   },
   "devDependencies": {
     "eslint": "^3.15.0",

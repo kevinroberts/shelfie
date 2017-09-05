@@ -53,7 +53,7 @@ class AddClip extends Component {
         request: {
           endpoint: `${ROOT_URL}/uploads`,
           customHeaders: {
-            'authorization': LocalStorageUtils.getToken()
+            'Authorization': 'Bearer' + LocalStorageUtils.getToken()
           }
         },
         validation: {

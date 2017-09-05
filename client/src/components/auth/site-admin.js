@@ -30,7 +30,7 @@ class SiteAdmin extends Component {
       data: {
         ...values
       },
-      headers: {authorization: LocalStorageUtils.getToken()}
+      headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
     }).then(response => {
       // show success message
       this.setState({requestSuccess: true, successMessage: response.data.message})

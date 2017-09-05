@@ -110,7 +110,7 @@ class EditClip extends Component {
       method: 'post',
       url: `${ROOT_URL}/edit-clip`,
       data: {...values},
-      headers: {authorization: LocalStorageUtils.getToken()}
+      headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
     })
       .then(response => {
         // update reducers
@@ -154,7 +154,7 @@ class EditClip extends Component {
       method: 'post',
       url: `${ROOT_URL}/remove-tags`,
       data: {tagId: removedTag.id, clipId: this.props.clip._id},
-      headers: {authorization: LocalStorageUtils.getToken()}
+      headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
     })
       .then(response => {
         this.setState({tags: tags})
@@ -186,7 +186,7 @@ class EditClip extends Component {
         method: 'post',
         url: `${ROOT_URL}/edit-tags`,
         data: {_id: existingTag._id, clips: existingClips, addToClip: true, clipId: this.props.clip._id},
-        headers: {authorization: LocalStorageUtils.getToken()}
+        headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
       })
         .then(response => {
           tags.push(tag)
@@ -210,7 +210,7 @@ class EditClip extends Component {
         method: 'post',
         url: `${ROOT_URL}/tags`,
         data: {name: tag.name, clip: this.props.clip._id, addToClip: true},
-        headers: {authorization: LocalStorageUtils.getToken()}
+        headers: {Authorization: 'Bearer ' + LocalStorageUtils.getToken()}
       })
         .then(response => {
           tags.push({id: response.data.tag._id, name: response.data.tag.name})

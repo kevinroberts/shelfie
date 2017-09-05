@@ -3,6 +3,7 @@ const User = require('../models/user')
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
 const LocalStrategy = require('passport-local')
+const log = require('../helpers/logging')
 
 // Create local strategy
 const localOptions = { usernameField: 'username' }
@@ -10,7 +11,7 @@ const localLogin = new LocalStrategy(localOptions, function (username, password,
   // Verify this username and password, call done with the user
   // if it is the correct username and password
   // otherwise, call done with false
-  var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username}
+  const criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username}
 
   User.findOne(criteria, function (err, user) {
     if (err) { return done(err) }
@@ -29,7 +30,7 @@ const localLogin = new LocalStrategy(localOptions, function (username, password,
 
 // Setup options for JWT Strategy
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.APP_SECRET
 }
 
@@ -38,6 +39,12 @@ const jwtLogin = new JwtStrategy(jwtOptions, function (payload, done) {
   // See if the user ID in the payload exists in our database
   // If it does, call 'done' with that other
   // otherwise, call done without a user object
+  const currDate = new Date().getTime()
+  // if current date time is greater than expiration
+  if (currDate > payload.exp) {
+    log.debug('JWT token expired for user with exp: ' + payload.exp)
+    return done(null, false)
+  }
   User.findById(payload.sub, function (err, user) {
     if (err) { return done(err, false) }
 

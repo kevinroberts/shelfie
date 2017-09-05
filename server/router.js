@@ -14,7 +14,7 @@ const xss = require('xss')
 
 const requireAuth = passport.authenticate('jwt', { session: false })
 const requireSignin = passport.authenticate('local', { session: false })
-const BASE_URL = process.env.HOST_URL;
+const BASE_URL = process.env.HOST_URL
 
 module.exports = function (app) {
   app.get('/message', requireAuth, function (req, res) {
