@@ -39,8 +39,8 @@ const jwtLogin = new JwtStrategy(jwtOptions, function (payload, done) {
   // See if the user ID in the payload exists in our database
   // If it does, call 'done' with that other
   // otherwise, call done without a user object
-  const currDate = new Date().getTime()
-  // if current date time is greater than expiration
+  const currDate = Math.floor(Date.now() / 1000)
+  // if current date time in seconds is greater than expiration
   if (currDate > payload.exp) {
     log.debug('JWT token expired for user with exp: ' + payload.exp)
     return done(null, false)

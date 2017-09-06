@@ -9,9 +9,8 @@ const log = require('../helpers/logging')
 const xss = require('xss')
 
 function tokenForUser (user) {
-  const timestamp = new Date().getTime()
   // tokens will expire 1 day after they are issued
-  return jwt.sign({ sub: user.id, iat: timestamp }, process.env.APP_SECRET, { expiresIn: '1d' })
+  return jwt.sign({ sub: user.id }, process.env.APP_SECRET, { expiresIn: '1d' })
 }
 
 exports.signin = function (req, res, next) {
