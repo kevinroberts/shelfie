@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"shelfie.clips"},{"v":1,"unique":true,"key":{"title":1},"name":"title_1","ns":"shelfie.clips","background":true}]}
