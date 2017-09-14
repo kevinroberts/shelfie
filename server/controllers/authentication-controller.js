@@ -7,16 +7,25 @@ const Checkit = require('checkit')
 const Validator = require('../helpers/checkit-validation')
 const log = require('../helpers/logging')
 const xss = require('xss')
+const _ = require('lodash')
 
-function tokenForUser (user) {
-  // tokens will expire 1 day after they are issued
-  return jwt.sign({ sub: user.id }, process.env.APP_SECRET, { expiresIn: '1d' })
+function tokenForUser (user, rememberMe) {
+  if (!rememberMe) {
+    // tokens will expire 1 day after they are issued
+    return jwt.sign({ sub: user.id }, process.env.APP_SECRET, { expiresIn: '1d' })
+  } else {
+    return jwt.sign({ sub: user.id }, process.env.APP_SECRET, { expiresIn: '30d' })
+  }
 }
 
 exports.signin = function (req, res, next) {
   // User has already had their email and password auth'd
   // We just need to give them a token
-  res.send({ token: tokenForUser(req.user),
+  let rememberMe = false
+  if (!_.isUndefined(req.param('rememberMe'))) {
+    rememberMe = req.param('rememberMe')
+  }
+  res.send({ token: tokenForUser(req.user, rememberMe),
     username: req.user.username,
     email: req.user.email,
     firstName: req.user.firstName,

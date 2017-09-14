@@ -86,7 +86,7 @@ const util = {
   },
   setUser (responseData, rememberUser) {
     if (isAvailable) {
-      const days = rememberUser ? 1 : 1
+      const days = rememberUser ? 30 : 1
 
       return window.localStorage.setCacheItem('user', {
         token: responseData.data.token,
