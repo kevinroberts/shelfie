@@ -21,7 +21,7 @@ class Signout extends Component {
                 ]}
         />
         <center>
-          <iframe src='//giphy.com/embed/d2Zktmc1QMCTXtfi' width='480' height='360' frameBorder='0' class='giphy-embed' allowFullScreen />
+          <iframe src='//giphy.com/embed/d2Zktmc1QMCTXtfi' width='480' height='360' frameBorder='0' className='giphy-embed' allowFullScreen />
           <h1>See yah!</h1>
         </center>
       </div>

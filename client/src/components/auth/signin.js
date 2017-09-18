@@ -44,7 +44,11 @@ class Signin extends Component {
     return axios.post(`${ROOT_URL}/signin`, {...values})
       .then(response => {
         // success response - pass action creator to update state
-        this.props.signinUser(response, _.isUndefined(values.rememberMe), this.state.redirectTo)
+        let rememberMe = false
+        if (!_.isUndefined(values.rememberMe)) {
+          rememberMe = values.rememberMe
+        }
+        this.props.signinUser(response, rememberMe, this.state.redirectTo)
       })
       .catch(response => {
         if (response instanceof SubmissionError) throw SubmissionError
