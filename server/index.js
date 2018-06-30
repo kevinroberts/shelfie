@@ -1,7 +1,7 @@
 // Main starting point of the application
-require('dotenv').config({silent: true})
-require('./helpers/pre-run-check')
 const path = require('path')
+require('dotenv').config({path: path.join(__dirname, "./.env"), silent: true});
+require('./helpers/pre-run-check')
 const log = require('./helpers/logging')
 const logDirectory = path.join(__dirname, 'log')
 const rfs = require('rotating-file-stream')
