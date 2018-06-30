@@ -27,7 +27,8 @@ const mongoose = require('mongoose')
 require('./queries/db-update') // DB init helper script
 
 // DB Setup
-mongoose.connect(process.env.MONGO_CONNECTION_STRING)
+mongoose.createConnection(process.env.MONGO_CONNECTION_STRING, { server: { poolSize: 4 }});
+
 
 // App Setup
 // setup the logger
