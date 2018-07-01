@@ -4,7 +4,7 @@ const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 const multiparty = require('multiparty')
 const wavFileInfo = require('wav-file-info')
-const mm = require('musicmetadata')
+const mm = require('music-metadata');
 const Clip = require('../models/clip')
 const async = require('async')
 const xss = require('xss')
@@ -51,8 +51,8 @@ exports.onDeleteFile = function (req, res) {
 }
 
 function onSimpleUpload (fields, file, res, user) {
-  var uuid = fields.qquuid
-  var responseData = {success: false}
+  const uuid = fields.qquuid
+  const responseData = {success: false}
 
   file.name = fields.qqfilename
   file.ext = path.extname(file.path).toLowerCase()
@@ -62,23 +62,32 @@ function onSimpleUpload (fields, file, res, user) {
     async.waterfall([
       function (done) {
         if (file.ext === '.mp3') {
-          const readableStream = fs.createReadStream(file.path)
-          const dummyInfo = {artist: '', title: '', album: '', duration: 0}
-          mm(readableStream, {duration: true, fileSize: file.size}, function (err, metadata) {
-            if (err) {
-              readableStream.close()
-              // if the file is just missing its metadata header --> continue with a warning
-              if (err.message === 'Could not find metadata header') {
-                console.warn(`uploaded file ${file.name} is missing its MP3 metadata header`)
-                done(null, dummyInfo)
-              } else {
-                done(err)
+          // const readableStream = fs.createReadStream(file.path)
+          const mp3info = {artist: '', title: '', album: '', duration: 0, bitRate: 0}
+
+          mm.parseFile(file.path, {native: true, duration: true, skipCovers: true})
+            .then(function (metadata) {
+              if (metadata.format.duration) {
+                mp3info.duration = metadata.format.duration
               }
-            } else {
-              readableStream.close()
-              done(null, metadata)
-            }
-          })
+              if (metadata.format.bitrate) {
+                mp3info.bitRate = metadata.format.bitrate
+              }
+              if (metadata.common && metadata.common.artist) {
+                mp3info.artist = metadata.common.artist
+              }
+              if (metadata.common && metadata.common.album) {
+                mp3info.album = metadata.common.album
+              }
+              if (metadata.common && metadata.common.title) {
+                mp3info.title = metadata.common.title
+              }
+              done(null, mp3info)
+            })
+            .catch(function (err) {
+              console.error(err.message)
+              done(err)
+            })
         } else if (file.ext === '.wav') {
           wavFileInfo.infoByFilename(file.path, function (err, info) {
             if (err) { done(err) }
@@ -101,7 +110,7 @@ function onSimpleUpload (fields, file, res, user) {
         fileName = fileName.substr(0, fileName.lastIndexOf('.'))
 
         if (file.ext === '.mp3') {
-          const artist = info.artist ? info.artist[0] : ''
+          const artist = info.artist ? info.artist : ''
           let title = info.title ? info.title : fileName
           if (artist) {
             title = artist + ' - ' + title
@@ -110,12 +119,13 @@ function onSimpleUpload (fields, file, res, user) {
           const duration = info.duration ? Math.floor(info.duration * 1000) : 0
 
           clip = new Clip({
-            title: title + ' ' + new Date().getTime(),
+            title: title,
             sourceUrl: sourceLoc,
             artist: artist,
             album: album,
             length: duration,
             fileSize: file.size,
+            bitRate: info.bitRate,
             type: 'mp3',
             _creator: user._id
           })
@@ -130,7 +140,7 @@ function onSimpleUpload (fields, file, res, user) {
           }
         } else {
           clip = new Clip({
-            title: fileName + ' ' + new Date().getTime(),
+            title: fileName,
             sourceUrl: sourceLoc,
             length: Math.floor(info.duration * 1000),
             fileSize: info.stats.size,
@@ -153,8 +163,13 @@ function onSimpleUpload (fields, file, res, user) {
         })
       }], function (err, clip) {
       if (err) {
+        let errMsg = `Problem with ${file.ext} file format, please try again with another file.`
+        // check if a duplicate title error occurred
+        if (err.code === 11000) {
+          errMsg = `Sorry a clip with the title "${clip.title}" has already been uploaded. Please check the site to avoid duplicates.`
+        }
         log.error('error occurred trying to upload a clip: ', err)
-        responseData.error = `Problem with ${file.ext} file format, please try again with another file.`
+        responseData.error = errMsg
         return res.send(responseData)
       }
       responseData.success = true

@@ -16,6 +16,7 @@ var ClipSchema = new Schema({
   disk: Schema.Types.Mixed,
   track: Schema.Types.Mixed,
   genre: Schema.Types.Mixed,
+  bitRate: Number,
   type: String,
   fileSize: Number, // number in bytes 16000 -> 16kB
   createdAt: { type: Date, default: Date.now },

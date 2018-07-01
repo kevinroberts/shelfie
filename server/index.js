@@ -25,7 +25,7 @@ const router = require('./router')
 const mongoose = require('mongoose')
 
 // DB Setup
-mongoose.connect(process.env.MONGO_CONNECTION_STRING, { userMongoClient: true })
+mongoose.connect(process.env.MONGO_CONNECTION_STRING)
 log.info('Mongo connection status: ', mongoose.connection.readyState)
 
 // const cors = require('cors')
