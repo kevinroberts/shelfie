@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-var RemovedClipSchema = new Schema({
+const RemovedClipSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' },
   clipId: { type: String },
   title: { type: String, unique: false, required: true },

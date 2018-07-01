@@ -62,18 +62,18 @@ function onSimpleUpload (fields, file, res, user) {
     async.waterfall([
       function (done) {
         if (file.ext === '.mp3') {
-          var readableStream = fs.createReadStream(file.path)
-
+          const readableStream = fs.createReadStream(file.path)
+          const dummyInfo = {artist: '', title: '', album: '', duration: 0}
           mm(readableStream, {duration: true, fileSize: file.size}, function (err, metadata) {
             if (err) {
+              readableStream.close()
               // if the file is just missing its metadata header --> continue with a warning
               if (err.message === 'Could not find metadata header') {
                 console.warn(`uploaded file ${file.name} is missing its MP3 metadata header`)
-                done(null, {})
+                done(null, dummyInfo)
               } else {
                 done(err)
               }
-              readableStream.close()
             } else {
               readableStream.close()
               done(null, metadata)
