@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 import * as actions from '../../actions'
 import Loading from '../../utils/react-loading-animation'
-import { formatMilliseconds } from '../../utils/clip-utils'
+import { formatMilliseconds, formatBytes } from '../../utils/clip-utils'
 import TagList from './tag-list'
 import ActionsBar from './actions'
 import Wavesurfer from 'react-wavesurfer'
@@ -141,6 +141,10 @@ class ViewClip extends Component {
                       <DownloadButton className='btn btn-success' filename={clip.sourceUrl} />
                     </div>
                   </OverlayTrigger>
+                  <div className='clip-size float-sm-left'>
+                    <i className='fa fa-file-o' aria-hidden='true' />
+                    <span>{formatBytes(clip.fileSize)}</span>
+                  </div>
                   <TagList tags={clip.tags} />
                 </div>
                 <div className='clip-subTitle text-muted'>added {createdDate}</div>

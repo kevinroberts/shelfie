@@ -7,9 +7,20 @@
   }
   .clip-duration {
     padding-top: 5px;
+    i {
+      padding-right: 5px;
+    }
   }
   .clip-description {
     padding-top: 5px;
+  }
+
+  .clip-size {
+    padding-left: 10px;
+    padding-top: 10px;
+    i {
+      padding-right: 5px;
+    }
   }
 
   .tag {
