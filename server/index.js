@@ -1,6 +1,6 @@
 // Main starting point of the application
 const path = require('path')
-require('dotenv').config({path: path.join(__dirname, "./.env"), silent: true});
+require('dotenv').config({path: path.join(__dirname, './.env'), silent: true})
 require('./helpers/pre-run-check')
 const log = require('./helpers/logging')
 const logDirectory = path.join(__dirname, 'log')
@@ -11,7 +11,7 @@ const fs = require('fs')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
 
 // create a rotating write stream
-var accessLogStream = rfs('access.log', {
+const accessLogStream = rfs('access.log', {
   interval: '1d', // rotate daily
   path: logDirectory
 })
@@ -23,12 +23,13 @@ const morgan = require('morgan')
 const app = express()
 const router = require('./router')
 const mongoose = require('mongoose')
-// const cors = require('cors')
-require('./queries/db-update') // DB init helper script
 
 // DB Setup
-mongoose.createConnection(process.env.MONGO_CONNECTION_STRING, { server: { poolSize: 4 }});
+mongoose.connect(process.env.MONGO_CONNECTION_STRING, { userMongoClient: true })
+log.info('Mongo connection status: ', mongoose.connection.readyState)
 
+// const cors = require('cors')
+require('./queries/db-update') // DB init helper script
 
 // App Setup
 // setup the logger

@@ -71,7 +71,7 @@ module.exports = function (app) {
 
     app.get('*', (req, res) => {
       console.log('request url: ', req.url)
-      var match = RegExp('^/clip/([0-9a-fA-F]{24}).*$', 'g').exec(req.url)
+      const match = RegExp('^/clip/([0-9a-fA-F]{24}).*$', 'g').exec(req.url)
       if (match) {
         console.log('this is a clip page', match)
         FindClip(match[1]).then((result = []) => {
