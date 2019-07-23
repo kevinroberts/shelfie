@@ -131,8 +131,8 @@ exports.clipValidation = {
     message: 'You must provide a source url'
   }],
   description: [{
-    rule: 'maxLength:200',
-    message: 'Description must be less than 200 characters'
+    rule: 'maxLength:500',
+    message: 'Description must be less than 500 characters'
   }],
   length: [{
     rule: 'numeric',
